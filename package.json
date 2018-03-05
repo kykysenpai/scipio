@@ -1,0 +1,22 @@
+{
+  "name": "tccapp2",
+  "version": "1.0.0",
+  "description": "Fun little application for the enjoyment of all of TCC !",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kykysenpai/tccapp2.git"
+  },
+  "author": "KykySenpai Tsinxias",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kykysenpai/tccapp2/issues"
+  },
+  "homepage": "https://github.com/kykysenpai/tccapp2#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
