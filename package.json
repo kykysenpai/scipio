@@ -2,9 +2,10 @@
   "name": "tccapp2",
   "version": "1.0.0",
   "description": "Fun little application for the enjoyment of all of TCC !",
-  "main": "index.js",
+  "main": "server-start.js",
   "scripts": {
-    "test": "node test.js"
+    "start": "node babel-server-start.js",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,12 @@
   "homepage": "https://github.com/kykysenpai/tccapp2#readme",
   "dependencies": {
     "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "mocha": "^5.0.1",
+    "winston": "^3.0.0-rc1"
   }
 }
