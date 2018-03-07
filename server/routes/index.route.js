@@ -1,9 +1,9 @@
 import express from 'express';
-import index from '../controllers/index.controller';
+import indexController from '../controllers/index.controller';
 
 const router = express.Router();
 
 router.route('/')
-    .get(index.index)
+    .get(indexController.index)
 
 module.exports = router;

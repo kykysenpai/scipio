@@ -1,6 +1,8 @@
 import config from './config';
 import winston from 'winston';
 
+winston.cli()
+
 let level;
 
 if(config.ENV === 'dev'){
@@ -11,6 +13,23 @@ if(config.ENV === 'dev'){
     throw Error('Environment was not set in the config file');
 }
 
+winston.configure({
+    transports:[
+        new(winston.transports.Console)({
+            colorize: true,
+            level: level,
+            prettyPrint: true,
+            timestamp: true
+        }),
+        new(winston.transports.File)({
+            filename: 'app.log',
+            level: 'warn',
+            timestamp: true
+        })
+    ]
+});
+
+/*
 const logger = winston.createLogger({
     transports: [
         new winston.transports.Console({
@@ -28,5 +47,4 @@ const logger = winston.createLogger({
 });
 
 logger.colorize = true;
-
-module.exports = logger;
+*/

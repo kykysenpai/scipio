@@ -1,5 +1,5 @@
 import config from './server/config/config';
-import log from './server/config/logger';
+import log from 'winston';
 import app from './server/config/express';
 
 app.listen(config.PORT, () => {

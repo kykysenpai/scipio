@@ -1,5 +1,9 @@
 import config from '../config/config';
 
-exports.index = (req, res) => {
+const index = (req, res) => {
     res.status(200).sendFile(config.PUBLIC + '/index.html');
 }
+
+
+
+module.exports = {index};
