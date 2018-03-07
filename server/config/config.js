@@ -1,7 +1,8 @@
 const config = {
+    //should be 'prod' or 'dev'
     ENV: 'dev',
-    PORT: '21973',
-    IP: '127.0.0.1'
+    //public port of the application
+    PORT: '21973'
 };
 
 module.exports = config;
