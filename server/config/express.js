@@ -8,7 +8,8 @@ import expressWinston from 'express-winston';
 
 const app = express();
 
-app.use(express.static('../../public'));
+app.use(express.static(config.PUBLIC));
+
 
 /**
  * logs only the http request method and path at info level in the console
@@ -67,7 +68,7 @@ app.use((req, res) => {
     res.status(httpStatus.NOT_FOUND);
 
     if(req.accepts('html')){
-        res.sendFile(config.VIEWS + '/error404.html');
+        res.sendFile(config.VIEWS_ERRORS + '/error404.html');
         return;
     }
 

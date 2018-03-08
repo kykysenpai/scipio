@@ -1,7 +1,7 @@
 import config from './config';
 import winston from 'winston';
 
-winston.cli()
+winston.cli();
 
 if(config.ENV === 'dev'){
     config.LOG_LEVEL = 'debug';
