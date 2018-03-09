@@ -1,6 +1,5 @@
 import express from 'express';
 import log from 'winston';
-import index from '../routes/index.route';
 import httpStatus from 'http-status';
 import api from '../routes/api.route';
 import config from './config';
@@ -57,9 +56,22 @@ app.use(expressWinston.errorLogger({
 app.use('/api', api);
 
 /**
- * Route calls to the root url
+ * An error was thrown
  */
-app.use('/', index);
+app.use((err, req, res, next) => {
+    if(err){
+        if(err.statusCode){
+            res
+                .status(err.statusCode)
+                .sendFile(config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
+            log.debug('sending', config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
+        } else {
+            res
+                .status(httpStatus.INTERNAL_SERVER_ERROR)
+                .sendFile(config.VIEWS_ERRORS + '/error500.html');
+        }
+    }
+});
 
 /**
  * If no route managed to respond to the request, send a 404
@@ -83,4 +95,4 @@ app.use((req, res) => {
 
 log.info('express app has received middlewares setup');
 
-module.exports = app;
+export default app;
