@@ -3,10 +3,16 @@ const config = {
     ENV: 'dev',
     //public port of the application
     PORT: '21973',
-    //jwt signing hash
+
+    //JWT
     JWT_SECRET: process.env.JWT_SECRET || 'superSecretKey',
-    //cookie signing hash
-    COOKIE_SECRET: process.env.COOKIE_SECRET || 'superDuperSecretKey'
+
+    //cookies
+    COOKIE_SECRET: process.env.COOKIE_SECRET || 'superDuperSecretKey',
+    COOKIE_NAME: process.env.COOKIE_NAME || 'cookie_monster_rpz',
+
+    //bcrypt
+    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS || 10
 
 };
 

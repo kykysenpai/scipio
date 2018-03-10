@@ -4,8 +4,6 @@ import HttpError from "./HttpError";
 import HttpStatus from "http-status";
 import log from 'winston';
 
-const secretJWTKey = config.JWT_SECRET;
-
 /**
  * Verify the validity of the JWT token in the client session and decode it if it's valid
  * @param req
@@ -13,34 +11,34 @@ const secretJWTKey = config.JWT_SECRET;
  */
 const getTokenFromSession = (req) => {
     return new Promise((resolve, reject) => {
-        if (req.session && req.session.token) {
-            let token = JWT.decode(req.session.token);
-            JWT.verify(token, secretJWTKey, (err, decoded) => {
-                if(!err) {
+        if (req.cookies && req.cookies[config.COOKIE_NAME]) {
+            log.debug(req.cookies[config.COOKIE_NAME]);
+            JWT.verify(req.cookies[config.COOKIE_NAME], config.COOKIE_SECRET, (err, decoded) => {
+                if(err) {
+                    reject(err);
+                } else {
                     resolve(decoded);
                 }
-                log.debug(err);
-            })
+            });
         }
         reject(new HttpError('The JWT token from the client session was malformed or invalid', HttpStatus.BAD_REQUEST));
     });
 };
 
 /**
- * Sign a token and add it in the session signed if no error happened
+ * Sign a token and return it
  * @param token
- * @param session
  * @returns {Promise<any>}
  */
-const signToken = (token, session) => {
+const signToken = (token) => {
     return new Promise((resolve, reject) => {
-        JWT.sign(token, secretJWTKey, {algorithm: 'HS256'}, (err, signedToken) => {
+        JWT.sign(token, config.COOKIE_SECRET, {algorithm: 'HS256'}, (err, signedToken) => {
             if(err){
                 log.debug(err);
                 reject(new HttpError('The server couldn\'t sign the JWT token', HttpStatus.INTERNAL_SERVER_ERROR));
             } else {
-                session.token = signedToken;
-                resolve();
+                log.debug('generated token :', signedToken);
+                resolve(signedToken);
             }
         })
     })

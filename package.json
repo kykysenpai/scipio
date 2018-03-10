@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kykysenpai/tccapp2#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "http-status": "^1.0.1",

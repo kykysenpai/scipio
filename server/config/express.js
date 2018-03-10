@@ -12,6 +12,12 @@ app.use(express.static(config.PUBLIC));
 
 app.use(cookieParser());
 
+app.use(express.json());
+
+app.use(express.urlencoded({
+    extended: true
+}));
+
 /**
  * logs only the http request method and path at info level in the console
  */
