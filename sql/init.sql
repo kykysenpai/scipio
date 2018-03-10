@@ -23,12 +23,12 @@ create table tccApp2.roles(
   PRIMARY KEY(user_id, perm)
 );
 
-INSERT INTO tccApp2.users VALUES (DEFAULT, 'Thibaut', 'Janssens', 'Bicky', '123', NULL);
-INSERT INTO tccApp2.permissions VALUES(DEFAULT, 'admin');
-INSERT INTO tccApp2.permissions VALUES(DEFAULT, 'user');
-INSERT INTO tccApp2.permissions VALUES(DEFAULT, 'bdo');
-INSERT INTO tccApp2.roles VALUES (1,1);
-INSERT INTO tccApp2.roles VALUES (1,3);
+--INSERT INTO tccApp2.users VALUES (DEFAULT, 'John', 'Doe', 'Dummy', '123', NULL);
+--INSERT INTO tccApp2.permissions VALUES(DEFAULT, 'admin');
+--INSERT INTO tccApp2.permissions VALUES(DEFAULT, 'user');
+--INSERT INTO tccApp2.permissions VALUES(DEFAULT, 'bdo');
+--INSERT INTO tccApp2.roles VALUES (1,1);
+--INSERT INTO tccApp2.roles VALUES (1,3);
 
 --SELECT * FROM tccApp2.users;
 --SELECT * FROM tccApp2.permissions;
