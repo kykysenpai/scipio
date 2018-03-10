@@ -4,11 +4,7 @@ import log from 'winston';
 import HttpError from '../modules/HttpError';
 
 const get = (req, res, next) => {
-    try{
-        res.status(HttpStatus.OK).send('Hello');
-    }catch (err){
-        return next(err);
-    }
+    res.status(HttpStatus.OK).send('Hello');
 };
 
 export default {get};

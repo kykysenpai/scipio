@@ -4,11 +4,13 @@ import HttpStatus from 'http-status';
 import api from '../routes/api.route';
 import config from './config';
 import expressWinston from 'express-winston';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(express.static(config.PUBLIC));
 
+app.use(cookieParser());
 
 /**
  * logs only the http request method and path at info level in the console
