@@ -1,6 +1,6 @@
 import express from 'express';
 import log from 'winston';
-import httpStatus from 'http-status';
+import HttpStatus from 'http-status';
 import api from '../routes/api.route';
 import config from './config';
 import expressWinston from 'express-winston';
@@ -67,7 +67,7 @@ app.use((err, req, res, next) => {
             log.debug('sending', config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
         } else {
             res
-                .status(httpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .sendFile(config.VIEWS_ERRORS + '/error500.html');
         }
     }
@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
  * If no route managed to respond to the request, send a 404
  */
 app.use((req, res) => {
-    res.status(httpStatus.NOT_FOUND);
+    res.status(HttpStatus.NOT_FOUND);
 
     if(req.accepts('html')){
         res.sendFile(config.VIEWS_ERRORS + '/error404.html');
