@@ -5,3 +5,4 @@ config.ROOT = path.normalize(__dirname + '/../..');
 config.PUBLIC = config.ROOT + '/public';
 config.VIEWS = config.ROOT + '/server/views';
 config.VIEWS_ERRORS = config.VIEWS + '/errors';
+config.VIEWS_SUCCESS = config.VIEWS + '/success';

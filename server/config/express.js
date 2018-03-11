@@ -5,6 +5,7 @@ import api from '../routes/api.route';
 import config from './config';
 import expressWinston from 'express-winston';
 import cookieParser from 'cookie-parser';
+import views from '../routes/views.route';
 
 const app = express();
 
@@ -62,6 +63,8 @@ app.use(expressWinston.errorLogger({
  * Route all calls to the /api url
  */
 app.use('/api', api);
+
+app.use('/views', views);
 
 /**
  * An error was thrown
