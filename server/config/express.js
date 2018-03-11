@@ -1,14 +1,22 @@
 import express from 'express';
 import log from 'winston';
-import httpStatus from 'http-status';
+import HttpStatus from 'http-status';
 import api from '../routes/api.route';
 import config from './config';
 import expressWinston from 'express-winston';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 app.use(express.static(config.PUBLIC));
 
+app.use(cookieParser());
+
+app.use(express.json());
+
+app.use(express.urlencoded({
+    extended: true
+}));
 
 /**
  * logs only the http request method and path at info level in the console
@@ -67,7 +75,7 @@ app.use((err, req, res, next) => {
             log.debug('sending', config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
         } else {
             res
-                .status(httpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .sendFile(config.VIEWS_ERRORS + '/error500.html');
         }
     }
@@ -77,7 +85,7 @@ app.use((err, req, res, next) => {
  * If no route managed to respond to the request, send a 404
  */
 app.use((req, res) => {
-    res.status(httpStatus.NOT_FOUND);
+    res.status(HttpStatus.NOT_FOUND);
 
     if(req.accepts('html')){
         res.sendFile(config.VIEWS_ERRORS + '/error404.html');

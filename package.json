@@ -4,7 +4,7 @@
   "description": "Fun little application for the enjoyment of all of TCC !",
   "main": "server-start.js",
   "scripts": {
-    "start": "node babel-server-start.js",
+    "start": "nodemon babel-server-start.js",
     "test": "mocha"
   },
   "repository": {
@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/kykysenpai/tccapp2#readme",
   "dependencies": {
+    "bcrypt": "^1.0.3",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
-    "http-status": "^1.0.1"
+    "http-status": "^1.0.1",
+    "jsonwebtoken": "^8.2.0"
   },
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
@@ -27,6 +30,7 @@
     "babel-register": "^6.26.0",
     "express-winston": "^2.5.0",
     "mocha": "^5.0.1",
+    "nodemon": "^1.17.1",
     "winston": "^2.4.0"
   }
 }
