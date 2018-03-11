@@ -6,7 +6,7 @@ winston.cli();
 if(config.ENV === 'dev'){
     config.LOG_LEVEL = 'debug';
 } else if (config.ENV === 'prod'){
-    config.LOG_LEVEL = 'warn';
+    config.LOG_LEVEL = 'info';
 } else {
     throw Error('Environment was not set in the config file');
 }

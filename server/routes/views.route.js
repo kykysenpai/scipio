@@ -13,4 +13,8 @@ const router = express.Router();
 router.route('/index')
     .get(viewsController.index);
 
+router.route('/profile')
+    .get(validator.requireAny(permissions.USER), viewsController.profile);
+
+
 export default router;
