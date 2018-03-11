@@ -1,3 +1,5 @@
+$(() => loadSbAdmin());
+
 const getAndLoadPage = (viewName) => {
     $.ajax({
         url: '/views/' + viewName
@@ -11,9 +13,8 @@ const getAndLoadPage = (viewName) => {
 };
 
 const loadPage = (page) => {
-    $('body').html(page);
-    loadSbAdmin();
-    loadSbAdminCharts();
+    $('#mainContentDiv').html(page);
+    //loadSbAdmin();
 };
 
 const loadDataTable = () => {
