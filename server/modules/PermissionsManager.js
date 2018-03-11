@@ -13,18 +13,23 @@ const requireAny = (...perms) => {
         Session.getTokenFromSession(req)
             .then((token) => {
                 let jwtPerms = token.permissions;
+                let hasPerm = false;
                 perms.forEach((perm) => {
                     jwtPerms.forEach((jwtPerm) => {
                         if (perm === jwtPerm) {
-                            next();
+                            hasPerm = true;
                         }
                     })
                 });
-                throw new HttpError('A client tried accessing protecting data but didn\'t have high enough permissions', HttpStatus.FORBIDDEN);
+                if(hasPerm){
+                    next();
+                } else {
+                    next(new HttpError('A client tried accessing protecting data but didn\'t have high enough permissions', HttpStatus.FORBIDDEN));
+                }
             })
             .catch((err) => {
                 log.debug(err);
-                next(new HttpError('The JWT token from the client session was malformed or invalid', HttpStatus.BAD_REQUEST));
+               next(err);
             });
     }
 };
@@ -54,7 +59,7 @@ const requireAll = (...perms) =>{
             })
             .catch((err) => {
                 log.debug(err);
-                next(new HttpError('The JWT token from the client session was malformed or invalid', HttpStatus.BAD_REQUEST));
+                next(err);
             });
 
     }

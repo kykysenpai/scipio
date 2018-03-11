@@ -13,7 +13,6 @@ const authenticate = (login, password) => {
             reject(new HttpError('One of the parameter was invalid or not present', HttpStatus.BAD_REQUEST));
         }
 
-
         DB.getUserByLogin(login)
             .then((userJsObj) => {
                 return userJsObj;

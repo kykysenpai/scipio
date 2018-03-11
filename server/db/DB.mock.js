@@ -35,7 +35,6 @@ const getUserByLogin = (login) => {
             resolve({
                 name: 'admin',
                 permissions: [
-                    Permissions.ADMIN,
                     Permissions.USER
                 ],
                 password: '$2a$10$Yp1ASKU6XieX6ctCG/t3wOr/NCS90T0rV3oD9bHPQSB5YqSMXJ/Y.'
