@@ -23,7 +23,7 @@ app.use(express.urlencoded({
  * logs only the http request method and path at info level in the console
  */
 app.use(expressWinston.logger({
-    transports:[
+    transports: [
         new log.transports.Console({
             colorize: true,
             level: config.LOG_LEVEL
@@ -37,9 +37,9 @@ app.use(expressWinston.logger({
  * logs the meta data of http requests in the http-requests.log file
  */
 app.use(expressWinston.logger({
-    transports:[
+    transports: [
         new log.transports.File({
-            filename:'http-requests.log'
+            filename: 'http-requests.log'
         })
     ],
     expressFormat: true
@@ -49,19 +49,16 @@ app.use(expressWinston.logger({
  * logs the errors of the pipeline
  */
 app.use(expressWinston.errorLogger({
-    transports:[
+    transports: [
         new log.transports.Console({
             colorize: true
         }),
         new log.transports.File({
-            filename:'http-errors.log'
+            filename: 'http-errors.log'
         })
     ]
 }));
 
-/**
- * Route all calls to the /api url
- */
 app.use('/api', api);
 
 app.use('/views', views);
@@ -70,12 +67,11 @@ app.use('/views', views);
  * An error was thrown
  */
 app.use((err, req, res, next) => {
-    if(err){
-        if(err.statusCode){
+    if (err) {
+        if (err.statusCode) {
             res
                 .status(err.statusCode)
                 .sendFile(config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
-            log.debug('sending', config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
         } else {
             res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -90,12 +86,12 @@ app.use((err, req, res, next) => {
 app.use((req, res) => {
     res.status(HttpStatus.NOT_FOUND);
 
-    if(req.accepts('html')){
+    if (req.accepts('html')) {
         res.sendFile(config.VIEWS_ERRORS + '/error404.html');
         return;
     }
 
-    if(req.accepts('json')){
+    if (req.accepts('json')) {
         res.send({error: 'This url doesn\'t exist'});
         return;
     }

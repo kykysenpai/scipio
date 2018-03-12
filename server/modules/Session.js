@@ -12,7 +12,6 @@ import log from 'winston';
 const getTokenFromSession = (req) => {
     return new Promise((resolve, reject) => {
         if (req.cookies && req.cookies[config.COOKIE_NAME]) {
-            log.debug(req.cookies[config.COOKIE_NAME]);
             JWT.verify(req.cookies[config.COOKIE_NAME], config.COOKIE_SECRET, (err, decoded) => {
                 if (err) {
                     reject(new HttpError('The JWT token from the client session was malformed or invalid', HttpStatus.BAD_REQUEST));
@@ -38,7 +37,6 @@ const signToken = (token) => {
                 log.debug(err);
                 reject(new HttpError('The server couldn\'t sign the JWT token', HttpStatus.INTERNAL_SERVER_ERROR));
             } else {
-                log.debug('generated token :', signedToken);
                 resolve(signedToken);
             }
         })

@@ -6,7 +6,7 @@ const index = (req, res, next) => {
 };
 
 const profile = (req, res, next) => {
-    res.status(HttpStatus.OK).sendFile(config.VIEWS_SUCCESS + 'profile.html');
+    res.status(HttpStatus.OK).sendFile(config.VIEWS_SUCCESS + '/profile.html');
 };
 
 export default {index, profile};

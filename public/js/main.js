@@ -52,5 +52,23 @@
                 getAndLoadPage(route);
             }
         })
+
+        $('.navLoggedIn').hide();
+        $('.navLoggedOut').hide();
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/auth'
+        })
+            .then((ret) => {
+                console.log(ret);
+                $('.navLoggedIn').show();
+                $('.navLoggedOut').hide();
+            })
+            .catch((ret) => {
+                console.log(ret);
+                $('.navLoggedOut').show();
+                $('.navLoggedIn').hide();
+            })
     })
 })(jQuery);

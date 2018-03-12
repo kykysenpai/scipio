@@ -29,6 +29,7 @@
   <!-- TCC scripts -->
   <script src="js/utils.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
 </head>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <!-- Navigation-->
@@ -54,7 +55,7 @@
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown navLoggedIn">
         <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-fw fa-envelope"></i>
           <span class="d-lg-none">Messages
@@ -88,7 +89,7 @@
           <a class="dropdown-item small" href="#">View all messages</a>
         </div>
       </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown navLoggedIn">
         <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-fw fa-bell"></i>
           <span class="d-lg-none">Alerts
@@ -131,7 +132,7 @@
           <a class="dropdown-item small" href="#">View all alerts</a>
         </div>
       </li>
-      <li class="nav-item">
+      <li class="nav-item navLoggedIn">
         <form class="form-inline my-2 my-lg-0 mr-lg-2">
           <div class="input-group">
             <input class="form-control" type="text" placeholder="Search for...">
@@ -143,9 +144,13 @@
           </div>
         </form>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+      <li class="nav-item navLoggedIn">
+        <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
           <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+      </li>
+      <li class="nav-item navLoggedOut">
+        <a class="nav-link" data-toggle="modal" data-target="#loginModal">
+          <i class="fa fa-fw fa-sign-in"></i>Login</a>
       </li>
     </ul>
   </div>
@@ -167,12 +172,14 @@
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
     </a>
+
+
     <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <h5 class="modal-title" id="logoutModalLabel">Ready to Leave?</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -180,11 +187,48 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
+            <a class="btn btn-primary" id="logoutModalButton" href="#" data-dismiss="modal">Logout</a>
           </div>
         </div>
       </div>
     </div>
+
+  <!-- Login Modal-->
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form name="loginModalForm">
+            <div class="form-group">
+              <label for="loginInputEmail1">Login</label>
+              <input name="login" class="form-control" id="loginInputEmail1" type="text" aria-describedby="emailHelp" placeholder="Enter login">
+            </div>
+            <div class="form-group">
+              <label for="loginInputPassword1">Password</label>
+              <input name="password" class="form-control" id="loginInputPassword1" type="password" placeholder="Password">
+            </div>
+            <!--
+            <div class="form-group">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox"> Remember Password</label>
+              </div>
+            </div>
+            -->
+            <a class="btn btn-primary btn-block" id="loginModalButton" href="#" data-dismiss="modal">Login</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   </div>
 </body>
 </html>
