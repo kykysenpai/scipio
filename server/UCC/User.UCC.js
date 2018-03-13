@@ -15,24 +15,18 @@ const authenticate = (login, password) => {
 
         DB.getUserByLogin(login)
             .then((userJsObj) => {
-                return userJsObj;
+                return Promise.all([bcrypt.compare(password, userJsObj.password), userJsObj]);
             })
-            .then((userJsObj) => {
-                bcrypt.compare(password, userJsObj.password)
-                    .then((result) => {
-                        if(result){
-                            try{
-                                resolve(UserDTO.cast(userJsObj));
-                            } catch (err) {
-                                reject(err);
-                            }
-                        } else {
-                            reject(new HttpError('Password did not match', HttpStatus.BAD_REQUEST));
-                        }
-                    })
-                    .catch((err) => {
+            .then(([result, userJsObj]) => {
+                if(result){
+                    try{
+                        resolve(UserDTO.cast(userJsObj));
+                    } catch (err) {
                         reject(err);
-                    });
+                    }
+                } else {
+                    reject(new HttpError('Password did not match', HttpStatus.BAD_REQUEST));
+                }
             })
             .catch((err) => {
                 log.debug('error from db', err);
