@@ -9,20 +9,16 @@ import log from 'winston';
  * @param req
  * @returns {Promise<any>}
  */
-const getTokenFromSession = (req) => {
-    return new Promise((resolve, reject) => {
-        if (req.cookies && req.cookies[config.COOKIE_NAME]) {
-            JWT.verify(req.cookies[config.COOKIE_NAME], config.COOKIE_SECRET, (err, decoded) => {
-                if (err) {
-                    reject(new HttpError('The JWT token from the client session was malformed or invalid', HttpStatus.BAD_REQUEST));
-                } else {
-                    resolve(decoded);
-                }
-            });
-        } else {
-            reject(new HttpError('The client didn\'t have a cookie in his session', HttpStatus.UNAUTHORIZED));
+const getTokenFromSession = async (req) => {
+    if (req.cookies && req.cookies[config.COOKIE_NAME]) {
+        try{
+            return await JWT.decode(req.cookies[config.COOKIE_NAME], config.COOKIE_SECRET);
+        } catch (err){
+            throw new HttpError('The JWT token from the client session was malformed or invalid', HttpStatus.BAD_REQUEST);
         }
-    });
+    } else {
+        throw new HttpError('The client didn\'t have a cookie in his session', HttpStatus.UNAUTHORIZED);
+    }
 };
 
 /**
@@ -30,17 +26,13 @@ const getTokenFromSession = (req) => {
  * @param token
  * @returns {Promise<any>}
  */
-const signToken = (token) => {
-    return new Promise((resolve, reject) => {
-        JWT.sign(token, config.COOKIE_SECRET, {algorithm: 'HS256'}, (err, signedToken) => {
-            if (err) {
-                log.debug(err);
-                reject(new HttpError('The server couldn\'t sign the JWT token', HttpStatus.INTERNAL_SERVER_ERROR));
-            } else {
-                resolve(signedToken);
-            }
-        })
-    })
+const signToken = async (token) => {
+    try {
+        return await JWT.sign(token, config.COOKIE_SECRET, {algorithm: 'HS256'})
+    } catch (err) {
+        log.debug(err);
+        throw new HttpError('The server couldn\'t sign the JWT token', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 };
 
 export default {getTokenFromSession, signToken};

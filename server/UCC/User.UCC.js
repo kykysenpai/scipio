@@ -5,34 +5,20 @@ import HttpStatus from 'http-status';
 import log from 'winston';
 import bcrypt from 'bcrypt';
 import config from '../config/config';
+import Session from "../modules/Session";
 
-const authenticate = (login, password) => {
-    return new Promise((resolve, reject) => {
-        if(login === undefined || login === ''
-            || password === undefined || password === ''){
-            reject(new HttpError('One of the parameter was invalid or not present', HttpStatus.BAD_REQUEST));
-        }
-
-        DB.getUserByLogin(login)
-            .then((userJsObj) => {
-                return Promise.all([bcrypt.compare(password, userJsObj.password), userJsObj]);
-            })
-            .then(([result, userJsObj]) => {
-                if(result){
-                    try{
-                        resolve(UserDTO.cast(userJsObj));
-                    } catch (err) {
-                        reject(err);
-                    }
-                } else {
-                    reject(new HttpError('Password did not match', HttpStatus.BAD_REQUEST));
-                }
-            })
-            .catch((err) => {
-                log.debug('error from db', err);
-                reject(err);
-            });
-    });
+const authenticate = async (login, password) => {
+    if (login === undefined || login === ''
+        || password === undefined || password === '') {
+        reject(new HttpError('One of the parameter was invalid or not present', HttpStatus.BAD_REQUEST));
+    }
+    let userJsObj = await DB.getUserByLogin(login);
+    let result = await bcrypt.compare(password, userJsObj.password);
+    if(result){
+        return UserDTO.cast(userJsObj);
+    } else {
+        throw new HttpError('Password did not match', HttpStatus.BAD_REQUEST);
+    }
 };
 const updatePassword = () => {
 

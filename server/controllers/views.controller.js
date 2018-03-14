@@ -1,11 +1,11 @@
 import config from '../config/config';
 import HttpStatus from 'http-status';
 
-const index = (req, res, next) => {
+const index = (req, res) => {
     res.status(HttpStatus.OK).sendFile(config.VIEWS_SUCCESS + '/index.html');
 };
 
-const profile = (req, res, next) => {
+const profile = (req, res) => {
     res.status(HttpStatus.OK).sendFile(config.VIEWS_SUCCESS + '/profile.html');
 };
 
