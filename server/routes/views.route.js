@@ -4,6 +4,7 @@ import authController from '../controllers/auth.controller';
 import validator from '../modules/PermissionsManager';
 import permissions from '../config/Permissions';
 import viewsController from '../controllers/views.controller';
+import scopes from "../config/Scopes";
 
 const router = express.Router();
 
@@ -21,6 +22,6 @@ router.route('/index')
  * Get profile infos in JSON format
  */
 router.route('/profile')
-    .get(validator.requireAny(permissions.USER), viewsController.profile);
+    .get(validator.requires(scopes.ALL, permissions.USER), viewsController.profile);
 
 export default router;

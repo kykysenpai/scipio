@@ -15,31 +15,32 @@ import HTTPConstants from '../config/HTTPConstants';
  * @param res
  * @param next
  */
-const post = (req, res, next) => {
-    Session.getTokenFromSession(req)
-        .then(decodedToken => res.status(HttpStatus.OK).send(decodedToken.permissions))
-        .catch(err => {//The user doesn't have a cookie initialized
-            if(!req.body[HTTPConstants.LOGIN] || !req.body[HTTPConstants.PASSWORD]){
-                return next(new HttpError('The request didn\'t have the required parameters', HttpStatus.BAD_REQUEST));
-            }
-            UserUCC.authenticate(req.body[HTTPConstants.LOGIN], req.body[HTTPConstants.PASSWORD])
-                .then((userDTO) => {
-                    return Promise.all([Session.signToken(userDTO.getAll()), userDTO]);
-                })
-                .then(([signedToken, userDTO]) => {
-                    res
-                        .cookie(config.COOKIE_NAME, signedToken)
-                        .status(HttpStatus.OK)
-                        .send(userDTO.permissions);
-                })
-                .catch((err) => {
-                    log.debug(err);
-                    next(err)
-                });
-        });
+const post = async (req, res, next) => {
+    try {
+        let decodedToken = await Session.getTokenFromSession(req);
+        res.status(HttpStatus.OK).send(decodedToken.permissions);
+        return;
+    } catch (err) {
+        log.debug(err);
+    }
+
+    try {
+        if (!req.body[HTTPConstants.LOGIN] || !req.body[HTTPConstants.PASSWORD]) {
+            return next(new HttpError('The request didn\'t have the required parameters', HttpStatus.BAD_REQUEST));
+        }
+        let userDTO = await UserUCC.authenticate(req.body[HTTPConstants.LOGIN], req.body[HTTPConstants.PASSWORD]);
+        let signedToken = await Session.signToken(userDTO.getAll());
+        res
+            .cookie(config.COOKIE_NAME, signedToken)
+            .status(HttpStatus.OK)
+            .send(userDTO.permissions);
+    } catch (err) {
+        log.debug(err);
+        next(err)
+    }
 };
 
-const deleteSession = (req, res, next) => {
+const deleteSession = (req, res) => {
     res
         .clearCookie(config.COOKIE_NAME)
         .status(HttpStatus.OK)

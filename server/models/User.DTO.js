@@ -1,4 +1,6 @@
 import HttpError from "../modules/HttpError";
+import HTTPConstants from "../config/HTTPConstants";
+import HttpStatus from 'http-status';
 
 class User {
     constructor(name, permissions) {
@@ -31,20 +33,18 @@ class User {
      * @returns {*}
      */
     static cast(userObject) {
-        return new Promise((resolve, reject) => {
-            if(userObject.name === undefined || userObject.name === ''
-                || userObject.permissions === undefined){
-                reject(new Error('Invalid js object to cast'));
-            }
-            try {
-                resolve(new User(
-                    userObject.name,
-                    userObject.permissions
-                ));
-            } catch (err) {
-                reject(err);
-            }
-        });
+        if (userObject.name === undefined || userObject.name === ''
+            || userObject.permissions === undefined) {
+            throw new HttpError('Invalid js object to cast', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try {
+            return (new User(
+                userObject.name,
+                userObject.permissions
+            ));
+        } catch (err) {
+            throw new HttpError('Couldn\t case a js Object to a UserDto instance', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
 

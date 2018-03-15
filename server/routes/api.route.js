@@ -3,6 +3,7 @@ import apiController from '../controllers/api.controller';
 import authController from '../controllers/auth.controller';
 import validator from '../modules/PermissionsManager';
 import permissions from '../config/Permissions';
+import scopes from '../config/Scopes';
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ const router = express.Router();
  * Get on root of api, returns api informations in JSON format
  */
 router.route('/')
-    .get(validator.requireAll(permissions.ADMIN),apiController.get);
+    .get(validator.requires(scopes.ALL, permissions.ADMIN),apiController.get);
 
 /**
  * Post request to try and get a valid session back if credentials are valids
