@@ -1,8 +1,4 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const config = {
+export default {
     //should be 'prod' or 'dev'
     ENV: process.env.ENV || 'dev',
     //public port of the application
@@ -17,7 +13,5 @@ const config = {
 
     //bcrypt
     BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS || 10
+}
 
-};
-
-export default config;

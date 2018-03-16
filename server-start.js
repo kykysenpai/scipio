@@ -1,9 +1,8 @@
-//setup the config
-import './server/config/config';
+//setup .env file setup
+import dotenv from 'dotenv';
+dotenv.config();
 //setup the logger for the server
-import './server/config/logger';
-//setup the paths
-import './server/config/setupPaths';
+//import './server/modules/Logger';
 //start the server
 import './server';
 

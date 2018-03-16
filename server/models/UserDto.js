@@ -1,6 +1,5 @@
 import HttpError from "../modules/HttpError";
-import HTTPConstants from "../config/HTTPConstants";
-import HttpStatus from 'http-status';
+import HttpStatus from "../config/constants/HttpStatus";
 
 class User {
     constructor(name, permissions) {

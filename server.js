@@ -1,9 +1,9 @@
-import config from './server/config/config';
-import log from 'winston';
-import app from './server/config/express';
+import app from "./server/config/Express";
+import Config from "./server/config/Config";
+import Logger from "./server/modules/Logger";
 
-app.listen(config.PORT, () => {
-    log.info('server started on port ', config.PORT, ' in an environment of ', config.ENV);
+app.listen(Config.PORT, () => {
+    Logger.info('server started on port ', Config.PORT, ' in an environment of ', Config.ENV);
 });
 
-module.exports = app;
+export default app;

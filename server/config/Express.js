@@ -1,15 +1,17 @@
-import express from 'express';
-import log from 'winston';
-import HttpStatus from 'http-status';
-import api from '../routes/api.route';
-import config from './config';
-import expressWinston from 'express-winston';
+import express from "express";
 import cookieParser from 'cookie-parser';
-import views from '../routes/views.route';
+import expressWinston from "express-winston";
+import winston from "winston";
+import ApiRoute from "../routes/ApiRoute";
+import ViewsRoute from "../routes/ViewsRoute";
+import HttpStatus from "./constants/HttpStatus";
+import Paths from "./constants/Paths";
+import Config from "./Config";
+import Logger from "../modules/Logger";
 
 const app = express();
 
-app.use(express.static(config.PUBLIC));
+app.use(express.static(Paths.PUBLIC));
 
 app.use(cookieParser());
 
@@ -24,9 +26,9 @@ app.use(express.urlencoded({
  */
 app.use(expressWinston.logger({
     transports: [
-        new log.transports.Console({
+        new winston.transports.Console({
             colorize: true,
-            level: config.LOG_LEVEL
+            level: Config.LOG_LEVEL
         })
     ],
     meta: false,
@@ -38,7 +40,7 @@ app.use(expressWinston.logger({
  */
 app.use(expressWinston.logger({
     transports: [
-        new log.transports.File({
+        new winston.transports.File({
             filename: 'http-requests.log'
         })
     ],
@@ -50,32 +52,36 @@ app.use(expressWinston.logger({
  */
 app.use(expressWinston.errorLogger({
     transports: [
-        new log.transports.Console({
+        new winston.transports.Console({
             colorize: true
         }),
-        new log.transports.File({
+        new winston.transports.File({
             filename: 'http-errors.log'
         })
     ]
 }));
 
-app.use('/api', api);
+app.use('/api', ApiRoute);
 
-app.use('/views', views);
+app.use('/views', ViewsRoute);
 
 /**
  * An error was thrown
  */
 app.use((err, req, res, next) => {
     if (err) {
-        if (err.statusCode) {
+        if (err.statusCode && err.redirectRes) {
             res
                 .status(err.statusCode)
-                .sendFile(config.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
+                .sendFile(Paths.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
+        } else if (err.statusCode && !err.redirectRes) {
+            res
+                .status(err.statusCode)
+                .send('Error message : ' + err.message)
         } else {
             res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .sendFile(config.VIEWS_ERRORS + '/error500.html');
+                .sendFile(Paths.VIEWS_ERRORS + '/error500.html');
         }
     }
 });
@@ -87,7 +93,7 @@ app.use((req, res) => {
     res.status(HttpStatus.NOT_FOUND);
 
     if (req.accepts('html')) {
-        res.sendFile(config.VIEWS_ERRORS + '/error404.html');
+        res.sendFile(Paths.VIEWS_ERRORS + '/error404.html');
         return;
     }
 
@@ -100,6 +106,6 @@ app.use((req, res) => {
 
 });
 
-log.info('express app has received middlewares setup');
+Logger.info('express app has received middlewares setup');
 
 export default app;

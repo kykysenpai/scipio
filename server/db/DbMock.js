@@ -1,12 +1,6 @@
-import Permissions from '../config/Permissions';
+import Permissions from "../config/constants/Permissions";
 import HttpError from "../modules/HttpError";
-import HttpStatus from 'http-status';
 
-/**
- * Fetch user by his login
- * @param login
- * @returns {Promise<{name: string, permissions: *[], password: string}>}
- */
 const getUserByLogin = async (login) => {
     if (login === 'admin') {
         return {
@@ -17,8 +11,8 @@ const getUserByLogin = async (login) => {
             password: '$2a$10$Yp1ASKU6XieX6ctCG/t3wOr/NCS90T0rV3oD9bHPQSB5YqSMXJ/Y.'
         };
     } else {
-        throw new Error('no user with this login')
+        throw new HttpError('No user with this login', 400, false)
     }
 };
 
-export default {getUserByLogin};
+export default {getUserByLogin}

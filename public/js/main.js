@@ -61,12 +61,11 @@
             url: '/api/auth'
         })
             .then((ret) => {
-                console.log(ret);
+                toastS('You were automatically re-authenticated');
                 $('.navLoggedIn').show();
                 $('.navLoggedOut').hide();
             })
             .catch((ret) => {
-                console.log(ret);
                 $('.navLoggedOut').show();
                 $('.navLoggedIn').hide();
             })
