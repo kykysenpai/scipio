@@ -2,7 +2,7 @@ import Session from "../modules/Session";
 import HttpStatus from "../config/constants/HttpStatus";
 import Logger from "../modules/Logger";
 import Config from "../config/Config";
-import UserUcc from "../UCC/UserUcc";
+import UserUcc from "../ucc/UserUcc";
 import HttpError from "../modules/HttpError";
 import HttpParams from "../config/constants/HttpParams";
 

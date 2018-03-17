@@ -4,6 +4,8 @@ import Scopes from "../config/constants/Scopes";
 import Permissions from "../config/constants/Permissions";
 import ApiController from "../controllers/ApiController";
 import AuthController from "../controllers/AuthController";
+import AuthenticationRoute from "./AuthenticationRoute";
+import UserRoute from "./UserRoute";
 
 const router = express.Router();
 
@@ -15,19 +17,10 @@ const router = express.Router();
  * Get on root of api, returns api informations in JSON format
  */
 router.route('/')
-    .get(PermissionsManager(Scopes.ALL, Permissions.ADMIN), ApiController.get);
+    .get(PermissionsManager(Scopes.ALL, true, Permissions.ADMIN), ApiController.get);
 
-/**
- * Post request to try and get a valid session back if credentials are valids
- */
-router.route('/auth')
-    .post(AuthController.authenticate);
+router.use('/auth', AuthenticationRoute);
 
-/**
- * Delete request to destroy cookie from session
- */
-router.route('/auth')
-    .delete(AuthController.deleteSession);
-
+router.use('/user', UserRoute);
 
 export default router

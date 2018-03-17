@@ -6,7 +6,8 @@ const getUserByLogin = async (login) => {
         return {
             name: 'admin',
             permissions: [
-                Permissions.USER
+                Permissions.USER,
+                Permissions.ADMIN
             ],
             password: '$2a$10$Yp1ASKU6XieX6ctCG/t3wOr/NCS90T0rV3oD9bHPQSB5YqSMXJ/Y.'
         };

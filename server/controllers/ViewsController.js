@@ -9,4 +9,12 @@ const profile = (req, res) => {
     res.status(HttpStatus.OK).sendFile(Paths.VIEWS_SUCCESS + '/profile.html');
 };
 
-export default {index, profile}
+const tables = (req, res) => {
+    res.status(HttpStatus.OK).sendFile(Paths.VIEWS_SUCCESS + '/tables.html');
+};
+
+const admin = (req, res) => {
+    res.status(HttpStatus.OK).sendFile(Paths.VIEWS_SUCCESS + '/admin.html');
+}
+
+export default {index, profile, tables, admin}

@@ -20,6 +20,12 @@ const router = express.Router();
      * Get profile infos in JSON format
      */
     router.route('/profile')
-        .get(PermissionsManager(Scopes.ALL, Permissions.USER), ViewsController.profile);
+        .get(PermissionsManager(Scopes.ALL, true, Permissions.USER), ViewsController.profile);
+
+    router.route('/tables')
+        .get(ViewsController.tables);
+
+    router.route('/admin')
+        .get(PermissionsManager(Scopes.ALL, true, PermissionsManager.ADMIN), ViewsController.admin);
 
 export default router
