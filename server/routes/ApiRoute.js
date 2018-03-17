@@ -15,7 +15,7 @@ const router = express.Router();
  * Get on root of api, returns api informations in JSON format
  */
 router.route('/')
-    .get(PermissionsManager.requires(Scopes.ALL, Permissions.ADMIN), ApiController.get);
+    .get(PermissionsManager(Scopes.ALL, Permissions.ADMIN), ApiController.get);
 
 /**
  * Post request to try and get a valid session back if credentials are valids

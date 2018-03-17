@@ -53,4 +53,4 @@ const requires = (scope, ...perms) => {
         return true;
     };
 
-    export default {requires}
+    export default requires
