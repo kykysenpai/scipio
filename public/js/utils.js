@@ -1,17 +1,9 @@
 const getAndLoadPage = (viewName) => {
-    $.ajax({
-        url: '/views/' + viewName
-    })
-        .then((res) => {
-            loadPage(res);
-        })
-        .catch((res) => {
-            loadPage(res.responseText);
-        });
+    $('#mainContentDiv').load('/views/success/' + viewName + '.html')
 };
 
-const loadPage = (page) => {
-    $('#mainContentDiv').html(page);
+const getAndLoadError = (errorNumber) => {
+    $('#mainContentDiv').load('/views/errors/error' + errorNumber + '.html')
 };
 
 const loadDataTable = () => {

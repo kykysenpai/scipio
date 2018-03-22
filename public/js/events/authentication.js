@@ -7,32 +7,28 @@ $(() => {
         $.ajax({
             url: '/api/auth',
             data: data,
-            type: 'POST'
+            type: 'POST',
+            noprint: true
         })
-            .then((ret) => {
+            .then(() => {
                 toastS('You\'re successfully authenticated');
                 $('.navLoggedIn').show();
                 $('.navLoggedOut').hide();
                 $('#loginModal').modal('hide');
             })
-            .catch((err) => {
-                toastE(err.responseText);
-            });
     });
 
     $('#logoutModalButton').click((event) => {
         $.ajax({
             url: '/api/auth',
-            type: 'DELETE'
+            type: 'DELETE',
+            noprint:true
         })
-            .then((res) => {
+            .then(() => {
                 toastS('You successfully logged out');
                 $('.navLoggedOut').show();
                 $('.navLoggedIn').hide();
             })
-            .catch((err) => {
-                toastE(err.responseText);
-            });
     });
 
 });

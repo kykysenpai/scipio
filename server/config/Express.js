@@ -3,7 +3,6 @@ import cookieParser from 'cookie-parser';
 import expressWinston from "express-winston";
 import winston from "winston";
 import ApiRoute from "../routes/ApiRoute";
-import ViewsRoute from "../routes/ViewsRoute";
 import HttpStatus from "./constants/HttpStatus";
 import Paths from "./constants/Paths";
 import Config from "./Config";
@@ -63,25 +62,19 @@ app.use(expressWinston.errorLogger({
 
 app.use('/api', ApiRoute);
 
-app.use('/views', ViewsRoute);
-
 /**
  * An error was thrown
  */
 app.use((err, req, res, next) => {
     if (err) {
-        if (err.statusCode && err.redirectRes) {
-            res
-                .status(err.statusCode)
-                .sendFile(Paths.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
-        } else if (err.statusCode && !err.redirectRes) {
+        if (err.statusCode) {
             res
                 .status(err.statusCode)
                 .send('Error message : ' + err.message)
         } else {
             res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .sendFile(Paths.VIEWS_ERRORS + '/error500.html');
+                .sendFile('Error message : Unknown error');
         }
     }
 });
@@ -91,19 +84,7 @@ app.use((err, req, res, next) => {
  */
 app.use((req, res) => {
     res.status(HttpStatus.NOT_FOUND);
-
-    if (req.accepts('html')) {
-        res.sendFile(Paths.VIEWS_ERRORS + '/error404.html');
-        return;
-    }
-
-    if (req.accepts('json')) {
-        res.send({error: 'This url doesn\'t exist'});
-        return;
-    }
-
-    res.type('txt').send('Error 404 this page doesn\'t exist');
-
+    res.send({error: 'This url doesn\'t exist'});
 });
 
 Logger.info('express app has received middlewares setup');

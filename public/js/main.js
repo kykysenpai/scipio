@@ -1,6 +1,16 @@
 (function ($) {
     "use strict";
     $(() => {
+
+        $(document).ajaxError((event, jqxhr, settings, thrownError) => {
+            if(!settings.noprint){
+                getAndLoadError(jqxhr.status);
+            }
+            if(!settings.nonotif){
+                toastE(jqxhr.responseText);
+            }
+        });
+
         getAndLoadPage('index');
 
         // Configure tooltips for collapsed side navigation
@@ -48,7 +58,7 @@
 
         $('#mainNav a').click((event) => {
             let route = $(event.currentTarget).attr('data-link');
-            if(route){
+            if (route) {
                 getAndLoadPage(route);
             }
         })
@@ -58,7 +68,9 @@
 
         $.ajax({
             type: 'POST',
-            url: '/api/auth'
+            url: '/api/auth',
+            noprint: true,
+            nonotif:true
         })
             .then((ret) => {
                 toastS('You were automatically re-authenticated');
