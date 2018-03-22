@@ -15,6 +15,6 @@ const tables = (req, res) => {
 
 const admin = (req, res) => {
     res.status(HttpStatus.OK).sendFile(Paths.VIEWS_SUCCESS + '/admin.html');
-}
+};
 
 export default {index, profile, tables, admin}
