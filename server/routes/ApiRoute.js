@@ -17,7 +17,7 @@ const router = express.Router();
  * Get on root of api, returns api informations in JSON format
  */
 router.route('/')
-    .get(PermissionsManager(Scopes.ALL, true, Permissions.ADMIN), ApiController.get);
+    .get(PermissionsManager(Scopes.ALL, Permissions.ADMIN), ApiController.get);
 
 router.use('/auth', AuthenticationRoute);
 

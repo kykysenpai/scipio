@@ -8,6 +8,8 @@ import Paths from "./constants/Paths";
 import Config from "./Config";
 import Logger from "../modules/Logger";
 
+Logger.info('Setting up server context');
+
 const app = express();
 
 app.use(express.static(Paths.PUBLIC));
@@ -19,6 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+Logger.info('Setting up the server log middleware');
 
 /**
  * logs only the http request method and path at info level in the console
@@ -60,6 +64,8 @@ app.use(expressWinston.errorLogger({
     ]
 }));
 
+Logger.info('Setting up the routes');
+
 app.use('/api', ApiRoute);
 
 /**
@@ -74,7 +80,7 @@ app.use((err, req, res, next) => {
         } else {
             res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .sendFile('Error message : Unknown error');
+                .send('Error message : Unknown error, please report this error to Kyky');
         }
     }
 });
@@ -84,7 +90,7 @@ app.use((err, req, res, next) => {
  */
 app.use((req, res) => {
     res.status(HttpStatus.NOT_FOUND);
-    res.send({error: 'This url doesn\'t exist'});
+    res.send('This resource doesn\'t exist');
 });
 
 Logger.info('express app has received middlewares setup');

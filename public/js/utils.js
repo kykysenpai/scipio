@@ -6,10 +6,6 @@ const getAndLoadError = (errorNumber) => {
     $('#mainContentDiv').load('/views/errors/error' + errorNumber + '.html')
 };
 
-const loadDataTable = () => {
-    $('#dataTable').DataTable();
-};
-
 const getFormValues = (name) => {
     let map = {};
     $('form[name=' + name + ']')

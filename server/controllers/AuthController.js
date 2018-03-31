@@ -6,6 +6,13 @@ import UserUcc from "../ucc/UserUcc";
 import HttpError from "../modules/HttpError";
 import HttpParams from "../config/constants/HttpParams";
 
+/**
+ * Try to authenticate request by putting a token in it if it's not already present
+ * @param req
+ * @param res
+ * @param next
+ * @returns {Promise<*>} the permissions of the now logged in user
+ */
 const authenticate = async (req, res, next) => {
     try {
         let decodedToken = await Session.getTokenFromSession(req);
@@ -19,18 +26,23 @@ const authenticate = async (req, res, next) => {
         if (!req.body[HttpParams.LOGIN] || !req.body[HttpParams.PASSWORD]) {
             return next(new HttpError('The login or the password is missing !', HttpStatus.BAD_REQUEST));
         }
-        let userDTO = await UserUcc.authenticate(req.body[HttpParams.LOGIN], req.body[HttpParams.PASSWORD]);
-        let signedToken = await Session.signToken(userDTO.getAll());
+        let user = await UserUcc.authenticate(req.body[HttpParams.LOGIN], req.body[HttpParams.PASSWORD]);
+        let signedToken = await Session.signToken(user);
         res
             .cookie(Config.COOKIE_NAME, signedToken)
             .status(HttpStatus.OK)
-            .send(userDTO.permissions);
+            .send(user.permissions);
     } catch (err) {
         Logger.debug(err);
         next(err)
     }
 };
 
+/**
+ * Clear the jwt token from the session
+ * @param req
+ * @param res
+ */
 const deleteSession = (req, res) => {
     res
         .clearCookie(Config.COOKIE_NAME)
