@@ -2,6 +2,8 @@ import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
 import Db from "../db/DbMock";
 import bcrypt from "bcrypt";
+import UserDao from "../dao/UserDao";
+import Logger from "../modules/Logger";
 
 /**
  * Try to authenticate user with given login and password, will return a js object representing the user or else null and throw an error
@@ -14,7 +16,8 @@ const authenticate = async (login, password) => {
         || password === undefined || password === '') {
         reject(new HttpError('One of the parameter was invalid or not present', HttpStatus.BAD_REQUEST));
     }
-    let userJsObj = await Db.getUserByLogin(login);
+    let userJsObj = await UserDao.findByLogin(login);
+    if(!userJsObj) throw new HttpError('No user with this login', HttpStatus.BAD_REQUEST);
     let result = await bcrypt.compare(password, userJsObj.password);
     if (result) {
         return checkIntegrity(userJsObj) ? userJsObj : null;

@@ -1,9 +1,9 @@
 const getAndLoadPage = (viewName) => {
-    $('#mainContentDiv').load('/views/success/' + viewName + '.html')
+    $('#mainContentDiv').load('/views/success/' + viewName)
 };
 
 const getAndLoadError = (errorNumber) => {
-    $('#mainContentDiv').load('/views/errors/error' + errorNumber + '.html')
+    $('#mainContentDiv').load('/views/errors/' + errorNumber)
 };
 
 const getFormValues = (name) => {

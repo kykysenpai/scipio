@@ -12,6 +12,14 @@ export default {
     COOKIE_NAME: process.env.COOKIE_NAME || 'cookie_monster_rpz',
 
     //bcrypt
-    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS || 10
+    BCRYPT_SALT_ROUNDS: process.env.BCRYPT_SALT_ROUNDS || 10,
+
+    //db
+    DB_DATABASE: process.env.DB_DATABASE,
+    DB_URL: process.env.DB_URL,
+    DB_PASSWORD: process.env.DB_PASSWORD,
+    DB_USERNAME: process.env.DB_USERNAME,
+    DB_PORT: process.env.DB_PORT,
+    DB_POOL_MAX: process.env.DB_POOL_MAX || 5
 }
 

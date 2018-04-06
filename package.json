@@ -23,6 +23,8 @@
     "dotenv": "^5.0.1",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.2.0",
+    "mysql2": "^1.5.3",
+    "sequelize": "^4.37.5",
     "winston": "^2.4.1"
   },
   "devDependencies": {

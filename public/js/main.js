@@ -3,10 +3,11 @@
     $(() => {
 
         $(document).ajaxError((event, jqxhr, settings, thrownError) => {
-            if(!settings.noprint){
+            console.log(jqxhr);
+            if (!settings.noprint) {
                 getAndLoadError(jqxhr.status);
             }
-            if(!settings.nonotif){
+            if (!settings.nonotif) {
                 toastE(jqxhr.responseText);
             }
         });
@@ -61,7 +62,7 @@
             if (route) {
                 getAndLoadPage(route);
             }
-        })
+        });
 
         $('.navLoggedIn').hide();
         $('.navLoggedOut').hide();
@@ -70,7 +71,7 @@
             type: 'POST',
             url: '/api/auth',
             noprint: true,
-            nonotif:true
+            nonotif: true
         })
             .then((ret) => {
                 toastS('You were automatically re-authenticated');

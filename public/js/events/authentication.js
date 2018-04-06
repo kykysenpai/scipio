@@ -3,7 +3,7 @@ $(() => {
     $('#loginModalButton').click((event) => {
         let formName = $(event.currentTarget).closest('form').attr('name');
         let data = getFormValues(formName);
-        if (!data) return false;
+        if (!data || data === {}) return false;
         $.ajax({
             url: '/api/auth',
             data: data,
@@ -22,7 +22,7 @@ $(() => {
         $.ajax({
             url: '/api/auth',
             type: 'DELETE',
-            noprint:true
+            noprint: true
         })
             .then(() => {
                 toastS('You successfully logged out');

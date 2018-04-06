@@ -7,6 +7,7 @@ import HttpStatus from "./constants/HttpStatus";
 import Paths from "./constants/Paths";
 import Config from "./Config";
 import Logger from "../modules/Logger";
+import ViewRoute from "../routes/ViewRoute";
 
 Logger.info('Setting up server context');
 
@@ -68,6 +69,8 @@ Logger.info('Setting up the routes');
 
 app.use('/api', ApiRoute);
 
+app.use('/views', ViewRoute)
+
 /**
  * An error was thrown
  */
@@ -89,8 +92,16 @@ app.use((err, req, res, next) => {
  * If no route managed to respond to the request, send a 404
  */
 app.use((req, res) => {
-    res.status(HttpStatus.NOT_FOUND);
-    res.send('This resource doesn\'t exist');
+
+    if(req.accepts('html')){
+        res
+            .status(HttpStatus.NOT_FOUND)
+            .sendFile(Paths.VIEWS_ERRORS + '/error404.html');
+    } else {
+        res
+            .status(HttpStatus.NOT_FOUND)
+            .send('This resource doesn\'t exist');
+    }
 });
 
 Logger.info('express app has received middlewares setup');
