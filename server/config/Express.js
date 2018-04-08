@@ -9,7 +9,7 @@ import Config from "./Config";
 import Logger from "../modules/Logger";
 import ViewRoute from "../routes/ViewRoute";
 
-Logger.info('Setting up server context');
+Logger.info('Setting up server context...');
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-Logger.info('Setting up the server log middleware');
+Logger.info('Setting up the server log middleware...');
 
 /**
  * logs only the http request method and path at info level in the console
@@ -65,17 +65,18 @@ app.use(expressWinston.errorLogger({
     ]
 }));
 
-Logger.info('Setting up the routes');
+Logger.info('Setting up the HTTP routes...');
 
 app.use('/api', ApiRoute);
 
-app.use('/views', ViewRoute)
+app.use('/views', ViewRoute);
 
 /**
  * An error was thrown
  */
 app.use((err, req, res, next) => {
     if (err) {
+        Logger.debug(err);
         if (err.statusCode) {
             res
                 .status(err.statusCode)

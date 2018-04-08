@@ -3,6 +3,10 @@ import ViewController from "../controllers/ViewController";
 
 const router = express.Router();
 
+/**
+ * All these routes are prefixed by /views
+ */
+
 router.route('/success/:viewName')
     .get(ViewController.getView);
 

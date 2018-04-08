@@ -6,6 +6,12 @@ const getAndLoadError = (errorNumber) => {
     $('#mainContentDiv').load('/views/errors/' + errorNumber)
 };
 
+
+const getFormValuesFromClick = (event) => {
+    let formName = $(event.currentTarget).closest('form').attr('name');
+    return getFormValues(formName);
+};
+
 const getFormValues = (name) => {
     let map = {};
     $('form[name=' + name + ']')

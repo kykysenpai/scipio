@@ -6,7 +6,13 @@ export default {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    code: {
+        type: Sequelize.DataTypes.STRING
+    },
+    expiration_date:{
+        type: Sequelize.DataTypes.DATE
+    },
+    user_login:{
         type: Sequelize.DataTypes.STRING
     }
 }

@@ -4,7 +4,7 @@ import AuthController from "../controllers/AuthController";
 const router = express.Router();
 
 /**
- * /api/auth route
+ * All these routes are prefixed by /api/auth
  */
 
 /**

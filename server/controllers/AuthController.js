@@ -5,6 +5,7 @@ import Config from "../config/Config";
 import UserUcc from "../ucc/UserUcc";
 import HttpError from "../modules/HttpError";
 import HttpParams from "../config/constants/HttpParams";
+import PermissionUcc from "../ucc/PermissionUcc";
 
 /**
  * Try to authenticate request by putting a token in it if it's not already present
@@ -23,11 +24,25 @@ const authenticate = async (req, res, next) => {
     }
 
     try {
-        if (!req.body[HttpParams.LOGIN] || !req.body[HttpParams.PASSWORD]) {
-            return next(new HttpError('The login or the password is missing !', HttpStatus.BAD_REQUEST));
-        }
+        if (!req.body[HttpParams.LOGIN] || !req.body[HttpParams.PASSWORD]) throw new HttpError('The login or the password is missing !', HttpStatus.BAD_REQUEST);
+
+        let infoToSignInToken = {};
+
         let user = await UserUcc.authenticate(req.body[HttpParams.LOGIN], req.body[HttpParams.PASSWORD]);
-        let signedToken = await Session.signToken(user);
+        infoToSignInToken.id = user.id;
+        infoToSignInToken.first_name = user.first_name;
+        infoToSignInToken.last_name = user.last_name;
+        infoToSignInToken.login = user.login;
+        infoToSignInToken.email = user.email;
+
+        infoToSignInToken.permissions = [];
+        let permissions = await PermissionUcc.findAllByUserId(user.id);
+        permissions.forEach(permission => {
+            infoToSignInToken.permissions.push(permission.name);
+        });
+
+        let signedToken = await Session.signToken(infoToSignInToken);
+
         res
             .cookie(Config.COOKIE_NAME, signedToken)
             .status(HttpStatus.OK)

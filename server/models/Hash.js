@@ -6,7 +6,10 @@ export default {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    user_id: {
+        type: Sequelize.DataTypes.INTEGER
+    },
+    hash:{
         type: Sequelize.DataTypes.STRING
     }
 }

@@ -3,7 +3,8 @@ import Sequelize from "sequelize";
 export default {
     id: {
         type: Sequelize.DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     first_name: {
         type: Sequelize.DataTypes.STRING
@@ -19,5 +20,8 @@ export default {
     },
     email: {
         type: Sequelize.DataTypes.STRING
+    },
+    active: {
+        type: Sequelize.DataTypes.BOOLEAN
     }
 }

@@ -12,8 +12,12 @@ import PermissionModel from "../models/Permission";
 import UserPermissionModel from "../models/UserPermission";
 import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
+import HashModel from "../models/Hash";
+import AccountCreationCodeModel from "../models/AccountCreationCode";
 
-const db = new Sequelize(
+Logger.info("Creating database instance...");
+
+const sequelize = new Sequelize(
     Config.DB_DATABASE,
     Config.DB_USERNAME,
     Config.DB_PASSWORD,
@@ -36,7 +40,6 @@ const db = new Sequelize(
 );
 
 const getErrorMessage = (err) => {
-    Logger.error(err);
     switch (err.constructor) {
         case AccessDeniedError:
             return "Access to database was denied from application";
@@ -44,6 +47,8 @@ const getErrorMessage = (err) => {
             return "Access to database refused";
         case ConnectionTimedOutError:
             return "Timed out before reaching database, it is probably not attainable";
+        case HttpError:
+            return err.message;
     }
     if(err instanceof DatabaseError){
         return "There was an error querrying the database";
@@ -54,15 +59,36 @@ const getErrorMessage = (err) => {
     return "There was an unknown problem in the database";
 };
 
+// const transaction = db.transaction;
+
 const handleError = (err) => {
+    Logger.error("An error was reported in the persistence layer", err);
     throw new HttpError(getErrorMessage(err), HttpStatus.INTERNAL_SERVER_ERROR);
 };
 
-const User = db.define("users", UserModel);
+Logger.info("Creation all database models...");
 
-const Permissions = db.define("permissions", PermissionModel);
+const getTransaction = async () => {
+    try{
+        return await sequelize.transaction();
+    } catch(err){
+        Logger.error(err);
+        throw new HttpError("Not possible to start a persistence transaction", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+};
 
-const UsersPermissions = db.define("users_permissions", UserPermissionModel);
+
+const Users = sequelize.define("users", UserModel);
+
+const Permissions = sequelize.define("permissions", PermissionModel);
+
+const UsersPermissions = sequelize.define("users_permissions", UserPermissionModel);
+
+const Hashs = sequelize.define("hashs", HashModel);
+
+const AccountCreationCodes = sequelize.define("account_creation_codes", AccountCreationCodeModel);
 
 
-export default {User, Permissions, UsersPermissions, handleError}
+Logger.info("All database models have been set up");
+
+export default {handleError, Users, Permissions, UsersPermissions, Hashs, AccountCreationCodes, getTransaction}

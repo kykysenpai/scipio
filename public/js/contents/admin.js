@@ -1,3 +1,0 @@
-const loadAdminPageContent = () => {
-    $('#adminPageUsersDataTable').DataTable();
-};
