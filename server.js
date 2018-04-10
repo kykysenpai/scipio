@@ -3,7 +3,7 @@ import Config from "./server/config/Config";
 import Logger from "./server/modules/Logger";
 
 app.listen(Config.PORT, () => {
-    Logger.info('server started on port ', Config.PORT, ' in an environment of ', Config.ENV);
+    Logger.info('Server successfully started on port', Config.PORT, 'in an environment of', Config.ENV);
 });
 
 export default app;

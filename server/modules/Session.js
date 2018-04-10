@@ -4,6 +4,11 @@ import HttpError from "./HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
 import Logger from "./Logger";
 
+/**
+ * Get the token from the given request
+ * @param req
+ * @returns {Promise<*>} returns the decoded token from the session, else throws an error
+ */
 const getTokenFromSession = async (req) => {
     if (req.cookies && req.cookies[Config.COOKIE_NAME]) {
         try {
@@ -18,7 +23,7 @@ const getTokenFromSession = async (req) => {
 
 /**
  * Sign a token and return it
- * @param token
+ * @param token the user informations in a js object
  * @returns {Promise<any>}
  */
 const signToken = async (token) => {

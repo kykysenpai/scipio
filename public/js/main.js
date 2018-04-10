@@ -1,6 +1,17 @@
 (function ($) {
     "use strict";
     $(() => {
+
+        $(document).ajaxError((event, jqxhr, settings, thrownError) => {
+            console.log(jqxhr);
+            if (!settings.noprint) {
+                getAndLoadError(jqxhr.status);
+            }
+            if (!settings.nonotif) {
+                toastE(jqxhr.responseText);
+            }
+        });
+
         getAndLoadPage('index');
 
         // Configure tooltips for collapsed side navigation
@@ -48,17 +59,19 @@
 
         $('#mainNav a').click((event) => {
             let route = $(event.currentTarget).attr('data-link');
-            if(route){
+            if (route) {
                 getAndLoadPage(route);
             }
-        })
+        });
 
         $('.navLoggedIn').hide();
         $('.navLoggedOut').hide();
 
         $.ajax({
             type: 'POST',
-            url: '/api/auth'
+            url: '/api/auth',
+            noprint: true,
+            nonotif: true
         })
             .then((ret) => {
                 toastS('You were automatically re-authenticated');
@@ -68,6 +81,65 @@
             .catch((ret) => {
                 $('.navLoggedOut').show();
                 $('.navLoggedIn').hide();
+            });
+
+        $('#loginModalButton').click((event) => {
+            let data = getFormValuesFromClick(event);
+            if (!data || data === {}) return false;
+            $.ajax({
+                url: '/api/auth',
+                data: data,
+                type: 'POST',
+                noprint: true
             })
+                .then(() => {
+                    toastS('You\'re successfully authenticated');
+                    $('.navLoggedIn').show();
+                    $('.navLoggedOut').hide();
+                    $('#loginModal').modal('hide');
+                })
+        });
+
+        $('#signInCodeValidationButton').click((event) => {
+            let data = getFormValuesFromClick(event);
+            $.ajax({
+                url: '/api/user/validate-code',
+                data: data,
+                type: 'POST',
+                noprint: true
+            })
+                .then(ret => {
+                    toastS('Your combination login/code is correct, you can now create your account');
+                    $('#signInInputCode').val(ret.code);
+                    $('#signInInputlogin').val(ret.user_login);
+                })
+        });
+
+        $('#signInModalButton').click((event) => {
+            let data = getFormValuesFromClick(event);
+            $.ajax({
+                url: '/api/user/create-user',
+                data: data,
+                type: 'POST',
+                noprint: true
+            })
+                .then(ret => {
+                    toastS('Your account has been created, check your emails to activate your account');
+                    $('#signinModal').modal('hide');
+                })
+        });
+
+        $('#logoutModalButton').click((event) => {
+            $.ajax({
+                url: '/api/auth',
+                type: 'DELETE',
+                noprint: true
+            })
+                .then(() => {
+                    toastS('You successfully logged out');
+                    $('.navLoggedOut').show();
+                    $('.navLoggedIn').hide();
+                })
+        });
     })
 })(jQuery);

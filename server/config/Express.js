@@ -3,11 +3,13 @@ import cookieParser from 'cookie-parser';
 import expressWinston from "express-winston";
 import winston from "winston";
 import ApiRoute from "../routes/ApiRoute";
-import ViewsRoute from "../routes/ViewsRoute";
 import HttpStatus from "./constants/HttpStatus";
 import Paths from "./constants/Paths";
 import Config from "./Config";
 import Logger from "../modules/Logger";
+import ViewRoute from "../routes/ViewRoute";
+
+Logger.info('Setting up server context...');
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+Logger.info('Setting up the server log middleware...');
 
 /**
  * logs only the http request method and path at info level in the console
@@ -61,27 +65,26 @@ app.use(expressWinston.errorLogger({
     ]
 }));
 
+Logger.info('Setting up the HTTP routes...');
+
 app.use('/api', ApiRoute);
 
-app.use('/views', ViewsRoute);
+app.use('/views', ViewRoute);
 
 /**
  * An error was thrown
  */
 app.use((err, req, res, next) => {
     if (err) {
-        if (err.statusCode && err.redirectRes) {
-            res
-                .status(err.statusCode)
-                .sendFile(Paths.VIEWS_ERRORS + '/error' + err.statusCode + '.html');
-        } else if (err.statusCode && !err.redirectRes) {
+        Logger.debug(err);
+        if (err.statusCode) {
             res
                 .status(err.statusCode)
                 .send('Error message : ' + err.message)
         } else {
             res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .sendFile(Paths.VIEWS_ERRORS + '/error500.html');
+                .send('Error message : Unknown error, please report this error to Kyky');
         }
     }
 });
@@ -90,20 +93,16 @@ app.use((err, req, res, next) => {
  * If no route managed to respond to the request, send a 404
  */
 app.use((req, res) => {
-    res.status(HttpStatus.NOT_FOUND);
 
-    if (req.accepts('html')) {
-        res.sendFile(Paths.VIEWS_ERRORS + '/error404.html');
-        return;
+    if(req.accepts('html')){
+        res
+            .status(HttpStatus.NOT_FOUND)
+            .sendFile(Paths.VIEWS_ERRORS + '/error404.html');
+    } else {
+        res
+            .status(HttpStatus.NOT_FOUND)
+            .send('This resource doesn\'t exist');
     }
-
-    if (req.accepts('json')) {
-        res.send({error: 'This url doesn\'t exist'});
-        return;
-    }
-
-    res.type('txt').send('Error 404 this page doesn\'t exist');
-
 });
 
 Logger.info('express app has received middlewares setup');
