@@ -1,4 +1,5 @@
 import Db from "../db/Db";
+import Logger from "../modules/Logger";
 
 const findAllByUserId = async (user_id) => {
     try {
@@ -8,16 +9,18 @@ const findAllByUserId = async (user_id) => {
             }
         });
 
-        let users_permissions_id = [];
+        let permissions_id = [];
         users_permissions.forEach(user_permission => {
-            users_permissions_id.push(user_permission.user_id);
+            permissions_id.push(user_permission.permission_id);
         });
 
         return await Db.Permissions.findAll({
             where: {
-                id: users_permissions_id
+                id: permissions_id
             }
         });
+
+
     } catch (err) {
         Db.handleError(err);
     }

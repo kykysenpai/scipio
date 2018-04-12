@@ -51,18 +51,13 @@ const checkAny = (perms, jwtPerms) => {
 };
 
 const checkAll = (perms, jwtPerms) => {
+    let hasPerm = true;
     perms.forEach((perm) => {
-        let hasPerm = false;
-        jwtPerms.forEach((jwtPerm) => {
-            if (perm === jwtPerm) {
-                hasPerm = true;
-            }
-        });
-        if (!hasPerm) {
-            return false;
+        if(!jwtPerms.includes(perm)){
+            hasPerm = false;
         }
     });
-    return true;
+    return hasPerm;
 };
 
 export default requires;

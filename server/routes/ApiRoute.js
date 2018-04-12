@@ -5,6 +5,7 @@ import Permissions from "../config/constants/Permissions";
 import ApiController from "../controllers/ApiController";
 import AuthenticationRoute from "./AuthenticationRoute";
 import UserRoute from "./UserRoute";
+import AdminRoute from "./AdminRoute";
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.route('/')
 router.use('/auth', AuthenticationRoute);
 
 router.use('/user', UserRoute);
+
+router.use('/admin', AdminRoute);
 
 export default router

@@ -3,7 +3,7 @@ import Sequelize, {
     BaseError, ConnectionError,
     ConnectionRefusedError,
     ConnectionTimedOutError,
-    DatabaseError, EmptyResultError
+    DatabaseError, EmptyResultError, UniqueConstraintError
 } from "sequelize";
 import Config from "../config/Config";
 import Logger from "../modules/Logger";

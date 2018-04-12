@@ -16,14 +16,6 @@ import PermissionUcc from "../ucc/PermissionUcc";
  */
 const authenticate = async (req, res, next) => {
     try {
-        let decodedToken = await Session.getTokenFromSession(req);
-        res.status(HttpStatus.OK).send(decodedToken.permissions);
-        return;
-    } catch (err) {
-        Logger.debug("A client made a request with an empty cookie");
-    }
-
-    try {
         if (!req.body[HttpParams.LOGIN] || !req.body[HttpParams.PASSWORD]) throw new HttpError('The login or the password is missing !', HttpStatus.BAD_REQUEST);
 
         let infoToSignInToken = {};
@@ -46,7 +38,7 @@ const authenticate = async (req, res, next) => {
         res
             .cookie(Config.COOKIE_NAME, signedToken)
             .status(HttpStatus.OK)
-            .send(user.permissions);
+            .send(infoToSignInToken.permissions);
     } catch (err) {
         Logger.debug(err);
         next(err)
@@ -65,4 +57,25 @@ const deleteSession = (req, res) => {
         .end();
 };
 
-export default {authenticate, deleteSession}
+const checkAuthenticated = async (req, res) => {
+    try {
+        let decodedToken = await Session.getTokenFromSession(req);
+        res
+            .status(HttpStatus.OK)
+            .send({
+                isAuthenticated: true,
+                permissions : decodedToken.permissions
+            });
+    } catch (err) {
+        /**
+         * Empty cookie
+         */
+        res
+            .status(HttpStatus.OK)
+            .send({
+                isAuthenticated: false
+            })
+    }
+};
+
+export default {authenticate, deleteSession, checkAuthenticated}

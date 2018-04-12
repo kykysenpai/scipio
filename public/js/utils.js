@@ -22,6 +22,12 @@ const getFormValues = (name) => {
     return map;
 };
 
+const loadNavBarLinks = (permissions) => {
+    permissions.forEach(perm => {
+        $('#navbarApplication' + perm).show();
+    });
+};
+
 toastr.options = {
     "closeButton": true,
     "debug": false,

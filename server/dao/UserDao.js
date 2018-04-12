@@ -3,6 +3,7 @@ import Hash from 'object-hash';
 import Logger from "../modules/Logger";
 import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
+import {UniqueConstraintError} from "sequelize";
 
 const findAllInfoByLogin = async (login) => {
     try {
@@ -43,9 +44,7 @@ const createUser = async (user) => {
         }, {transaction: t});
 
         Logger.debug("Deleting his security code in the database...");
-        await foundAccountCreationCode.destroy({
-
-        }, {transaction: t});
+        await foundAccountCreationCode.destroy({}, {transaction: t});
 
 
         Logger.debug("No problem while creating user, committing changes...");
@@ -54,6 +53,9 @@ const createUser = async (user) => {
         return createdHash.hash;
     } catch (err) {
         await t.rollback();
+        if (err.constructor === UniqueConstraintError) {
+            throw new HttpError("This e-mail is already used", HttpStatus.BAD_REQUEST);
+        }
         Db.handleError(err);
     }
 };
@@ -83,9 +85,7 @@ const confirmAccount = async (hash) => {
         }, {transaction: t});
 
         Logger.debug("Removing his activation code from persistence...");
-        await foundHash.destroy({
-
-        }, {transaction: t});
+        await foundHash.destroy({}, {transaction: t});
 
         Logger.debug("No error while activating account, committing changes...");
         await t.commit();
@@ -96,14 +96,14 @@ const confirmAccount = async (hash) => {
     }
 };
 
-const findAll = async() => {
-  try{
-      return await Db.Users.findAll({
-          attributes: ['first_name', 'last_name', 'login', 'email', 'active']
-      });
-  } catch(err) {
-      Db.handleError(err);
-  }
+const findAll = async () => {
+    try {
+        return await Db.Users.findAll({
+            attributes: ['first_name', 'last_name', 'login', 'email', 'active']
+        });
+    } catch (err) {
+        Db.handleError(err);
+    }
 };
 
 

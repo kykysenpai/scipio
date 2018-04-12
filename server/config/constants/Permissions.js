@@ -1,4 +1,3 @@
 export default {
-    USER: 'USER',
-    ADMIN: 'ADMIN'
+    ADMIN: 'Admin'
 }

@@ -69,18 +69,20 @@
 
         $.ajax({
             type: 'POST',
-            url: '/api/auth',
+            url: '/api/auth/check',
             noprint: true,
             nonotif: true
         })
             .then((ret) => {
-                toastS('You were automatically re-authenticated');
-                $('.navLoggedIn').show();
-                $('.navLoggedOut').hide();
-            })
-            .catch((ret) => {
-                $('.navLoggedOut').show();
-                $('.navLoggedIn').hide();
+                if(ret.isAuthenticated) {
+                    toastS('You were automatically re-authenticated');
+                    $('.navLoggedIn').show();
+                    $('.navLoggedOut').hide();
+                    loadNavBarLinks(ret.permissions);
+                } else {
+                    $('.navLoggedOut').show();
+                    $('.navLoggedIn').hide();
+                }
             });
 
         $('#loginModalButton').click((event) => {
@@ -92,7 +94,8 @@
                 type: 'POST',
                 noprint: true
             })
-                .then(() => {
+                .then((permissions) => {
+                    loadNavBarLinks(permissions);
                     toastS('You\'re successfully authenticated');
                     $('.navLoggedIn').show();
                     $('.navLoggedOut').hide();

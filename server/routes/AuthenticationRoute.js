@@ -13,6 +13,9 @@ const router = express.Router();
 router.route('/')
     .post(AuthController.authenticate);
 
+router.route('/check')
+    .post(AuthController.checkAuthenticated);
+
 /**
  * Delete request to destroy cookie from session
  */
