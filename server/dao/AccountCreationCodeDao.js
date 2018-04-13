@@ -17,6 +17,7 @@ const createAccountCreationCode = async (user_login) => {
             user_login: user_login
         });
     } catch (err) {
+        Logger.debug(err);
         throw new HttpError(err.message, HttpStatus.BAD_REQUEST);
     }
 };
