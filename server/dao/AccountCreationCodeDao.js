@@ -4,6 +4,7 @@ import Logger from "../modules/Logger";
 import Sequelize from 'sequelize';
 import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
+import ErrorMessages from "../config/constants/ErrorMessages";
 
 const Op = Sequelize.Op;
 
@@ -18,7 +19,11 @@ const createAccountCreationCode = async (user_login) => {
         });
     } catch (err) {
         Logger.debug(err);
-        throw new HttpError(err.message, HttpStatus.BAD_REQUEST);
+        if(err.message === ErrorMessages.ACCOUNT_CREATION_CODE_UNIQUE_LOGIN)
+            throw new HttpError("This user already exists", HttpStatus.BAD_REQUEST);
+        if(err.message === ErrorMessages.VALIDATION_ERROR)
+            throw new HttpError("A code was already created for this user", HttpStatus.BAD_REQUEST);
+        Db.handleError(err);
     }
 };
 
