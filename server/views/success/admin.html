@@ -39,7 +39,12 @@
                     <i class="fa fa-user-circle"></i> Permissions
                 </div>
                 <div class="card-body">
-
+                    <div class="row">
+                        aze
+                    </div>
+                    <div class="row">
+                        aze
+                    </div>
                 </div>
                 <div class="card-footer small text-muted">Manage the access of the users of Scipio</div>
             </div>
@@ -59,7 +64,8 @@
                             <input class="form-control" type="text" id="adminPageCreateUserFormLogin" name="login">
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary" id="adminPageCreateUserFormButton" type="button">Get Code</button>
+                            <button class="btn btn-primary" id="adminPageCreateUserFormButton" type="button">Get Code
+                            </button>
                         </div>
                     </form>
                     <form>
@@ -69,29 +75,29 @@
                         </div>
                     </form>
                 </div>
-                <div class="card-footer small text-muted">Create a new user with a set login and create an url</div>
+                <div class="card-footer small text-muted">Create a new user code with a set login</div>
             </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fa fa-user-circle"></i> Empty
-                </div>
-                <div class="card-body">
-                </div>
-                <div class="card-footer small text-muted">Empty card for dev purposes</div>
-            </div>
-        </div>
-    </div>
+    <!--<div class="row">-->
+    <!--<div class="col-12">-->
+    <!--<div class="card mb-3">-->
+    <!--<div class="card-header">-->
+    <!--<i class="fa fa-user-circle"></i> Empty-->
+    <!--</div>-->
+    <!--<div class="card-body">-->
+    <!--</div>-->
+    <!--<div class="card-footer small text-muted">Empty card for dev purposes</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
 
     <script>
-        const deactivateUser = (login) => {
-            if(confirm("Are you sure you want to deactivate the account of " + login)){
+        deactivateUser = (login) => {
+            if (confirm("This user won't be able to log back in, are you sure you want to deactivate the account of " + login + " ?")) {
                 $.ajax({
-                    url:'/api/admin/deactivate-user',
+                    url: '/api/admin/deactivate-user',
                     data: {
                         login: login
                     },
@@ -105,11 +111,11 @@
             }
         };
 
-        const resendConfirmationEmail = (login) => {
+        resendConfirmationEmail = (login) => {
             $.ajax({
-                url:'/api/admin/resend-mail',
-                data:{
-                    login:login
+                url: '/api/admin/resend-mail',
+                data: {
+                    login: login
                 },
                 type: 'POST',
                 noprint: true
@@ -119,13 +125,13 @@
                 })
         };
 
-        const loadAdminPage = () => {
+        loadAdminPage = () => {
             loadAdminPageUsersDataTable();
         };
 
-        const adminPageDatatable = $('#adminPageUsersDataTable').DataTable();
+        adminPageDatatable = $('#adminPageUsersDataTable').DataTable();
 
-        const loadAdminPageUsersDataTable = () => {
+        loadAdminPageUsersDataTable = () => {
             adminPageDatatable.clear();
             $.ajax({
                 url: '/api/user',
@@ -140,8 +146,8 @@
                             user.login,
                             user.email,
                             user.active ?
-                                '<button id="adminPageUserDeactivate_'+ user.login +'" class="btn btn-primary">Desactivate account</button>' :
-                                '<button id="adminPageUserResendMail_'+ user.login +'" class="btn btn-primary">Resend confirmation mail</button>'
+                                '<button id="adminPageUserDeactivate_' + user.login + '" class="btn btn-primary">Desactivate account</button>' :
+                                '<button id="adminPageUserResendMail_' + user.login + '" class="btn btn-primary">Resend confirmation mail</button>'
                         ]).draw();
 
                         $('#adminPageUserDeactivate_' + user.login).click((event) => {
@@ -149,7 +155,7 @@
                         });
 
                         $('#adminPageUserResendMail_' + user.login).click((event) => {
-                           resendConfirmationEmail(user.login);
+                            resendConfirmationEmail(user.login);
                         });
 
                     });
@@ -162,10 +168,10 @@
                 if (!data || data === {}) return false;
                 console.log(data);
                 $.ajax({
-                    url:'/api/admin/create-code',
+                    url: '/api/admin/create-code',
                     type: 'GET',
                     data: data,
-                    noprint:true
+                    noprint: true
                 })
                     .then(ret => {
                         $('#adminPageCreateUserFormCode').val(ret);

@@ -12,6 +12,14 @@
             }
         });
 
+        $(document).ajaxStart(() => {
+            $('#ajaxLoaderGifContainer').show();
+        });
+
+        $(document).ajaxStop(() => {
+            $('#ajaxLoaderGifContainer').hide();
+        });
+
         getAndLoadPage('index');
 
         // Configure tooltips for collapsed side navigation
@@ -74,7 +82,7 @@
             nonotif: true
         })
             .then((ret) => {
-                if(ret.isAuthenticated) {
+                if (ret.isAuthenticated) {
                     toastS('You were automatically re-authenticated');
                     $('.navLoggedIn').show();
                     $('.navLoggedOut').hide();
