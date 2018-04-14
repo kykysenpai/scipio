@@ -1,5 +1,8 @@
 import express from "express";
 import UserController from "../controllers/UserController";
+import PermissionsManager from "../modules/PermissionsManager";
+import Scopes from "../config/constants/Scopes";
+import Permissions from "../config/constants/Permissions";
 
 const router = express.Router();
 
@@ -8,7 +11,7 @@ const router = express.Router();
  */
 
 router.route('/')
-    .get(UserController.findAll);
+    .get(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.findAll);
 
 router.route('/create-user')
     .post(UserController.createUser);

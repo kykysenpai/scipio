@@ -12,7 +12,7 @@ const router = express.Router();
  */
 
 router.route('/create-code')
-    .post(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.createCode);
+    .get(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.createCode);
 
 router.route('/deactivate-user')
     .post(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.deactivateUser);

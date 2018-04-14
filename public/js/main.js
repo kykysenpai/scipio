@@ -72,9 +72,6 @@
             }
         });
 
-        $('.navLoggedIn').hide();
-        $('.navLoggedOut').hide();
-
         $.ajax({
             type: 'POST',
             url: '/api/auth/check',
@@ -84,12 +81,12 @@
             .then((ret) => {
                 if (ret.isAuthenticated) {
                     toastS('You were automatically re-authenticated');
-                    $('.navLoggedIn').show();
-                    $('.navLoggedOut').hide();
+                    $('.navLoggedIn').show("slow");
+                    $('.navLoggedOut').hide("slow");
                     loadNavBarLinks(ret.permissions);
                 } else {
-                    $('.navLoggedOut').show();
-                    $('.navLoggedIn').hide();
+                    $('.navLoggedOut').show("slow");
+                    $('.navLoggedIn').hide("slow");
                 }
             });
 
@@ -105,8 +102,8 @@
                 .then((permissions) => {
                     loadNavBarLinks(permissions);
                     toastS('You\'re successfully authenticated');
-                    $('.navLoggedIn').show();
-                    $('.navLoggedOut').hide();
+                    $('.navLoggedIn').show("slow");
+                    $('.navLoggedOut').hide("slow");
                     $('#loginModal').modal('hide');
                 })
         });
@@ -148,8 +145,8 @@
             })
                 .then(() => {
                     toastS('You successfully logged out');
-                    $('.navLoggedOut').show();
-                    $('.navLoggedIn').hide();
+                    $('.navLoggedOut').show("slow");
+                    $('.navLoggedIn').hide("slow");
                 })
         });
     })
