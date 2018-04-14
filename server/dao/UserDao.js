@@ -84,8 +84,8 @@ const confirmAccount = async (hash) => {
             active: true
         }, {transaction: t});
 
-        Logger.debug("Removing his activation code from persistence...");
-        await foundHash.destroy({}, {transaction: t});
+        // Logger.debug("Removing his activation code from persistence...");
+        // await foundHash.destroy({}, {transaction: t});
 
         Logger.debug("No error while activating account, committing changes...");
         await t.commit();
@@ -94,6 +94,18 @@ const confirmAccount = async (hash) => {
         await t.rollback();
         Db.handleError(err);
     }
+};
+
+const deactivateUser = async (login) => {
+  try{
+      let user = await findAllInfoByLogin(login);
+      return await user.update({
+          active: false
+      });
+  } catch(err){
+
+      Db.handleError(err);
+  }
 };
 
 const findAll = async () => {
@@ -107,4 +119,4 @@ const findAll = async () => {
 };
 
 
-export default {findAllInfoByLogin, createUser, confirmAccount, findAll}
+export default {findAllInfoByLogin, createUser, confirmAccount, findAll, deactivateUser}

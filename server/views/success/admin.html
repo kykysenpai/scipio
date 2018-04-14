@@ -88,9 +88,75 @@
     </div>
 
     <script>
+        const deactivateUser = (login) => {
+            if(confirm("Are you sure you want to deactivate the account of " + login)){
+                $.ajax({
+                    url:'/api/admin/deactivate-user',
+                    data: {
+                        login: login
+                    },
+                    type: 'POST',
+                    noprint: true
+                })
+                    .then(ret => {
+                        toastS("Account was deactivated");
+                        loadAdminPageUsersDataTable();
+                    })
+            }
+        };
+
+        const resendConfirmationEmail = (login) => {
+            $.ajax({
+                url:'/api/admin/resend-mail',
+                data:{
+                    login:login
+                },
+                type: 'POST',
+                noprint: true
+            })
+                .then(ret => {
+                    toastS("Mail sent");
+                })
+        };
+
+        const loadAdminPage = () => {
+            loadAdminPageUsersDataTable();
+        };
+
+        const adminPageDatatable = $('#adminPageUsersDataTable').DataTable();
+
+        const loadAdminPageUsersDataTable = () => {
+            adminPageDatatable.clear();
+            $.ajax({
+                url: '/api/user',
+                type: 'GET',
+                noprint: true
+            })
+                .then((ret) => {
+                    ret.forEach(user => {
+                        adminPageDatatable.row.add([
+                            user.first_name,
+                            user.last_name,
+                            user.login,
+                            user.email,
+                            user.active ?
+                                '<button id="adminPageUserDeactivate_'+ user.login +'" class="btn btn-primary">Desactivate account</button>' :
+                                '<button id="adminPageUserResendMail_'+ user.login +'" class="btn btn-primary">Resend confirmation mail</button>'
+                        ]).draw();
+
+                        $('#adminPageUserDeactivate_' + user.login).click((event) => {
+                            deactivateUser(user.login);
+                        });
+
+                        $('#adminPageUserResendMail_' + user.login).click((event) => {
+                           resendConfirmationEmail(user.login);
+                        });
+
+                    });
+                })
+        };
+
         $(() => {
-
-
             $('#adminPageCreateUserFormButton').click((event) => {
                 let data = getFormValuesFromClick(event);
                 if (!data || data === {}) return false;
@@ -105,31 +171,6 @@
                         $('#adminPageCreateUserFormCode').val(ret);
                     });
             });
-
-            const adminPageDatatable = $('#adminPageUsersDataTable').DataTable();
-
-            const loadAdminPage = () => {
-                loadAdminPageUsersDataTable();
-            };
-
-            const loadAdminPageUsersDataTable = () => {
-                $.ajax({
-                    url: '/api/user',
-                    type: 'GET',
-                    noprint: true
-                })
-                    .then((ret) => {
-                        ret.forEach(user => {
-                            adminPageDatatable.row.add([
-                                user.first_name,
-                                user.last_name,
-                                user.login,
-                                user.email,
-                                user.active
-                            ]).draw()
-                        })
-                    })
-            };
 
             loadAdminPage();
 

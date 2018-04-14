@@ -53,16 +53,38 @@ const findAll = async (req, res, next) => {
 const validateCode = async (req, res, next) => {
     try {
         let code = await UserUcc.validateCode(req);
-        if(!code) throw new HttpError("The combination code/login was invalid, it is either wrong or expired", HttpStatus.BAD_REQUEST);
+        if (!code) throw new HttpError("The combination code/login was invalid, it is either wrong or expired", HttpStatus.BAD_REQUEST);
         res
             .status(HttpStatus.OK)
             .send({
-                code : code.code,
-                user_login : code.user_login
+                code: code.code,
+                user_login: code.user_login
             });
     } catch (err) {
         next(err);
     }
 };
 
-export default {createUser, createCode, confirmAccount, findAll, validateCode}
+const deactivateUser = async (req, res, next) => {
+    try {
+        await UserUcc.deactivateUser(req);
+        res
+            .status(HttpStatus.OK)
+            .send();
+    } catch (err) {
+        next(err);
+    }
+};
+
+const resendMail = async(req, res, next) => {
+  try{
+      await UserUcc.resendMail(req);
+      res
+          .status(HttpStatus.OK)
+          .send();
+  }  catch(err) {
+      next(err);
+  }
+};
+
+export default {createUser, createCode, confirmAccount, findAll, validateCode, deactivateUser, resendMail}

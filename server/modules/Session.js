@@ -17,7 +17,7 @@ const getTokenFromSession = async (req) => {
             throw new HttpError('The JWT token from the session was malformed or invalid', HttpStatus.BAD_REQUEST);
         }
     } else {
-        throw new HttpError('The client didn\'t have a cookie in his session', HttpStatus.UNAUTHORIZED);
+        throw new HttpError('You must be properly logged in to access this resource', HttpStatus.UNAUTHORIZED);
     }
 };
 

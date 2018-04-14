@@ -8,6 +8,7 @@ import Config from "../config/Config";
 import AccountCreationCodeUcc from "./AccountCreationCodeUcc";
 import Mailer from "../modules/Mailer";
 import Url from "../config/constants/Url";
+import HashDao from "../dao/HashDao";
 
 const createUser = async (req) => {
     if (!req.body) throw new HttpError("Missing logging user information while creating him", HttpStatus.BAD_REQUEST);
@@ -24,16 +25,16 @@ const createUser = async (req) => {
         throw new HttpError("Internal error while hashing the password", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     let userHash = await UserDao.createUser(req.body);
-    try{
+    try {
         await Mailer.sendAccountConfirmation(req.body.email, Url.ACCOUNT_CONFIRMATION + userHash, req.body.login);
-    }catch(err){
+    } catch (err) {
         Logger.error(err);
         throw new HttpError("Error while trying to send confirmation email", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 };
 
-const validateCode = async(req) => {
-    if(!req.body || !req.body.code || req.body.code ==="" || !req.body.login || req.body.login === "") throw new HttpError("Missing login or code to validate code", HttpStatus.BAD_REQUEST);
+const validateCode = async (req) => {
+    if (!req.body || !req.body.code || req.body.code === "" || !req.body.login || req.body.login === "") throw new HttpError("Missing login or code to validate code", HttpStatus.BAD_REQUEST);
     return await AccountCreationCodeUcc.checkCodeValidity(req.body.code, req.body.login);
 };
 
@@ -92,8 +93,26 @@ const confirmAccount = async (req) => {
     await UserDao.confirmAccount(req.query.user);
 };
 
-const findAll = async() =>{
+const findAll = async () => {
     return await UserDao.findAll();
 };
 
-export default {authenticate, createUser, confirmAccount, findAll, validateCode}
+const deactivateUser = async (req) => {
+    if (!req.body || !req.body.login || req.body.login === "") throw new HttpError("The login value of the user was empty", HttpStatus.BAD_REQUEST);
+    return await UserDao.deactivateUser(req.body.login);
+};
+
+const resendMail = async (req) => {
+    if (!req.body || !req.body.login || req.body.login === "") throw new HttpError("The login value of the user was empty", HttpStatus.BAD_REQUEST);
+    let user = await UserDao.findAllInfoByLogin(req.body.login);
+    let hash = await HashDao.findHashByLogin(req.body.login);
+    if(!hash) throw new HttpError("No hash found in database for this user. He is probably already active", HttpStatus.BAD_REQUEST);
+    try {
+        await Mailer.sendAccountConfirmation(user.email, Url.ACCOUNT_CONFIRMATION + hash.hash, user.login);
+    } catch (err) {
+        Logger.error(err);
+        throw new HttpError("Error while trying to send confirmation email", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+};
+
+export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail}

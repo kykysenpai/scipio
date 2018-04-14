@@ -3,6 +3,7 @@ import PermissionsManager from "../modules/PermissionsManager";
 import Permissions from "../config/constants/Permissions";
 import Scopes from "../config/constants/Scopes";
 import UserController from "../controllers/UserController";
+import Permission from "../models/Permission";
 
 const router = express.Router();
 
@@ -11,7 +12,12 @@ const router = express.Router();
  */
 
 router.route('/create-code')
-    .get(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.createCode);
+    .post(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.createCode);
 
+router.route('/deactivate-user')
+    .post(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.deactivateUser);
+
+router.route('/resend-mail')
+    .post(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.resendMail);
 
 export default router
