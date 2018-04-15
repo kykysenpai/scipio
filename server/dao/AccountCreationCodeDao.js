@@ -11,7 +11,7 @@ const Op = Sequelize.Op;
 const createAccountCreationCode = async (user_login) => {
     try {
         let expiration_date = new Date();
-        expiration_date.setHours(expiration_date.getHours() + 1);
+        expiration_date.setHours(expiration_date.getHours() + 24);
         return await Db.AccountCreationCodes.create({
             code: Hash(Math.random()),
             expiration_date: expiration_date.toLocaleString(),
