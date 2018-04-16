@@ -65,13 +65,6 @@
             event.preventDefault();
         });
 
-        $('#mainNav a').click((event) => {
-            let route = $(event.currentTarget).attr('data-link');
-            if (route) {
-                getAndLoadPage(route);
-            }
-        });
-
         $.ajax({
             type: 'POST',
             url: '/api/auth/check',
@@ -83,7 +76,7 @@
                     toastS('You were automatically re-authenticated');
                     $('.navLoggedIn').show("slow");
                     $('.navLoggedOut').hide("slow");
-                    loadNavBarLinks(ret.permissions);
+                    loadNavBarLinks(ret.permissions || {});
                 } else {
                     $('.navLoggedOut').show("slow");
                     $('.navLoggedIn').hide("slow");
@@ -147,6 +140,7 @@
                     toastS('You successfully logged out');
                     $('.navLoggedOut').show("slow");
                     $('.navLoggedIn').hide("slow");
+                    loadNavBarLinks([]);
                 })
         });
     })

@@ -23,9 +23,18 @@ const getFormValues = (name) => {
 };
 
 const loadNavBarLinks = (permissions) => {
-    permissions.forEach(perm => {
-        $('#navbarApplication' + perm).show();
+    let html = "";
+    permissions.forEach(permission => {
+        html +=  '<li class="nav-item" id="navbarApplication'+ permission +'" data-toggle="tooltip" data-placement="right" title="'+permission+'" style="display:none;"><a class="nav-link" data-link="'+permissions+'" href="#"><i class="fa fa-fw fa-circle-o-notch"></i><span class="nav-link-text"> '+permission+'</span></a></li>';
     });
+    $('#navAccordion').html(html);
+    $('#navAccordion a, #navBarHomeButton').click((event) => {
+        let route = $(event.currentTarget).attr('data-link');
+        if (route) {
+            getAndLoadPage(route);
+        }
+    });
+    $('#navAccordion li').show("slow");
 };
 
 toastr.options = {
