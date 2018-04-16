@@ -1,3 +1,3 @@
 export default {
-    ADMIN: 'Admin'
+    ADMIN: 'admin'
 }
