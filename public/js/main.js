@@ -83,6 +83,13 @@
         //         }
         //     });
 
+        $('#navBarHomeButton').click((event) => {
+            let route = $(event.currentTarget).attr('data-link');
+            if (route) {
+                getAndLoadPage(route);
+            }
+        });
+
         $('#loginModalButton').click((event) => {
             let data = getFormValuesFromClick(event);
             if (!data || data === {}) return false;

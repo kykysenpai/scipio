@@ -28,7 +28,7 @@ const loadNavBarLinks = (permissions) => {
         html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+permission.name+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+permission.name+'</span></a></li>';
     });
     $('#navAccordion').html(html);
-    $('#navAccordion a, #navBarHomeButton').click((event) => {
+    $('#navAccordion a').click((event) => {
         let route = $(event.currentTarget).attr('data-link');
         if (route) {
             getAndLoadPage(route);
