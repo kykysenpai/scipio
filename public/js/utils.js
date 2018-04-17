@@ -25,7 +25,7 @@ const getFormValues = (name) => {
 const loadNavBarLinks = (permissions) => {
     let html = "";
     permissions.forEach(permission => {
-        html +=  '<li class="nav-item" id="navbarApplication'+ permission +'" data-toggle="tooltip" data-placement="right" title="'+permission+'" style="display:none;"><a class="nav-link" data-link="'+permissions+'" href="#"><i class="fa fa-fw fa-circle-o-notch"></i><span class="nav-link-text"> '+permission+'</span></a></li>';
+        html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+permission.name+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+permission.name+'</span></a></li>';
     });
     $('#navAccordion').html(html);
     $('#navAccordion a, #navBarHomeButton').click((event) => {

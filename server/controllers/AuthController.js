@@ -6,6 +6,8 @@ import UserUcc from "../ucc/UserUcc";
 import HttpError from "../modules/HttpError";
 import HttpParams from "../config/constants/HttpParams";
 import PermissionUcc from "../ucc/PermissionUcc";
+import FrontPermissions from "../config/constants/FrontPermissions";
+import Permissions from "../config/constants/Permissions";
 
 /**
  * Try to authenticate request by putting a token in it if it's not already present
@@ -29,8 +31,17 @@ const authenticate = async (req, res, next) => {
 
         infoToSignInToken.permissions = [];
         let permissions = await PermissionUcc.findAllByUserId(user.id);
+
         permissions.forEach(permission => {
             infoToSignInToken.permissions.push(permission.name);
+        });
+
+        let permissionsWithIcons = [];
+        permissions.forEach(permission => {
+            permissionsWithIcons.push({
+                name: permission.name,
+                icon: FrontPermissions[permission.name]
+            });
         });
 
         let signedToken = await Session.signToken(infoToSignInToken);
@@ -38,7 +49,7 @@ const authenticate = async (req, res, next) => {
         res
             .cookie(Config.COOKIE_NAME, signedToken)
             .status(HttpStatus.OK)
-            .send(infoToSignInToken.permissions);
+            .send(permissionsWithIcons);
     } catch (err) {
         Logger.debug(err);
         next(err)
@@ -60,11 +71,20 @@ const deleteSession = (req, res) => {
 const checkAuthenticated = async (req, res) => {
     try {
         let decodedToken = await Session.getTokenFromSession(req);
+        let permissionsWithIcons = [];
+
+        //get icons for front
+        decodedToken.permissions.forEach(permission => {
+            permissionsWithIcons.push({
+                name: permission,
+                icon: FrontPermissions[permission]
+            });
+        });
         res
             .status(HttpStatus.OK)
             .send({
                 isAuthenticated: true,
-                permissions : decodedToken.permissions
+                permissions : permissionsWithIcons
             });
     } catch (err) {
         /**

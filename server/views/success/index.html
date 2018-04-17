@@ -6,7 +6,7 @@
     </div>
     <!-- Icon Cards-->
     <div class="row">
-        <div class="col-xl-6 col-sm-12 mb-6 navLoggedIn" style="display:none;">
+        <div class="col-xl-6 col-sm-12 mb-6 indexLoggedIn" style="display:none;">
             <div class="card text-white bg-primary o-hidden h-100">
                 <div class="card-body">
                     <div class="card-body-icon">
@@ -22,7 +22,7 @@
                 </a>
             </div>
         </div>
-        <div class="col-xl-6 col-sm-12 mb-6 navLoggedIn" style="display:none;">
+        <div class="col-xl-6 col-sm-12 mb-6 indexLoggedIn" style="display:none;">
             <div class="card text-white bg-warning o-hidden h-100">
                 <div class="card-body">
                     <div class="card-body-icon">
@@ -99,4 +99,24 @@
             </div>
         </div>
     </div>
+    <script>
+        $.ajax({
+            type: 'POST',
+            url: '/api/auth/check',
+            noprint: true,
+            nonotif: true
+        })
+            .then((ret) => {
+                if (ret.isAuthenticated) {
+                    // toastS('You were automatically re-authenticated');
+                    console.info("JWT token was valid, now authenticated");
+                    $('.navLoggedIn, .indexLoggedIn').show("slow");
+                    $('.navLoggedOut, .indexLoggedOut').hide("slow");
+                    loadNavBarLinks(ret.permissions || {});
+                } else {
+                    $('.navLoggedOut, .indexLoggedOut').show("slow");
+                    $('.navLoggedIn, .indexLoggedIn').hide("slow");
+                }
+            });
+    </script>
 </div>

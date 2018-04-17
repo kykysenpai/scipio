@@ -65,23 +65,23 @@
             event.preventDefault();
         });
 
-        $.ajax({
-            type: 'POST',
-            url: '/api/auth/check',
-            noprint: true,
-            nonotif: true
-        })
-            .then((ret) => {
-                if (ret.isAuthenticated) {
-                    toastS('You were automatically re-authenticated');
-                    $('.navLoggedIn').show("slow");
-                    $('.navLoggedOut').hide("slow");
-                    loadNavBarLinks(ret.permissions || {});
-                } else {
-                    $('.navLoggedOut').show("slow");
-                    $('.navLoggedIn').hide("slow");
-                }
-            });
+        // $.ajax({
+        //     type: 'POST',
+        //     url: '/api/auth/check',
+        //     noprint: true,
+        //     nonotif: true
+        // })
+        //     .then((ret) => {
+        //         if (ret.isAuthenticated) {
+        //             toastS('You were automatically re-authenticated');
+        //             $('.navLoggedIn').show("slow");
+        //             $('.navLoggedOut').hide("slow");
+        //             loadNavBarLinks(ret.permissions || {});
+        //         } else {
+        //             $('.navLoggedOut').show("slow");
+        //             $('.navLoggedIn').hide("slow");
+        //         }
+        //     });
 
         $('#loginModalButton').click((event) => {
             let data = getFormValuesFromClick(event);
