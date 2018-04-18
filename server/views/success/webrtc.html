@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>WebRTC</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-comment	"></i> Audio chat
+                </div>
+                <div class="card-body">
+                    <video id="localVideo"></video>
+                    <div id="remoteVideos"></div>
+                </div>
+                <div class="card-footer small text-muted">Choose your channel and join others</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(() => {
+            let webrtc = new SimpleWebRTC({
+                localVideoEl: 'localVideo',
+                remoteVideosEl: 'remoteVideos',
+                autoRequestMedia: true,
+                url: 'https://signalmaster.tircher.be',
+                media: {video: false, audio: true}
+            });
+
+            webrtc.on('connectionReady', () => {
+                console.info("connection ready");
+            });
+
+            webrtc.on('readyToCall', () => {
+                console.info("joining room...");
+                webrtc.joinRoom('mainRoom');
+            })
+        });
+    </script>
+</div>

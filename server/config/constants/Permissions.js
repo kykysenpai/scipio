@@ -1,3 +1,4 @@
 export default {
-    ADMIN: 'admin'
+    ADMIN: 'admin',
+    WEB_RTC: 'webrtc'
 }
