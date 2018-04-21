@@ -11,7 +11,10 @@
                     <i class="fa fa-comment	"></i> Audio chat
                 </div>
                 <div class="card-body">
-                    <video id="localVideo"></video>
+                    <div id="localVideo">
+                        <button id="callWebRtc" class="btn btn-dark">Call group</button>
+                    </div>
+                    <!--<video id="localVideo"></video>-->
                     <div id="remoteVideos"></div>
                 </div>
                 <div class="card-footer small text-muted">Choose your channel and join others</div>
@@ -33,9 +36,16 @@
             });
 
             webrtc.on('readyToCall', () => {
-                console.info("joining room...");
+                console.info("Ready to call...");
+            });
+
+            let nClick = 1;
+
+            $('#callWebRtc').click((event) => {
+                console.log(nClick++);
                 webrtc.joinRoom('mainRoom');
-            })
+            });
+
         });
     </script>
 </div>
