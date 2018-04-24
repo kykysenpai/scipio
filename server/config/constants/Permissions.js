@@ -1,4 +1,5 @@
 export default {
     ADMIN: 'admin',
-    WEB_RTC: 'webrtc'
+    WEB_RTC: 'webrtc',
+    SPOTIFY: 'spotify'
 }

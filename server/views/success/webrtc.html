@@ -11,11 +11,8 @@
                     <i class="fa fa-comment	"></i> Audio chat
                 </div>
                 <div class="card-body">
-                    <div id="localVideo">
-                        <button id="callWebRtc" class="btn btn-dark">Call group</button>
-                    </div>
-                    <!--<video id="localVideo"></video>-->
-                    <div id="remoteVideos"></div>
+                    <button id="callWebRtc" class="btn btn-dark">Call group</button>
+                    <button id="hangUpWebRtc" class="btn btn-dark">Hang Up</button>
                 </div>
                 <div class="card-footer small text-muted">Choose your channel and join others</div>
             </div>
@@ -24,8 +21,8 @@
     <script>
         $(() => {
             let webrtc = new SimpleWebRTC({
-                localVideoEl: 'localVideo',
-                remoteVideosEl: 'remoteVideos',
+                // localVideoEl: '',
+                // remoteVideosEl: '',
                 autoRequestMedia: true,
                 url: 'https://signalmaster.tircher.be',
                 media: {video: false, audio: true}
@@ -39,11 +36,12 @@
                 console.info("Ready to call...");
             });
 
-            let nClick = 1;
-
             $('#callWebRtc').click((event) => {
-                console.log(nClick++);
                 webrtc.joinRoom('mainRoom');
+            });
+
+            $('#hangUpWebRtc').click((event) => {
+               webrtc.leaveRoom();
             });
 
         });

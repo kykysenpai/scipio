@@ -76,8 +76,9 @@ app.use('/views', ViewRoute);
  */
 app.use((err, req, res, next) => {
     if (err) {
-        Logger.debug(err);
+        Logger.debug("Express", err);
         if (err.statusCode) {
+            Logger.debug("Status code of err", err.statusCode);
             res
                 .status(err.statusCode)
                 .send('Error message : ' + err.message)

@@ -1,3 +1,5 @@
+const PERM_SPOTIFY = 'spotify';
+
 const getAndLoadPage = (viewName) => {
     $('#mainContentDiv').load('/views/success/' + viewName)
 };
@@ -22,10 +24,28 @@ const getFormValues = (name) => {
     return map;
 };
 
+const loadSpotifyWidget = () => {
+    $.ajax({
+        url: '/views/success/spotify.html',
+        type: 'GET',
+        noprint: true,
+        nonotif: true
+    })
+        .then((html) => {
+          $('#navAccordion').after(html);
+        })
+};
+
 const loadNavBarLinks = (permissions) => {
     let html = "";
     permissions.forEach(permission => {
-        html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+permission.name+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+permission.name+'</span></a></li>';
+        switch (permission) {
+            case PERM_SPOTIFY :
+                loadSpotifyWidget();
+                break;
+            default :
+                html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+permission.name+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+permission.name+'</span></a></li>';
+        }
     });
     $('#navAccordion').html(html);
     $('#navAccordion a').click((event) => {

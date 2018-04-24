@@ -59,8 +59,6 @@ const getErrorMessage = (err) => {
     return "There was an unknown problem in the database";
 };
 
-// const transaction = db.transaction;
-
 const handleError = (err) => {
     Logger.error("An error was reported in the persistence layer", err);
     throw new HttpError(getErrorMessage(err), HttpStatus.INTERNAL_SERVER_ERROR);

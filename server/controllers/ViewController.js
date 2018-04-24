@@ -16,6 +16,7 @@ const getError = (req, res, next) => {
 
 const getView = (req, res, next) => {
     try{
+        Logger.debug("getting view Controller", req.params.viewName);
         res
             .status(HttpStatus.OK)
             .sendFile(Paths.VIEWS_SUCCESS + '/' + req.params.viewName + '.html');

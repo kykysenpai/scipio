@@ -3,6 +3,7 @@ import Logger from "./Logger";
 import Session from "./Session";
 import HttpStatus from "../config/constants/HttpStatus";
 import Scopes from "../config/constants/Scopes";
+import Permissions from "../config/constants/Permissions";
 
 /**
  * Check if the user has the required permissions
@@ -27,13 +28,13 @@ const requires = (scope, ...perms) => {
                     next(new HttpError('Unknown permission scope : ' + scope, HttpStatus.INTERNAL_SERVER_ERROR));
             }
             if (hasPerm) {
-                next();
+                return next();
             } else {
-                next(new HttpError('You tried to access protected data but didn\'t have high enough permissions', HttpStatus.FORBIDDEN));
+                return next(new HttpError('You tried to access protected data but didn\'t have high enough permissions', HttpStatus.FORBIDDEN));
             }
         } catch (err) {
-            Logger.debug(err);
-            next(err);
+            Logger.debug("PermissionsManager", err);
+            return next(err);
         }
     }
 };
