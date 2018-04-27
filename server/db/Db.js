@@ -86,6 +86,17 @@ const Hashs = sequelize.define("hashs", HashModel);
 
 const AccountCreationCodes = sequelize.define("account_creation_codes", AccountCreationCodeModel);
 
+Users.belongsToMany(Permissions, {
+    through: 'users_permissions',
+    as: 'permissions',
+    foreignKey: 'user_id'
+});
+
+Permissions.belongsToMany(Users, {
+    through:'users_permissions',
+    as: 'users',
+    foreignKey:'permission_id'
+});
 
 Logger.info("All database models have been set up");
 

@@ -6,6 +6,7 @@ import ApiController from "../controllers/ApiController";
 import AuthenticationRoute from "./AuthenticationRoute";
 import UserRoute from "./UserRoute";
 import AdminRoute from "./AdminRoute";
+import PermissionRoute from "./PermissonRoute";
 
 const router = express.Router();
 
@@ -24,5 +25,7 @@ router.use('/auth', AuthenticationRoute);
 router.use('/user', UserRoute);
 
 router.use('/admin', AdminRoute);
+
+router.use('/permission', PermissionRoute);
 
 export default router

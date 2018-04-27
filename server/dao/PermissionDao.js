@@ -26,4 +26,10 @@ const findAllByUserId = async (user_id) => {
     }
 };
 
-export default {findAllByUserId}
+const findAll = async () => {
+    return await Db.Permissions.findAll({
+        attributes: ['name']
+    })
+};
+
+export default {findAllByUserId, findAll}

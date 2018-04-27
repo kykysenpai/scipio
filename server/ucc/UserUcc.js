@@ -74,7 +74,8 @@ const checkIntegrity = (user) => {
         !user.last_name || user.first_name === "" ||
         !user.login || user.login === "" ||
         !user.password || user.password === "" ||
-        !user.email || user.email === ""
+        !user.email || user.email === "" ||
+            !user.permissions
     ) throw new HttpError("A needed value is missing to create a new user", HttpStatus.BAD_REQUEST);
 
     if (!
@@ -94,7 +95,25 @@ const confirmAccount = async (req) => {
 };
 
 const findAll = async () => {
-    return await UserDao.findAll();
+    let users = await UserDao.findAll();
+    let rawUsers = [];
+    users.forEach(user => {
+        let tmp = [];
+        if(user.permissions) {
+            user.permissions.forEach(perm => {
+                tmp.push(perm.name);
+            });
+        };
+        rawUsers.push({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            login: user.login,
+            active: user.active,
+            permissions: tmp
+        });
+    });
+    return rawUsers;
 };
 
 const deactivateUser = async (req) => {

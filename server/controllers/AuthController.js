@@ -28,16 +28,15 @@ const authenticate = async (req, res, next) => {
         infoToSignInToken.last_name = user.last_name;
         infoToSignInToken.login = user.login;
         infoToSignInToken.email = user.email;
-
         infoToSignInToken.permissions = [];
-        let permissions = await PermissionUcc.findAllByUserId(user.id);
 
-        permissions.forEach(permission => {
+        user.permissions.forEach(permission => {
             infoToSignInToken.permissions.push(permission.name);
         });
 
         let permissionsWithIcons = [];
-        permissions.forEach(permission => {
+
+        user.permissions.forEach(permission => {
             permissionsWithIcons.push({
                 name: permission.name,
                 icon: FrontPermissions[permission.name]

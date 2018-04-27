@@ -7,4 +7,8 @@ const findAllByUserId = async (user) => {
     return await PermissionDao.findAllByUserId(user);
 };
 
-export default {findAllByUserId}
+const findAll = async () => {
+    return await PermissionDao.findAll();
+};
+
+export default {findAllByUserId, findAll}

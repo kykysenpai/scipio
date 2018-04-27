@@ -8,9 +8,15 @@ import {UniqueConstraintError} from "sequelize";
 const findAllInfoByLogin = async (login) => {
     try {
         return await Db.Users.findOne({
+            include:{
+                model:Db.Permissions,
+                as:'permissions',
+                attributes:['name']
+            },
             where: {
                 login: login
-            }
+            },
+            attributes: ['id', 'first_name', 'last_name', 'login', 'email', 'active', 'password']
         });
     } catch (err) {
         Db.handleError(err);
@@ -84,9 +90,6 @@ const confirmAccount = async (hash) => {
             active: true
         }, {transaction: t});
 
-        // Logger.debug("Removing his activation code from persistence...");
-        // await foundHash.destroy({}, {transaction: t});
-
         Logger.debug("No error while activating account, committing changes...");
         await t.commit();
 
@@ -111,12 +114,17 @@ const deactivateUser = async (login) => {
 const findAll = async () => {
     try {
         return await Db.Users.findAll({
+            include: [{
+                model: Db.Permissions,
+                as:'permissions',
+                attributes:['name'],
+                through: {attributes:[]}
+            }],
             attributes: ['first_name', 'last_name', 'login', 'email', 'active']
         });
     } catch (err) {
         Db.handleError(err);
     }
 };
-
 
 export default {findAllInfoByLogin, createUser, confirmAccount, findAll, deactivateUser}

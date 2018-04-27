@@ -39,6 +39,21 @@
                     <i class="fa fa-user-circle"></i> Permissions
                 </div>
                 <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="adminPagePermissionsDataTable" width="100%"
+                               cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Login</th>
+                                <th>Permissions</th>
+                                <th>Add</th>
+                                <th>Remove</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="card-footer small text-muted">Manage the access of the users of Scipio</div>
             </div>
@@ -106,41 +121,141 @@
                 })
         };
 
-        loadAdminPage = () => {
-            loadAdminPageUsersDataTable();
-        };
-
-        adminPageDatatable = $('#adminPageUsersDataTable').DataTable();
-
-        loadAdminPageUsersDataTable = () => {
-            adminPageDatatable.clear();
-            $.ajax({
+        getUsers = async () => {
+            return await $.ajax({
                 url: '/api/user',
                 type: 'GET',
                 noprint: true
+            });
+        };
+
+        getPermissions = async () => {
+            return await $.ajax({
+                url:'/api/permission',
+                type: 'GET',
+                noprint: true
             })
-                .then((ret) => {
-                    ret.forEach(user => {
-                        adminPageDatatable.row.add([
-                            user.first_name,
-                            user.last_name,
-                            user.login,
-                            user.email,
-                            user.active ?
-                                '<button id="adminPageUserDeactivate_' + user.login + '" class="btn btn-primary">Desactivate account</button>' :
-                                '<button id="adminPageUserResendMail_' + user.login + '" class="btn btn-primary">Resend confirmation mail</button>'
-                        ]).draw();
+        };
 
-                        $('#adminPageUserDeactivate_' + user.login).click((event) => {
-                            deactivateUser(user.login);
-                        });
+        formatPermissionsAddSelect = (userPerms, allPerms, login) => {
+            let ret = '<div class="form-group">' +
+                '<select id="adminPageUserAddPermissionSelect_' + login + '" class="form-control">';
+            allPerms.forEach(perm => {
+                if(!userPerms.includes(perm.name)){
+                    ret += "<option value=" + perm.name + ">" + perm.name + "</option>";
+                }
+            });
+            ret += '</select>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<button id="adminPageUserAddPermission_' + login + '" class="btn btn-primary">add</button>' +
+                '</div>';
+            return ret;
+        };
 
-                        $('#adminPageUserResendMail_' + user.login).click((event) => {
-                            resendConfirmationEmail(user.login);
-                        });
+        formatPermissionsRemoveSelect = (userPerms, login) => {
+            let ret = '<div class="form-group">' +
+                '<select id="adminPageUserRemovePermissionSelect_' + login + '" class="form-control">';
+            userPerms.forEach(perm => {
+                ret += "<option value=" + perm + ">" + perm + "</option>";
+            });
+            ret += '</select>' +
+                '</div>' +
+                '<div class="form-group">' +
+                '<button id="adminPageUserRemovePermission_' + login + '" class="btn btn-primary">remove</button>' +
+                '</div>';
+            return ret;
+        };
 
-                    });
-                })
+        loadAdminPage = async () => {
+            let users = await getUsers();
+            let permissions = await getPermissions();
+            loadAdminPageDataTables(users, permissions)
+                .then(console.log("loaded page"));
+        };
+
+        adminPageUsersDatatable = $('#adminPageUsersDataTable').DataTable();
+        adminPagePermissionsDatatable = $('#adminPagePermissionsDataTable').DataTable();
+
+        loadAdminPageDataTables = async (users, permissions) => {
+            if(!users){
+                users = await getUsers();
+            }
+
+            if(!permissions){
+                users = await getPermissions();
+            }
+
+            loadAdminPagePermissionsDataTable(users, permissions)
+                .then(console.log("loaded permissions"));
+            loadAdminPageUsersDataTable(users)
+                .then(console.log("loaded users"));
+        };
+
+        loadAdminPagePermissionsDataTable = async (users, permissions) => {
+            if (!users) {
+                users = await getUsers();
+            }
+
+            if(!permissions) {
+                permissions = await getPermissions();
+            }
+
+            // adminPagePermissionsDatatable.clear();
+
+            users.forEach(user => {
+                adminPagePermissionsDatatable.row.add([
+                    user.login,
+                    user.permissions.join(", "),
+                    formatPermissionsAddSelect(user.permissions, permissions, user.login),
+                    formatPermissionsRemoveSelect(user.permissions, user.login)
+                ]).draw();
+
+                $('#adminPageUserAddPermission_' + user.login).click((event) => {
+                    addPermission(user.login, $('#adminPageUserAddPermissionSelect_' + user.login).val());
+                });
+
+                $('#adminPageUserRemovePermission_' + user.login).click((event) => {
+                    removePermission(user.login, $('#adminPageUserRemovePermissionSelect_' + user.login).val());
+                });
+            })
+        };
+
+        addPermission = (login, permission) => {
+            console.log("adding", permission, "to", login);
+        };
+
+        removePermission = (login, permission) => {
+            console.log("removing", permission, "to", login);
+        };
+
+        loadAdminPageUsersDataTable = async (users) => {
+            if (!users) {
+                users = await getUsers();
+            }
+
+            // adminPageUsersDatatable.clear();
+
+            users.forEach(user => {
+                adminPageUsersDatatable.row.add([
+                    user.first_name,
+                    user.last_name,
+                    user.login,
+                    user.email,
+                    user.active ?
+                        '<button id="adminPageUserDeactivate_' + user.login + '" class="btn btn-primary">Desactivate account</button>' :
+                        '<button id="adminPageUserResendMail_' + user.login + '" class="btn btn-primary">Resend confirmation mail</button>'
+                ]).draw();
+
+                $('#adminPageUserDeactivate_' + user.login).click((event) => {
+                    deactivateUser(user.login);
+                });
+
+                $('#adminPageUserResendMail_' + user.login).click((event) => {
+                    resendConfirmationEmail(user.login);
+                });
+
+            });
         };
 
         $(() => {
@@ -159,7 +274,8 @@
                     });
             });
 
-            loadAdminPage();
+            loadAdminPage()
+                .then(console.log("page load"));
 
         })
     </script>

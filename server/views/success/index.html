@@ -112,6 +112,7 @@
                     console.info("JWT token was valid, now authenticated");
                     $('.navLoggedIn, .indexLoggedIn').show("slow");
                     $('.navLoggedOut, .indexLoggedOut').hide("slow");
+                    console.log(ret);
                     loadNavBarLinks(ret.permissions || {});
                 } else {
                     $('.navLoggedOut, .indexLoggedOut').show("slow");
