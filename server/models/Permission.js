@@ -7,6 +7,7 @@ export default {
         autoIncrement: true
     },
     name: {
-        type: Sequelize.DataTypes.STRING
+        type: Sequelize.DataTypes.STRING,
+        unique: true
     }
 }

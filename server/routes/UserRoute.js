@@ -22,4 +22,8 @@ router.route('/validate-code')
 router.route('/account-confirmation')
     .get(UserController.confirmAccount);
 
+router.route('/permission')
+    .post(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.addPermission)
+    .delete(PermissionsManager(Scopes.ANY, Permissions.ADMIN), UserController.removePermission);
+
 export default router

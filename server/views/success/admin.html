@@ -170,8 +170,7 @@
         loadAdminPage = async () => {
             let users = await getUsers();
             let permissions = await getPermissions();
-            loadAdminPageDataTables(users, permissions)
-                .then(console.log("loaded page"));
+            loadAdminPageDataTables(users, permissions);
         };
 
         adminPageUsersDatatable = $('#adminPageUsersDataTable').DataTable();
@@ -186,10 +185,8 @@
                 users = await getPermissions();
             }
 
-            loadAdminPagePermissionsDataTable(users, permissions)
-                .then(console.log("loaded permissions"));
-            loadAdminPageUsersDataTable(users)
-                .then(console.log("loaded users"));
+            loadAdminPagePermissionsDataTable(users, permissions);
+            loadAdminPageUsersDataTable(users);
         };
 
         loadAdminPagePermissionsDataTable = async (users, permissions) => {
@@ -201,7 +198,7 @@
                 permissions = await getPermissions();
             }
 
-            // adminPagePermissionsDatatable.clear();
+            adminPagePermissionsDatatable.clear();
 
             users.forEach(user => {
                 adminPagePermissionsDatatable.row.add([
@@ -222,11 +219,35 @@
         };
 
         addPermission = (login, permission) => {
-            console.log("adding", permission, "to", login);
+            $.ajax({
+                url:'/api/user/permission',
+                type:'POST',
+                data:{
+                  login: login,
+                  permission: permission
+                },
+                noprint:true,
+            })
+                .then(ret => {
+                    toastS("Successfully added permission");
+                   loadAdminPagePermissionsDataTable();
+                });
         };
 
         removePermission = (login, permission) => {
-            console.log("removing", permission, "to", login);
+            $.ajax({
+                url:'/api/user/permission',
+                type:'DELETE',
+                data:{
+                    login: login,
+                    permission: permission
+                },
+                noprint:true,
+            })
+                .then(ret => {
+                    toastS("Successfully removed permission");
+                    loadAdminPagePermissionsDataTable();
+                });
         };
 
         loadAdminPageUsersDataTable = async (users) => {
@@ -234,7 +255,7 @@
                 users = await getUsers();
             }
 
-            // adminPageUsersDatatable.clear();
+            adminPageUsersDatatable.clear();
 
             users.forEach(user => {
                 adminPageUsersDatatable.row.add([
@@ -274,8 +295,7 @@
                     });
             });
 
-            loadAdminPage()
-                .then(console.log("page load"));
+            loadAdminPage();
 
         })
     </script>

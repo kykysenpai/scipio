@@ -9,6 +9,7 @@ import AccountCreationCodeUcc from "./AccountCreationCodeUcc";
 import Mailer from "../modules/Mailer";
 import Url from "../config/constants/Url";
 import HashDao from "../dao/HashDao";
+import UserPermissionDao from "../dao/UserPermissionDao";
 
 const createUser = async (req) => {
     if (!req.body) throw new HttpError("Missing logging user information while creating him", HttpStatus.BAD_REQUEST);
@@ -74,8 +75,7 @@ const checkIntegrity = (user) => {
         !user.last_name || user.first_name === "" ||
         !user.login || user.login === "" ||
         !user.password || user.password === "" ||
-        !user.email || user.email === "" ||
-            !user.permissions
+        !user.email || user.email === ""
     ) throw new HttpError("A needed value is missing to create a new user", HttpStatus.BAD_REQUEST);
 
     if (!
@@ -134,4 +134,16 @@ const resendMail = async (req) => {
     }
 };
 
-export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail}
+const addPermission = async (req) => {
+    if(!req.body || !req.body.login || req.body.login === "" ||
+        !req.body.permission || req.body.permission === "") throw new HttpError("The login or the permission to add to the user is missing", HttpStatus.BAD_REQUEST);
+    await UserPermissionDao.addPermission(req.body.login, req.body.permission);
+};
+
+const removePermission = async (req) => {
+    if(!req.body || !req.body.login || req.body.login === "" ||
+        !req.body.permission || req.body.permission === "") throw new HttpError("The login or the permission to remove to the user is missing", HttpStatus.BAD_REQUEST);
+    await UserPermissionDao.removePermission(req.body.login, req.body.permission);
+};
+
+export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail, addPermission, removePermission}

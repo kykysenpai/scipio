@@ -77,14 +77,36 @@ const deactivateUser = async (req, res, next) => {
 };
 
 const resendMail = async(req, res, next) => {
-  try{
-      await UserUcc.resendMail(req);
-      res
-          .status(HttpStatus.OK)
-          .send();
-  }  catch(err) {
-      next(err);
-  }
+    try{
+        await UserUcc.resendMail(req);
+        res
+            .status(HttpStatus.OK)
+            .send();
+    }  catch(err) {
+        next(err);
+    }
 };
 
-export default {createUser, createCode, confirmAccount, findAll, validateCode, deactivateUser, resendMail}
+const addPermission = async (req, res, next) => {
+    try{
+        await UserUcc.addPermission(req);
+        res
+            .status(HttpStatus.OK)
+            .send();
+    } catch (err) {
+        next(err);
+    }
+};
+
+const removePermission = async(req, res, next) => {
+    try{
+        await UserUcc.removePermission(req);
+        res
+            .status(HttpStatus.OK)
+            .send();
+    } catch (err) {
+        next(err);
+    }
+};
+
+export default {createUser, createCode, confirmAccount, findAll, validateCode, deactivateUser, resendMail, addPermission, removePermission}
