@@ -4,13 +4,16 @@ import Paths from "../config/constants/Paths";
 import HttpError from "../modules/HttpError";
 
 const getError = (req, res, next) => {
+    if(!req.params || !req.params.errorNumber){
+        req.params.errorNumber = HttpStatus.BAD_REQUEST;
+    }
     try {
         res
-            .status(HttpStatus[req.params.errorNumber])
-            .sendFile(Paths.VIEWS_ERRORS + '/error' + req.params.errorNumber + '.html');
+            .status(HttpStatus.OK)
+            .sendFile(Paths.VIEWS_ERRORS + '/' + req.params.errorNumber + '.html');
     } catch (err) {
         Logger.debug(err);
-        next(new HttpError("Unknown error", HttpStatus.BAD_REQUEST));
+        next();
     }
 };
 
@@ -22,7 +25,7 @@ const getView = (req, res, next) => {
             .sendFile(Paths.VIEWS_SUCCESS + '/' + req.params.viewName + '.html');
     } catch (err){
         Logger.debug(err);
-        next(new HttpError("No such resource", HttpStatus.NOT_FOUND))
+        next();
     }
 };
 

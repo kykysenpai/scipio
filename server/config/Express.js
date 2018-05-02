@@ -81,7 +81,7 @@ app.use((err, req, res, next) => {
             Logger.debug("Status code of err", err.statusCode);
             res
                 .status(err.statusCode)
-                .send('Error message : ' + err.message)
+                .send('Error message : ' + err.message);
         } else {
             res
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -94,11 +94,10 @@ app.use((err, req, res, next) => {
  * If no route managed to respond to the request, send a 404
  */
 app.use((req, res) => {
-
     if(req.accepts('html')){
         res
             .status(HttpStatus.NOT_FOUND)
-            .sendFile(Paths.VIEWS_ERRORS + '/error404.html');
+            .sendFile(Paths.VIEWS_ERRORS + '/404.html');
     } else {
         res
             .status(HttpStatus.NOT_FOUND)

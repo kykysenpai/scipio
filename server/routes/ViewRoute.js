@@ -16,6 +16,9 @@ router.route('/success/webrtc')
 router.route('/success/spotify')
     .get(PermissionsManager(Scopes.ALL, Permissions.SPOTIFY));
 
+router.route('/sucess/spotify_widget')
+    .get(PermissionsManager(Scopes.ALL, Permissions.SPOTIFY));
+
 router.route('/success/admin')
     .get(PermissionsManager(Scopes.ALL, Permissions.ADMIN));
 

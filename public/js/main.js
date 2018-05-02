@@ -3,7 +3,6 @@
     $(() => {
 
         $(document).ajaxError((event, jqxhr, settings, thrownError) => {
-            console.log(jqxhr);
             if (!settings.noprint) {
                 getAndLoadError(jqxhr.status);
             }

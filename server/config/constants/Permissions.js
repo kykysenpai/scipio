@@ -1,5 +1,6 @@
 export default {
-    ADMIN: 'admin',
-    WEB_RTC: 'webrtc',
-    SPOTIFY: 'spotify'
+    ADMIN: 'Admin',
+    WEB_RTC: 'Chat',
+    SPOTIFY: 'Spotify',
+    COMMUNIST_SPLIT: 'Communist_Split'
 }

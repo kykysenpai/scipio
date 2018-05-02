@@ -142,7 +142,7 @@
                 '<select id="adminPageUserAddPermissionSelect_' + login + '" class="form-control">';
             allPerms.forEach(perm => {
                 if(!userPerms.includes(perm.name)){
-                    ret += "<option value=" + perm.name + ">" + perm.name + "</option>";
+                    ret += "<option value=" + perm.name + ">" + (perm.name).replace(/_/g, ' ') + "</option>";
                 }
             });
             ret += '</select>' +
@@ -157,7 +157,7 @@
             let ret = '<div class="form-group">' +
                 '<select id="adminPageUserRemovePermissionSelect_' + login + '" class="form-control">';
             userPerms.forEach(perm => {
-                ret += "<option value=" + perm + ">" + perm + "</option>";
+                ret += "<option value=" + perm + ">" + perm.replace(/_/g, ' ') + "</option>";
             });
             ret += '</select>' +
                 '</div>' +
