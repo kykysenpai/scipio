@@ -22,11 +22,11 @@ const startMinecraftServer = () => {
     let mcServ = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS +'/start_minecraft_server.sh']);
 
     mcServ.stdout.on('data', data => {
-        Logger.debug(data);
+        Logger.debug(data.toString());
     });
 
     mcServ.stderr.on('data', data => {
-        Logger.debug(data);
+        Logger.debug(data.toString());
     });
 
     mcServ.on('exit', code => {
