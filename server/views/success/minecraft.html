@@ -13,6 +13,8 @@
                 </div>
                 <div class="card-body">
                     <p>Current status : <b id="currentStatusMinecraftServer">...</b></p>
+                    <button id="startMinecraftServerButton" class="btn btn-primary">Start</button>
+                    <button id="stopMinecraftServerButton" class="btn btn-primary">Stop</button>
                 </div>
                 <div class="card-footer small text-muted">Check Current Status of the server</div>
             </div>
@@ -20,6 +22,17 @@
     </div>
     <script>
         $(() => {
+            $('#startMinecraftServerButton').click((event) => {
+               $.ajax({
+                   url:'/api/game_server/minecraft/start',
+                   type: 'POST',
+                   noprint:true
+               })
+                   .then(ret => {
+                       console.log(ret);
+                   })
+            });
+
             $.ajax({
                 url:'/api/game_server/minecraft',
                 type: 'GET',
