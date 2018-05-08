@@ -7,7 +7,6 @@ const findAll = async (req, res, next) => {
         res
             .status(HttpStatus.OK)
             .send(perms);
-
     } catch (err) {
         next(err);
     }

@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>Trackmania</h1>
+            <p>You can manage here the trackmania server</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Status
+                </div>
+                <div class="card-body">
+                    <p>Current status : <b id="currentStatusTrackmaniaServer">...</b></p>
+                </div>
+                <div class="card-footer small text-muted">Check Current Status of the server</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(() => {
+            $.ajax({
+                url:'/api/game_server/trackmania',
+                type: 'GET',
+                noprint: true
+            })
+                .then((inUse) => {
+                    if(inUse) {
+                        $('#currentStatusTrackmaniaServer').val("Running");
+                    } else {
+                        $('#currentStatusTrackmaniaServer').val("Off")
+                    }
+                })
+        });
+    </script>
+</div>

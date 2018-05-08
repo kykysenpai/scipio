@@ -7,6 +7,7 @@ import AuthenticationRoute from "./AuthenticationRoute";
 import UserRoute from "./UserRoute";
 import AdminRoute from "./AdminRoute";
 import PermissionRoute from "./PermissonRoute";
+import GameServerRoute from "./GameServerRoute";
 
 const router = express.Router();
 
@@ -27,5 +28,7 @@ router.use('/user', UserRoute);
 router.use('/admin', AdminRoute);
 
 router.use('/permission', PermissionRoute);
+
+router.use('/game_server', GameServerRoute);
 
 export default router

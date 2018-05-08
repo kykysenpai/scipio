@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>Minecraft</h1>
+            <p>You can manage here the minecraft server</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Status
+                </div>
+                <div class="card-body">
+                    <p>Current status : <b id="currentStatusMinecraftServer">...</b></p>
+                </div>
+                <div class="card-footer small text-muted">Check Current Status of the server</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(() => {
+            $.ajax({
+                url:'/api/game_server/minecraft',
+                type: 'GET',
+                noprint: true
+            })
+                .then((inUse) => {
+                    if(inUse) {
+                        $('#currentStatusMinecraftServer').val("Running");
+                    } else {
+                        $('#currentStatusMinecraftServer').val("Off")
+                    }
+                })
+        });
+    </script>
+</div>

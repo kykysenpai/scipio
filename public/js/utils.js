@@ -44,7 +44,7 @@ const loadNavBarLinks = (permissions) => {
                 loadSpotifyWidget();
                 break;
             default :
-                html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+permission.name+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+(permission.name).replace(/_/g, ' ')+'</span></a></li>';
+                html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+(permission.name).toLowerCase()+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+(permission.name).replace(/_/g, ' ')+'</span></a></li>';
         }
     });
     $('#navAccordion').html(html);
