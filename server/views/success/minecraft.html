@@ -26,6 +26,7 @@
                 noprint: true
             })
                 .then((inUse) => {
+                    console.log(inUse);
                     if(inUse) {
                         $('#currentStatusMinecraftServer').val("Running");
                     } else {
