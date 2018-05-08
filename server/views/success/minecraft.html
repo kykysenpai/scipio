@@ -26,11 +26,10 @@
                 noprint: true
             })
                 .then((inUse) => {
-                    console.log(inUse);
                     if(inUse) {
-                        $('#currentStatusMinecraftServer').val("Running");
+                        $('#currentStatusMinecraftServer').text("Running");
                     } else {
-                        $('#currentStatusMinecraftServer').val("Off")
+                        $('#currentStatusMinecraftServer').text("Off")
                     }
                 })
         });

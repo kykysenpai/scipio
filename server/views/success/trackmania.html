@@ -27,9 +27,9 @@
             })
                 .then((inUse) => {
                     if(inUse) {
-                        $('#currentStatusTrackmaniaServer').val("Running");
+                        $('#currentStatusTrackmaniaServer').text("Running");
                     } else {
-                        $('#currentStatusTrackmaniaServer').val("Off")
+                        $('#currentStatusTrackmaniaServer').text("Off")
                     }
                 })
         });

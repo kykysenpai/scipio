@@ -26,11 +26,10 @@
                noprint: true
            })
                .then((inUse) => {
-                   console.log(inUse);
                    if(inUse) {
-                       $('#currentStatusConanServer').val("Running");
+                       $('#currentStatusConanServer').text("Running");
                    } else {
-                       $('#currentStatusConanServer').val("Off")
+                       $('#currentStatusConanServer').text("Off")
                    }
                })
         });
