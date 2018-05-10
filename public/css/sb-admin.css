@@ -484,7 +484,7 @@ footer.sticky-footer {
   }
 }
 
-#divMinecraftServerLogs {
+.divGameServerLogs {
   height: 50vh;
   overflow-y : scroll;
 }
