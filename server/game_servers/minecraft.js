@@ -44,7 +44,7 @@ const startServer = async (io, socket) => {
             });
         });
 
-        io.gameserver.stderr.on('exit', () => {
+        io.gameserver.on('exit', () => {
             io.to(ROOM).emit('exit', {
                 data: "The Minecraft server was stopped"
             });
