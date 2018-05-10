@@ -13,10 +13,6 @@ const ROOM = 'authenticated';
 const getServer = async (io, socket) => {
     if(io.gameserver != null){
         addSocketToListeningRoom(io.gameserver, socket);
-    } else {
-        Logger.info("Starting Minecraft Server...");
-        await startServer(io, socket);
-        Logger.info("Minecraft Server started");
     }
 };
 
@@ -77,12 +73,17 @@ const initSocket = async (io) => {
         socket.on('authenticate', async (data) => {
             if(data.token != null){
                 await authenticate(socket, data.token);
+                if(socket.authenticated){
+                    await getServer(io, socket);
+                }
             }
         });
 
         socket.on('start', async () => {
             if(socket.authenticated){
-                await getServer(io, socket);
+                Logger.info("Starting Minecraft Server...");
+                await startServer(io, socket);
+                Logger.info("Minecraft Server started");
             }
         });
 
