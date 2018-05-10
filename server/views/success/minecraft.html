@@ -55,11 +55,9 @@
 
             getAndLoadServerState();
 
-            let token = Cookies.get("cookie_monster_rpz");
             let minecraft_socket = io('/minecraft');
-            minecraft_socket.on('connect', () => {
-                console.log("socket connected");
-            });
+
+            let token = Cookies.get("cookie_monster_rpz");
             minecraft_socket.emit('authenticate', {
                 token: token
             });
@@ -76,13 +74,9 @@
             });
 
             writeIntoLogs = (data, p) => {
-                if($('#divMinecraftServerLogs').length) {
-                    $('#divMinecraftServerLogs').append(p + data.data + '</p>');
-                    $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs').scrollHeight);
-                } else {
-                    console.log("socket disconnection");
-                    minecraft_socket.disconnect();
-                }
+                $('#divMinecraftServerLogs').append(p + data.data + '</p>');
+                $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs').scrollHeight);
+
             };
 
             $('#startMinecraftServerButton').click(event => {
@@ -95,8 +89,11 @@
 
             $('#refreshMinecraftServerButton').click(event => {
                 getAndLoadServerState();
-            })
+            });
 
+            $('#navBarHomeButton').click(event => {
+                console.log("changing page, disconnecting Minecraft Server socket");
+            });
 
         });
     </script>
