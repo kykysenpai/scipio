@@ -17,9 +17,12 @@ const getServer = async (io, socket) => {
 };
 
 const stopServer = async (io) => {
-    if(io.gameserver != null){
+    let inUse = await GameServerUcc.getStateMinecraft();
+    if(io.gameserver != null && inUse){
         Logger.info("Stopping Minecraft Server...");
         io.gameserver.stdin.write("stop\n");
+    } else {
+        Logger.info("Can't stop the Minecraft Server as no instance is currently running");
     }
 };
 
