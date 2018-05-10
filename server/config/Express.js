@@ -8,10 +8,17 @@ import Paths from "./constants/Paths";
 import Config from "./Config";
 import Logger from "../modules/Logger";
 import ViewRoute from "../routes/ViewRoute";
+import http from "http";
+import socket_io from "socket.io";
+import Minecraft from "../game_servers/minecraft";
+import Conan from "../game_servers/conan";
+import Trackmania from "../game_servers/trackmania";
 
 Logger.info('Setting up server context...');
 
 const app = express();
+
+const http_server = http.Server(app);
 
 app.use(express.static(Paths.PUBLIC));
 
@@ -22,6 +29,25 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+Logger.info('Setting up the websockets for gameservers...');
+
+const socket = socket_io(http_server);
+
+Logger.info('Initializing websocket for Minecraft...');
+
+const socket_minecraft = socket.of('/minecraft');
+Minecraft.initSocket(socket_minecraft);
+
+Logger.info('Initializing websocket for Conan...');
+
+const socket_conan = socket.of('/conan');
+Conan.initSocket(socket_conan);
+
+Logger.info('Initializing websocket for Trackmania...');
+
+const socket_trackmania = socket.of('/trackmania');
+Trackmania.initSocket(socket_trackmania);
 
 Logger.info('Setting up the server log middleware...');
 
@@ -107,4 +133,4 @@ app.use((req, res) => {
 
 Logger.info('express app has received middlewares setup');
 
-export default app;
+export default http_server;

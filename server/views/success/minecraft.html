@@ -22,15 +22,35 @@
     </div>
     <script>
         $(() => {
-            $('#startMinecraftServerButton').click((event) => {
-               $.ajax({
-                   url:'/api/game_server/minecraft/start',
-                   type: 'POST',
-                   noprint:true
-               })
-                   .then(ret => {
-                       console.log(ret);
-                   })
+            let token = Cookies.get("cookie_monster_rpz");
+            let socket = io('/minecraft');
+            socket.on('connect', () => {
+                console.log("socket connected");
+            });
+            socket.emit('authenticate', {
+                token: token
+            });
+
+            socket.on('stdin', data => console.log(data));
+
+            socket.on('stderr', data => console.err(data));
+
+
+            $('#startMinecraftServerButton').click(event => {
+                socket.emit('start');
+
+                // $.ajax({
+                //     url:'/api/game_server/minecraft/start',
+                //     type: 'POST',
+                //     noprint:true
+                // })
+                //     .then(ret => {
+                //         console.log(ret);
+                //     })
+            });
+
+            $('#stopMinecraftServerButton').click(event => {
+               socket.emit('stop');
             });
 
             $.ajax({

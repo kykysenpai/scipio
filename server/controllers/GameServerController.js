@@ -34,15 +34,4 @@ const getStateConan = async (req, res, next) => {
     }
 };
 
-const startMinecraftServer = (req, res, next) => {
-    try{
-        GameServerUcc.startMinecraftServer();
-        res
-            .status(HttpStatus.OK)
-            .send("Minecraft server started");
-    } catch(err){
-        next(err);
-    }
-};
-
-export default {getStateMinecraft, getStateTrackmania, getStateConan, startMinecraftServer}
+export default {getStateMinecraft, getStateTrackmania, getStateConan}

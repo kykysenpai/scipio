@@ -4,6 +4,7 @@ import Session from "./Session";
 import HttpStatus from "../config/constants/HttpStatus";
 import Scopes from "../config/constants/Scopes";
 import Permissions from "../config/constants/Permissions";
+import Utils from "./Utils";
 
 /**
  * Check if the user has the required permissions
@@ -19,10 +20,10 @@ const requires = (scope, ...perms) => {
             let hasPerm = false;
             switch (scope) {
                 case Scopes.ALL:
-                    hasPerm = checkAll(perms, jwtPerms);
+                    hasPerm = Utils.checkAll(perms, jwtPerms);
                     break;
                 case Scopes.ANY:
-                    hasPerm = checkAny(perms, jwtPerms);
+                    hasPerm = Utils.checkAny(perms, jwtPerms);
                     break;
                 default :
                     next(new HttpError('Unknown permission scope : ' + scope, HttpStatus.INTERNAL_SERVER_ERROR));
@@ -37,28 +38,6 @@ const requires = (scope, ...perms) => {
             return next(err);
         }
     }
-};
-
-const checkAny = (perms, jwtPerms) => {
-    let hasPerm = false;
-    perms.forEach((perm) => {
-        jwtPerms.forEach((jwtPerm) => {
-            if (perm === jwtPerm) {
-                hasPerm = true;
-            }
-        })
-    });
-    return hasPerm;
-};
-
-const checkAll = (perms, jwtPerms) => {
-    let hasPerm = true;
-    perms.forEach((perm) => {
-        if(!jwtPerms.includes(perm)){
-            hasPerm = false;
-        }
-    });
-    return hasPerm;
 };
 
 export default requires;

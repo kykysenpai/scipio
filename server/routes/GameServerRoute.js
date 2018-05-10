@@ -20,8 +20,5 @@ router.route('/minecraft')
 router.route('/trackmania')
     .get(PermissionsManager(Scopes.ANY, Permissions.TRACKMANIA), GameServerController.getStateTrackmania);
 
-router.route('/minecraft/start')
-    .post(PermissionsManager(Scopes.ANY, Permissions.MINECRAFT), GameServerController.startMinecraftServer);
-
 
 export default router
