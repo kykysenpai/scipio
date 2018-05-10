@@ -12,26 +12,158 @@
                     <i class="fa fa-user-circle"></i> Status
                 </div>
                 <div class="card-body">
-                    <p>Current status : <b id="currentStatusConanServer">...</b></p>
+                    <p>Current status : <b id="currentStatusConan1Server">...</b></p>
+                    <button id="refreshConan1ServerButton" class="btn btn-primary">Refresh</button>
+                    <button id="startConan1ServerButton" class="btn btn-primary">Start</button>
+                    <button id="stopConan1ServerButton" class="btn btn-primary">Stop</button>
                 </div>
-                <div class="card-footer small text-muted">Check Current Status of the server</div>
+                <div class="card-footer small text-muted">Check Current Status of the server Conan #1</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Logs
+                </div>
+                <div id="divConan1ServerLogs" class="card-body">
+                    <p>...</p>
+                </div>
+                <div class="card-footer small text-muted">Check out the live logs of the Conan #1 server</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Status
+                </div>
+                <div class="card-body">
+                    <p>Current status : <b id="currentStatusConan2Server">...</b></p>
+                    <button id="refreshConan2ServerButton" class="btn btn-primary">Refresh</button>
+                    <button id="startConan2ServerButton" class="btn btn-primary">Start</button>
+                    <button id="stopConan2ServerButton" class="btn btn-primary">Stop</button>
+                </div>
+                <div class="card-footer small text-muted">Check Current Status of the server Conan #2</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Logs
+                </div>
+                <div id="divConan2ServerLogs" class="card-body">
+                    <p>...</p>
+                </div>
+                <div class="card-footer small text-muted">Check out the live logs of the Conan #2 server</div>
             </div>
         </div>
     </div>
     <script>
         $(() => {
-           $.ajax({
-               url:'/api/game_server/conan',
-               type: 'GET',
-               noprint: true
-           })
-               .then((inUse) => {
-                   if(inUse) {
-                       $('#currentStatusConanServer').text("Running");
-                   } else {
-                       $('#currentStatusConanServer').text("Off")
-                   }
-               })
+
+            let conan_1_socket = io('/conan_1');
+            let conan_2_socket = io('/conan_2');
+            let token = Cookies.get("cookie_monster_rpz");
+
+            let stderrP = '<p style="color:red;">';
+            let stdoutP = '<p style="color:green;">';
+
+            //############################### Conan 1 ##############################################
+
+            conan_1_socket.emit('authenticate', {
+                token: token
+            });
+
+            conan_1_socket.on('stdout', data => {
+                writeIntoLogs1(data, stdoutP);
+            });
+
+            conan_1_socket.on('stderr', data => {
+                writeIntoLogs1(data, stderrP);
+            });
+
+            conan_1_socket.on('state', inUse => {
+                if(inUse) {
+                    $('#currentStatusConan1Server').text("Running");
+                } else {
+                    $('#currentStatusConan1Server').text("Off")
+                }
+            });
+
+            writeIntoLogs1 = (data, p) => {
+                $('#divConan1ServerLogs').append(p + data.data + '</p>');
+                $('#divConan1ServerLogs').scrollTop($('#divConan1ServerLogs')[0].scrollHeight);
+            };
+
+            $('#startConan1ServerButton').click(event => {
+                conan_1_socket.emit('start');
+            });
+
+            $('#stopConan1ServerButton').click(event => {
+                conan_1_socket.emit('stop');
+            });
+
+            $('#refreshConan1ServerButton').click(event => {
+                conan_1_socket.emit('state');
+            });
+
+            //################################# Conan 2 #############################################
+
+            conan_2_socket.emit('authenticate', {
+                token: token
+            });
+
+            conan_2_socket.on('stdout', data => {
+                writeIntoLogs2(data, stdoutP);
+            });
+
+            conan_2_socket.on('stderr', data => {
+                writeIntoLogs2(data, stderrP);
+            });
+
+            conan_2_socket.on('state', inUse => {
+                if(inUse) {
+                    $('#currentStatusConan2Server').text("Running");
+                } else {
+                    $('#currentStatusConan2Server').text("Off")
+                }
+            });
+
+            writeIntoLogs2 = (data, p) => {
+                $('#divConan2ServerLogs').append(p + data.data + '</p>');
+                $('#divConan2ServerLogs').scrollTop($('#divConan2ServerLogs')[0].scrollHeight);
+            };
+
+            $('#startConan2ServerButton').click(event => {
+                conan_2_socket.emit('start');
+            });
+
+            $('#stopConan2ServerButton').click(event => {
+                conan_2_socket.emit('stop');
+            });
+
+            $('#refreshConan2ServerButton').click(event => {
+                conan_2_socket.emit('state');
+            });
+
+
+            $('#navBarHomeButton, #navAccordion a').one("click", event => {
+                if(conan_1_socket.connected){
+                    conan_1_socket.disconnect();
+                }
+                if(conan_2_socket.connected){
+                    conan_2_socket.disconnect();
+                }
+            });
+
+            conan_1_socket.emit('state');
+            conan_2_socket.emit('state');
+
         });
     </script>
 </div>

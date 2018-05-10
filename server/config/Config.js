@@ -35,6 +35,9 @@ export default {
     MINECRAFT_PORT : process.env.MINECRAFT_PORT,
     TRACKMANIA_PORT : process.env.TRACKMANIA_PORT,
     CONAN_PORT_1 : process.env.CONAN_PORT_1,
-    CONAN_PORT_2 : process.env.CONAN_PORT_2
+    CONAN_PORT_2 : process.env.CONAN_PORT_2,
+
+    //gameserver websocket room
+    GAMESERVER_ROOM : process.env.GAMESERVER_ROOM || 'authenticated'
 }
 

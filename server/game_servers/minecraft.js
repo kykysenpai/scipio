@@ -35,19 +35,19 @@ const startServer = async (io, socket) => {
         addSocketToListeningRoom(io.gameserver, socket);
 
         io.gameserver.stdout.on('data', data => {
-            io.to('authenticated').emit('stdout', {
+            io.to(Config.GAMESERVER_ROOM).emit('stdout', {
                 data: data.toString()
             });
         });
 
         io.gameserver.stderr.on('data', data => {
-            io.to('authenticated').emit('stderr', {
+            io.to(Config.GAMESERVER_ROOM).emit('stderr', {
                 data: data.toString()
             });
         });
 
         io.gameserver.on('exit', () => {
-            io.to('authenticated').emit('stdout', {
+            io.to(Config.GAMESERVER_ROOM).emit('stdout', {
                 data: "The Minecraft server was stopped"
             });
             delete io.gameserver;
@@ -62,7 +62,7 @@ const startServer = async (io, socket) => {
 };
 
 const addSocketToListeningRoom = (gameserver, socket) => {
-    socket.join('authenticated');
+    socket.join(Config.GAMESERVER_ROOM);
 };
 
 const authenticate = async (socket, token) => {
@@ -104,4 +104,4 @@ const initSocket = (io) => {
     });
 };
 
-export default {getServer, initSocket}
+export default {initSocket}

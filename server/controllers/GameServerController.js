@@ -23,15 +23,4 @@ const getStateTrackmania = async (req, res, next) => {
     }
 };
 
-const getStateConan = async (req, res, next) => {
-    try{
-        let state = await GameServerUcc.getStateConan();
-        res
-            .status(HttpStatus.OK)
-            .send(state);
-    }catch(err){
-        next(err);
-    }
-};
-
-export default {getStateMinecraft, getStateTrackmania, getStateConan}
+export default {getStateMinecraft, getStateTrackmania}

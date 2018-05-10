@@ -10,8 +10,4 @@ const getStateTrackmania = async () => {
     return await checkPort.check(Number(Config.TRACKMANIA_PORT), '127.0.0.1');
 };
 
-const getStateConan = async () => {
-    return await checkPort.check(Number(Config.CONAN_PORT),'127.0.0.1');
-};
-
-export default {getStateMinecraft, getStateTrackmania, getStateConan}
+export default {getStateMinecraft, getStateTrackmania}
