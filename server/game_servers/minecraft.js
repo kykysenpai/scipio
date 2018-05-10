@@ -8,8 +8,6 @@ import child_process from "child_process";
 
 let spawn = child_process.spawn;
 
-const ROOM = 'authenticated';
-
 const getServer = async (io, socket) => {
     if(io.gameserver != null){
         addSocketToListeningRoom(io.gameserver, socket);
@@ -30,22 +28,26 @@ const startServer = async (io, socket) => {
     if(io.gameserver == null) {
         io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
 
+        socket.emit('stdout', {
+            data: "The Minecraft server is starting on tcc.tircher.be:" + Config.MINECRAFT_PORT
+        });
+
         addSocketToListeningRoom(io.gameserver, socket);
 
         io.gameserver.stdout.on('data', data => {
-            io.to(ROOM).emit('stdout', {
+            io.to('authenticated').emit('stdout', {
                 data: data.toString()
             });
         });
 
         io.gameserver.stderr.on('data', data => {
-            io.to(ROOM).emit('stderr', {
+            io.to('authenticated').emit('stderr', {
                 data: data.toString()
             });
         });
 
         io.gameserver.on('exit', () => {
-            io.to(ROOM).emit('exit', {
+            io.to('authenticated').emit('stdout', {
                 data: "The Minecraft server was stopped"
             });
             delete io.gameserver;
@@ -53,11 +55,14 @@ const startServer = async (io, socket) => {
         });
     } else {
         Logger.info("The Minecraft couldn't start because another instance is already running");
+        socket.emit('stdout', {
+            data: "The Minecraft server is already running on tcc.tircher.be:" + Config.MINECRAFT_PORT
+        })
     }
 };
 
 const addSocketToListeningRoom = (gameserver, socket) => {
-    socket.join(ROOM);
+    socket.join('authenticated');
 };
 
 const authenticate = async (socket, token) => {
@@ -70,7 +75,7 @@ const authenticate = async (socket, token) => {
     }
 };
 
-const initSocket = async (io) => {
+const initSocket = (io) => {
     io.on('connection', socket => {
 
         socket.on('authenticate', async (data) => {
@@ -86,7 +91,7 @@ const initSocket = async (io) => {
             if(socket.authenticated){
                 Logger.info("Starting Minecraft Server...");
                 await startServer(io, socket);
-                Logger.info("Minecraft Server started");
+                Logger.info("Minecraft Server started on tcc.tircher.be:" + Config.MINECRAFT_PORT);
             }
         });
 

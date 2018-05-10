@@ -34,6 +34,7 @@ export default {
     //gameserver ports
     MINECRAFT_PORT : process.env.MINECRAFT_PORT,
     TRACKMANIA_PORT : process.env.TRACKMANIA_PORT,
-    CONAN_PORT : process.env.CONAN_PORT
+    CONAN_PORT_1 : process.env.CONAN_PORT_1,
+    CONAN_PORT_2 : process.env.CONAN_PORT_2
 }
 

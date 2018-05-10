@@ -17,7 +17,20 @@
                     <button id="startMinecraftServerButton" class="btn btn-primary">Start</button>
                     <button id="stopMinecraftServerButton" class="btn btn-primary">Stop</button>
                 </div>
-                <div class="card-footer small text-muted">Check Current Status of the server</div>
+                <div class="card-footer small text-muted">Check the current status of the server</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Logs
+                </div>
+                <div id="divMinecraftServerLogs" class="card-body">
+                   <p>...</p>
+                </div>
+                <div class="card-footer small text-muted">Check out the live logs of the minecraft server</div>
             </div>
         </div>
     </div>
@@ -51,9 +64,13 @@
                 token: token
             });
 
-            socket.on('stdin', data => console.log(data));
+            socket.on('stdout', data => {
+                $('#divMinecraftServerLogs').append('<p style="color=green;">' + data.data + '</p>');
+            });
 
-            socket.on('stderr', data => console.log(data));
+            socket.on('stderr', data => {
+                $('#divMinecraftServerLogs').append('<p style="color=red;">' + data.data + '</p>');
+            });
 
             $('#startMinecraftServerButton').click(event => {
                 socket.emit('start');

@@ -11,7 +11,8 @@ import ViewRoute from "../routes/ViewRoute";
 import http from "http";
 import socket_io from "socket.io";
 import Minecraft from "../game_servers/minecraft";
-import Conan from "../game_servers/conan";
+import Conan_1 from "../game_servers/conan_1";
+import Conan_2 from "../game_servers/conan_2";
 import Trackmania from "../game_servers/trackmania";
 
 Logger.info('Setting up server context...');
@@ -41,8 +42,11 @@ Minecraft.initSocket(socket_minecraft);
 
 Logger.info('Initializing websocket for Conan...');
 
-const socket_conan = socket.of('/conan');
-Conan.initSocket(socket_conan);
+const socket_conan_1 = socket.of('/conan_1');
+Conan_1.initSocket(socket_conan_1);
+
+const socket_conan_2 = socket.of('/conan_2');
+Conan_2.initSocket(socket_conan_2);
 
 Logger.info('Initializing websocket for Trackmania...');
 
