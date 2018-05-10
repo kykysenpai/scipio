@@ -28,7 +28,7 @@
                     <i class="fa fa-user-circle"></i> Logs
                 </div>
                 <div id="divMinecraftServerLogs" class="card-body">
-                   <p>...</p>
+                    <p>...</p>
                 </div>
                 <div class="card-footer small text-muted">Check out the live logs of the minecraft server</div>
             </div>
@@ -56,31 +56,46 @@
             getAndLoadServerState();
 
             let token = Cookies.get("cookie_monster_rpz");
-            let socket = io('/minecraft');
-            socket.on('connect', () => {
+            let minecraft_socket;
+            if(minecraft_socket.connected) {
+                console.log("socket was already connected, disconnecting...");
+                minecraft_socket.disconnect();
+            }
+            minecraft_socket = io('/minecraft');
+            minecraft_socket.on('connect', () => {
                 console.log("socket connected");
             });
-            socket.emit('authenticate', {
+            minecraft_socket.emit('authenticate', {
                 token: token
             });
 
-            socket.on('stdout', data => {
-                $('#divMinecraftServerLogs').append('<p style="color:green;">' + data.data + '</p>');
-                $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs')[0].scrollHeight);
+            let stderrP = '<p style="color:red;">';
+            let stdoutP = '<p style="color:green;">';
+
+            minecraft_socket.on('stdout', data => {
+                writeIntoLogs(data.data, stdoutP);
             });
 
-            socket.on('stderr', data => {
-                $('#divMinecraftServerLogs').append('<p style="color:red;">' + data.data + '</p>');
-                $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs')[0].scrollHeight);
-
+            minecraft_socket.on('stderr', data => {
+                writeIntoLogs(data.data, stderrP);
             });
+
+            writeIntoLogs = (data, p) => {
+                if($('#divMinecraftServerLogs').length) {
+                    $('#divMinecraftServerLogs').append(p + data.data + '</p>');
+                    $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs').scrollHeight);
+                } else {
+                    console.log("socket disconnection");
+                    minecraft_socket.disconnect();
+                }
+            };
 
             $('#startMinecraftServerButton').click(event => {
-                socket.emit('start');
+                minecraft_socket.emit('start');
             });
 
             $('#stopMinecraftServerButton').click(event => {
-               socket.emit('stop');
+                minecraft_socket.emit('stop');
             });
 
             $('#refreshMinecraftServerButton').click(event => {
