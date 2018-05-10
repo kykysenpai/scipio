@@ -14,47 +14,44 @@ const getServer = async (io, socket) => {
     if(io.gameserver != null){
         addSocketToListeningRoom(io.gameserver, socket);
     } else {
+        Logger.info("Starting Minecraft Server...");
         await startServer(io, socket);
+        Logger.info("Minecraft Server started");
     }
 };
 
 const stopServer = async (io) => {
     if(io.gameserver != null){
+        Logger.info("Stopping Minecraft Server...");
         io.gameserver.stdin.write("stop\n");
     }
 };
 
 const startServer = async (io, socket) => {
     let inUse = await GameServerUcc.getStateMinecraft();
-    if(inUse){
-        Logger.debug("it looks like the server is already running");
-        return;
+    if(!inUse) {
+        io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
+
+        addSocketToListeningRoom(io.gameserver, socket);
+
+        io.gameserver.stdout.on('data', data => {
+            io.to(ROOM).emit('stdout', {
+                data: data.toString()
+            });
+        });
+
+        io.gameserver.stderr.on('data', data => {
+            io.to(ROOM).emit('stderr', {
+                data: data.toString()
+            });
+        });
+
+        io.gameserver.stderr.on('exit', () => {
+            io.to(ROOM).emit('exit', {
+                data: "The Minecraft server was closed"
+            });
+        });
     }
-
-    io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS +'/start_minecraft_server.sh']);
-
-    addSocketToListeningRoom(io.gameserver, socket);
-
-    io.gameserver.stdout.on('data', data => {
-        Logger.debug(data.toString());
-        io.to(ROOM).emit('stdout', {
-            data: data.toString()
-        });
-    });
-
-    io.gameserver.stderr.on('data', data => {
-        Logger.debug(data.toString());
-        io.to(ROOM).emit('stderr', {
-            data: data.toString()
-        });
-    });
-
-    io.gameserver.stderr.on('exit', () => {
-        Logger.debug("Exiting Minecraft server");
-        io.to(ROOM).emit('exit', {
-            data: "The Minecraft server was closed"
-        });
-    });
 };
 
 const addSocketToListeningRoom = (gameserver, socket) => {

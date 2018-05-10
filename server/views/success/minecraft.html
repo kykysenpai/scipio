@@ -13,6 +13,7 @@
                 </div>
                 <div class="card-body">
                     <p>Current status : <b id="currentStatusMinecraftServer">...</b></p>
+                    <button id="refreshMinecraftServerButton" class="btn btn-primary">Refresh</button>
                     <button id="startMinecraftServerButton" class="btn btn-primary">Start</button>
                     <button id="stopMinecraftServerButton" class="btn btn-primary">Stop</button>
                 </div>
@@ -21,7 +22,26 @@
         </div>
     </div>
     <script>
+
+        getAndLoadServerState = () => {
+            $.ajax({
+                url:'/api/game_server/minecraft',
+                type: 'GET',
+                noprint: true
+            })
+                .then((inUse) => {
+                    if(inUse) {
+                        $('#currentStatusMinecraftServer').text("Running");
+                    } else {
+                        $('#currentStatusMinecraftServer').text("Off")
+                    }
+                })
+        };
+
         $(() => {
+
+            getAndLoadServerState();
+
             let token = Cookies.get("cookie_monster_rpz");
             let socket = io('/minecraft');
             socket.on('connect', () => {
@@ -35,36 +55,19 @@
 
             socket.on('stderr', data => console.log(data));
 
-
             $('#startMinecraftServerButton').click(event => {
                 socket.emit('start');
-
-                // $.ajax({
-                //     url:'/api/game_server/minecraft/start',
-                //     type: 'POST',
-                //     noprint:true
-                // })
-                //     .then(ret => {
-                //         console.log(ret);
-                //     })
             });
 
             $('#stopMinecraftServerButton').click(event => {
                socket.emit('stop');
             });
 
-            $.ajax({
-                url:'/api/game_server/minecraft',
-                type: 'GET',
-                noprint: true
+            $('#refreshMinecraftServerButton').click(event => {
+                getAndLoadServerState();
             })
-                .then((inUse) => {
-                    if(inUse) {
-                        $('#currentStatusMinecraftServer').text("Running");
-                    } else {
-                        $('#currentStatusMinecraftServer').text("Off")
-                    }
-                })
+
+
         });
     </script>
 </div>
