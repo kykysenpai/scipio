@@ -56,12 +56,7 @@
             getAndLoadServerState();
 
             let token = Cookies.get("cookie_monster_rpz");
-            let minecraft_socket;
-            if(minecraft_socket.connected) {
-                console.log("socket was already connected, disconnecting...");
-                minecraft_socket.disconnect();
-            }
-            minecraft_socket = io('/minecraft');
+            let minecraft_socket = io('/minecraft');
             minecraft_socket.on('connect', () => {
                 console.log("socket connected");
             });
