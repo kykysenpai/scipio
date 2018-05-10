@@ -91,8 +91,10 @@
                 getAndLoadServerState();
             });
 
-            $('#navBarHomeButton').click(event => {
-                console.log("changing page, disconnecting Minecraft Server socket");
+            $('#navBarHomeButton, #navAccordion a').one("click", event => {
+                if(minecraft_socket.connected){
+                    minecraft_socket.disconnect();
+                }
             });
 
         });
