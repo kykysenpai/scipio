@@ -75,7 +75,7 @@
 
             writeIntoLogs = (data, p) => {
                 $('#divMinecraftServerLogs').append(p + data.data + '</p>');
-                $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs').scrollHeight);
+                $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs')[0].scrollHeight);
 
             };
 
