@@ -66,10 +66,12 @@
 
             socket.on('stdout', data => {
                 $('#divMinecraftServerLogs').append('<p style="color:green;">' + data.data + '</p>');
+                $('#divMinecraftServerLogs').scrollTop = $('divMinecraftServerLogs').scrollHeight;
             });
 
             socket.on('stderr', data => {
                 $('#divMinecraftServerLogs').append('<p style="color:red;">' + data.data + '</p>');
+                $('#divMinecraftServerLogs').scrollTop = $('divMinecraftServerLogs').scrollHeight;
             });
 
             $('#startMinecraftServerButton').click(event => {
