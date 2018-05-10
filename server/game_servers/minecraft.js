@@ -36,18 +36,21 @@ const startServer = async (io, socket) => {
     addSocketToListeningRoom(io.gameserver, socket);
 
     io.gameserver.stdout.on('data', data => {
+        Logger.debug(data.toString());
         io.to(ROOM).emit('stdout', {
             data: data.toString()
         });
     });
 
     io.gameserver.stderr.on('data', data => {
+        Logger.debug(data.toString());
         io.to(ROOM).emit('stderr', {
             data: data.toString()
         });
     });
 
     io.gameserver.stderr.on('exit', () => {
+        Logger.debug("Exiting Minecraft server");
         io.to(ROOM).emit('exit', {
             data: "The Minecraft server was closed"
         });

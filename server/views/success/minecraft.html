@@ -33,7 +33,7 @@
 
             socket.on('stdin', data => console.log(data));
 
-            socket.on('stderr', data => console.err(data));
+            socket.on('stderr', data => console.log(data));
 
 
             $('#startMinecraftServerButton').click(event => {
