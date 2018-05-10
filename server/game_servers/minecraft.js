@@ -28,8 +28,7 @@ const stopServer = async (io) => {
 };
 
 const startServer = async (io, socket) => {
-    let inUse = await GameServerUcc.getStateMinecraft();
-    if(!inUse) {
+    if(io.gameserver == null) {
         io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
 
         addSocketToListeningRoom(io.gameserver, socket);
@@ -48,9 +47,13 @@ const startServer = async (io, socket) => {
 
         io.gameserver.stderr.on('exit', () => {
             io.to(ROOM).emit('exit', {
-                data: "The Minecraft server was closed"
+                data: "The Minecraft server was stopped"
             });
+            delete io.gameserver;
+            Logger.info("The minecraft server is now closed");
         });
+    } else {
+        Logger.info("The Minecraft couldn't start because another instance is already running");
     }
 };
 
