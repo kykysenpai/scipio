@@ -28,7 +28,7 @@ const stopServer = async (io) => {
 const startServer = async (io, socket) => {
     if(io.gameserver == null) {
         // io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_conan_1_server.sh']);
-        io.gameserver = spawn('/bin/echo', '$USER');
+        io.gameserver = spawn('/bin/echo', ['$USER']);
 
         socket.emit('stdout', {
             data: "The Conan_1 server is starting on tcc.tircher.be:" + Config.CONAN_PORT_1
