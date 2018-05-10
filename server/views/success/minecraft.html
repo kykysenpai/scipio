@@ -66,11 +66,11 @@
             let stdoutP = '<p style="color:green;">';
 
             minecraft_socket.on('stdout', data => {
-                writeIntoLogs(data.data, stdoutP);
+                writeIntoLogs(data, stdoutP);
             });
 
             minecraft_socket.on('stderr', data => {
-                writeIntoLogs(data.data, stderrP);
+                writeIntoLogs(data, stderrP);
             });
 
             writeIntoLogs = (data, p) => {
