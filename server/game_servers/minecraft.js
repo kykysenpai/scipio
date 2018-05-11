@@ -95,7 +95,7 @@ const initSocket = (io) => {
 
         socket.on('stop', async () => {
             if (socket.authenticated) {
-                await stopServer(io);
+                await stopServer(io, socket);
             }
         });
 
