@@ -1,8 +1,6 @@
-import Logger from "../modules/Logger";
 import Config from "../config/Config";
 import JWT from "jsonwebtoken";
 import Permissions from "../config/constants/Permissions";
-import Paths from "../config/constants/Paths";
 import GameServerUcc from "../ucc/GameServerUcc";
 import child_process from "child_process";
 
@@ -24,7 +22,9 @@ const stopServer = async (io, socket) => {
 
 const startServer = async (io, socket) => {
     if (io.gameserver == null) {
-        io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
+        // io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
+        io.gameserver = spawn('cd', ['/srv/minecraft_server', '&&', 'java', '-Xms4G', '-Xmx10G', '-jar', 'forge-1.12.2-14.23.2.2651-universal.jar', 'nogui']);
+
 
         socket.emit('stdout', {
             data: "The Minecraft server is starting on tcc.tircher.be:" + Config.MINECRAFT_PORT
