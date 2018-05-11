@@ -11,7 +11,8 @@ const stopServer = async (io, socket) => {
         socket.emit('stdout', {
             data: "Stopping Conan_2 Server..."
         });
-        io.gameserver.kill('SIGINT');
+        // io.gameserver.kill('SIGINT');
+        io.gameserver.stdin.write("\x03")
     } else {
         socket.emit('stdout', {
             data: "Can't stop the Conan_2 Server as no instance is currently running"
