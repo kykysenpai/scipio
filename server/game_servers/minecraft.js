@@ -35,30 +35,32 @@ const startServer = async (io, socket) => {
         socket.emit('stdout', {
             data: "The Minecraft server is starting on tcc.tircher.be:" + Config.MINECRAFT_PORT
         });
+
+
+        io.gameserver.stdout.on('data', data => {
+            io.to(Config.GAMESERVER_ROOM).emit('stdout', {
+                data: data.toString()
+            });
+        });
+
+        io.gameserver.stderr.on('data', data => {
+            io.to(Config.GAMESERVER_ROOM).emit('stderr', {
+                data: data.toString()
+            });
+        });
+
+        io.gameserver.on('exit', () => {
+            io.to(Config.GAMESERVER_ROOM).emit('stdout', {
+                data: "The Minecraft server was stopped"
+            });
+            delete io.gameserver;
+        });
+
     } else {
         socket.emit('stdout', {
             data: "The Minecraft server is already running on tcc.tircher.be:" + Config.MINECRAFT_PORT
         })
     }
-
-    io.gameserver.stdout.on('data', data => {
-        io.to(Config.GAMESERVER_ROOM).emit('stdout', {
-            data: data.toString()
-        });
-    });
-
-    io.gameserver.stderr.on('data', data => {
-        io.to(Config.GAMESERVER_ROOM).emit('stderr', {
-            data: data.toString()
-        });
-    });
-
-    io.gameserver.on('exit', () => {
-        io.to(Config.GAMESERVER_ROOM).emit('stdout', {
-            data: "The Minecraft server was stopped"
-        });
-        delete io.gameserver;
-    });
 
 };
 

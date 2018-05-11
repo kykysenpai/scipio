@@ -8,7 +8,7 @@ let spawn = child_process.spawn;
 
 const getServer = async (io, socket) => {
     if (io.gameserver != null) {
-        addSocketToListeningRoom(io.gameserver, socket);
+        addSocketToListeningRoom(socket);
     }
 };
 
@@ -32,31 +32,30 @@ const startServer = async (io, socket) => {
         socket.emit('stdout', {
             data: "The Conan_2 server is starting on tcc.tircher.be:" + Config.CONAN_PORT_2
         });
+
+        io.gameserver.stdout.on('data', data => {
+            io.to(Config.GAMESERVER_ROOM).emit('stdout', {
+                data: data.toString()
+            });
+        });
+
+        io.gameserver.stderr.on('data', data => {
+            io.to(Config.GAMESERVER_ROOM).emit('stderr', {
+                data: data.toString()
+            });
+        });
+
+        io.gameserver.on('exit', () => {
+            io.to(Config.GAMESERVER_ROOM).emit('stdout', {
+                data: "The Conan_2 server was stopped"
+            });
+            delete io.gameserver;
+        });
     } else {
         socket.emit('stdout', {
             data: "The Conan_2 server is already running on tcc.tircher.be:" + Config.CONAN_PORT_2
         })
     }
-
-    io.gameserver.stdout.on('data', data => {
-        io.to(Config.GAMESERVER_ROOM).emit('stdout', {
-            data: data.toString()
-        });
-    });
-
-    io.gameserver.stderr.on('data', data => {
-        io.to(Config.GAMESERVER_ROOM).emit('stderr', {
-            data: data.toString()
-        });
-    });
-
-    io.gameserver.on('exit', () => {
-        io.to(Config.GAMESERVER_ROOM).emit('stdout', {
-            data: "The Conan_2 server was stopped"
-        });
-        delete io.gameserver;
-    });
-
 };
 
 const addSocketToListeningRoom = (socket) => {
