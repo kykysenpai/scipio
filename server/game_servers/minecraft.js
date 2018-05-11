@@ -3,6 +3,7 @@ import JWT from "jsonwebtoken";
 import Permissions from "../config/constants/Permissions";
 import GameServerUcc from "../ucc/GameServerUcc";
 import child_process from "child_process";
+import Paths from "../config/constants/Paths";
 
 let spawn = child_process.spawn;
 
@@ -22,14 +23,11 @@ const stopServer = async (io, socket) => {
 
 const startServer = async (io, socket) => {
     if (io.gameserver == null) {
-        // io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
-        io.gameserver = spawn('cd', ['/srv/minecraft_server', '&&', 'java', '-Xms4G', '-Xmx10G', '-jar', 'forge-1.12.2-14.23.2.2651-universal.jar', 'nogui']);
-
+        io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_minecraft_server.sh']);
 
         socket.emit('stdout', {
             data: "The Minecraft server is starting on tcc.tircher.be:" + Config.MINECRAFT_PORT
         });
-
 
         io.gameserver.stdout.on('data', data => {
             io.to(Config.GAMESERVER_ROOM).emit('stdout', {
