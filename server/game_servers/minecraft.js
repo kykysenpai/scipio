@@ -8,12 +8,6 @@ import child_process from "child_process";
 
 let spawn = child_process.spawn;
 
-const getServer = async (io, socket) => {
-    if (io.gameserver != null) {
-        addSocketToListeningRoom(io.gameserver, socket);
-    }
-};
-
 const stopServer = async (io, socket) => {
     let inUse = await GameServerUcc.getStateMinecraft();
     if (io.gameserver != null && inUse) {
@@ -66,6 +60,9 @@ const startServer = async (io, socket) => {
 
 const addSocketToListeningRoom = (socket) => {
     socket.join(Config.GAMESERVER_ROOM);
+    socket.emit('stdout', {
+        data: "You are now connected to the live logs of the Minecraft server"
+    });
 };
 
 const authenticate = async (socket, token) => {
@@ -85,7 +82,7 @@ const initSocket = (io) => {
             if (data.token != null) {
                 await authenticate(socket, data.token);
                 if (socket.authenticated) {
-                    await getServer(io, socket);
+                    await addSocketToListeningRoom(socket);
                 }
             }
         });
