@@ -51,7 +51,7 @@ Conan_2.initSocket(socket_conan_2);
 Logger.info('Initializing websocket for Trackmania...');
 
 const socket_trackmania = socket.of('/trackmania');
-Trackmania.initSocket(socket_trackmania);
+// Trackmania.initSocket(socket_trackmania);
 
 Logger.info('Setting up the server log middleware...');
 
