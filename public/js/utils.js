@@ -1,9 +1,5 @@
 const getAndLoadPage = async (viewName) => {
-    // $('#mainContentDiv').append(('/views/success/' + viewName)
-    console.log('loading');
-    console.log($('#view_success_' + viewName).length);
     if($('#view_success_' + viewName).length === 0){
-        console.log('not found', viewName);
         let view = await $.get('/views/success/' + viewName);
         $('#mainContentDiv').append(view);
     }
@@ -11,8 +7,13 @@ const getAndLoadPage = async (viewName) => {
     $('#view_success_' + viewName).show();
 };
 
-const getAndLoadError = (errorNumber) => {
-    $('#mainContentDiv').load('/views/errors/' + errorNumber)
+const getAndLoadError = async (errorNumber) => {
+    if($('#view_error_' + errorNumber).length === 0){
+        let view = await $.get('/views/errors/' + errorNumber);
+        $('#mainContentDiv').append(view);
+    }
+    $('.view').hide();
+    $('#view_error_' + errorNumber).show();
 };
 
 const getFormValuesFromClick = (event) => {
