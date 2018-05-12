@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div id="view_success_minecraft" class="view container-fluid">
     <div class="row">
         <div class="col-12">
             <h1>Minecraft</h1>
@@ -88,12 +88,6 @@
 
             $('#refreshMinecraftServerButton').click(event => {
                 getAndLoadServerState();
-            });
-
-            $('#navBarHomeButton, #navAccordion a').one("click", event => {
-                if(minecraft_socket.connected){
-                    minecraft_socket.disconnect();
-                }
             });
 
         });

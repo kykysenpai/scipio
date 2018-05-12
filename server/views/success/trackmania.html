@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div id="view_success_trackmania" class="view container-fluid">
     <div class="row">
         <div class="col-12">
             <h1>Trackmania</h1>
@@ -13,25 +13,147 @@
                 </div>
                 <div class="card-body">
                     <p>Current status : <b id="currentStatusTrackmaniaServer">...</b></p>
+                    <button id="refreshTrackmaniaServerButton" class="btn btn-primary">Refresh</button>
+                    <button id="startTrackmaniaServerButton" class="btn btn-primary">Start</button>
+                    <button id="stopTrackmaniaServerButton" class="btn btn-primary">Stop</button>
                 </div>
-                <div class="card-footer small text-muted">Check Current Status of the server</div>
+                <div class="card-footer small text-muted">Check Current Status of the Trackmania server</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Logs
+                </div>
+                <div id="divTrackmaniaServerLogs" class="divGameServerLogs card-body">
+                    <p>...</p>
+                </div>
+                <div class="card-footer small text-muted">Check out the live logs of the Trackmania server</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Status
+                </div>
+                <div class="card-body">
+                    <p>Current status : <b id="currentStatusManiaControlServer">...</b></p>
+                    <button id="refreshManiaControlServerButton" class="btn btn-primary">Refresh</button>
+                    <button id="startManiaControlServerButton" class="btn btn-primary">Start</button>
+                    <button id="stopManiaControlServerButton" class="btn btn-primary">Stop</button>
+                </div>
+                <div class="card-footer small text-muted">Check Current Status of the ManiaControl server</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Logs
+                </div>
+                <div id="divManiaControlServerLogs" class="divGameServerLogs card-body">
+                    <p>...</p>
+                </div>
+                <div class="card-footer small text-muted">Check out the live logs of the ManiaControl server</div>
             </div>
         </div>
     </div>
     <script>
         $(() => {
-            $.ajax({
-                url:'/api/game_server/trackmania',
-                type: 'GET',
-                noprint: true
-            })
-                .then((inUse) => {
-                    if(inUse) {
-                        $('#currentStatusTrackmaniaServer').text("Running");
-                    } else {
-                        $('#currentStatusTrackmaniaServer').text("Off")
-                    }
-                })
+
+            let trackmania_socket = io('/trackmania');
+            let maniacontrol_socket = io('/maniacontrol');
+            let token = Cookies.get("cookie_monster_rpz");
+
+            let stderrP = '<p style="color:red;">';
+            let stdoutP = '<p style="color:green;">';
+
+            //############################### Conan 1 ##############################################
+
+            trackmania_socket.emit('authenticate', {
+                token: token
+            });
+
+            trackmania_socket.on('stdout', data => {
+                writeIntoLogsTrackmania(data, stdoutP);
+            });
+
+            trackmania_socket.on('stderr', data => {
+                writeIntoLogsTrackmania(data, stderrP);
+            });
+
+            trackmania_socket.on('state', inUse => {
+                if(inUse) {
+                    $('#currentStatusTrackmaniaServer').text("Running");
+                } else {
+                    $('#currentStatusTrackmaniaServer').text("Off")
+                }
+            });
+
+            writeIntoLogsTrackmania = (data, p) => {
+                $('#divTrackmaniaServerLogs').append(p + data.data + '</p>');
+                $('#divTrackmaniaServerLogs').scrollTop($('#divTrackmaniaServerLogs')[0].scrollHeight);
+            };
+
+            $('#startTrackmaniaServerButton').click(event => {
+                trackmania_socket.emit('start');
+            });
+
+            $('#stopTrackmaniaServerButton').click(event => {
+                trackmania_socket.emit('stop');
+            });
+
+            $('#refreshTrackmaniaServerButton').click(event => {
+                trackmania_socket.emit('state');
+            });
+
+            //################################# Conan 2 #############################################
+
+            maniacontrol_socket.emit('authenticate', {
+                token: token
+            });
+
+            maniacontrol_socket.on('stdout', data => {
+                writeIntoLogsManiaControl(data, stdoutP);
+            });
+
+            maniacontrol_socket.on('stderr', data => {
+                writeIntoLogsManiaControl(data, stderrP);
+            });
+
+            maniacontrol_socket.on('state', inUse => {
+                if(inUse) {
+                    $('#currentStatusManiaControlServer').text("Running");
+                } else {
+                    $('#currentStatusManiaControlServer').text("Off")
+                }
+            });
+
+            writeIntoLogsManiaControl = (data, p) => {
+                $('#divManiaControlServerLogs').append(p + data.data + '</p>');
+                $('#divManiaControlServerLogs').scrollTop($('#divManiaControlServerLogs')[0].scrollHeight);
+            };
+
+            $('#startManiaControlServerButton').click(event => {
+                maniacontrol_socket.emit('start');
+            });
+
+            $('#stopManiaControlServerButton').click(event => {
+                maniacontrol_socket.emit('stop');
+            });
+
+            $('#refreshManiaControlServerButton').click(event => {
+                maniacontrol_socket.emit('state');
+            });
+
+            trackmania_socket.emit('state');
+            maniacontrol_socket.emit('state');
+
         });
     </script>
 </div>

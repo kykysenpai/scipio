@@ -9,22 +9,22 @@ let spawn = child_process.spawn;
 const stopServer = async (io, socket) => {
     if (io.gameserver != null) {
         socket.emit('stdout', {
-            data: "Stopping Trackmania Server..."
+            data: "Stopping ManiaControl Server..."
         });
         io.gameserver.kill('SIGINT');
     } else {
         socket.emit('stdout', {
-            data: "Can't stop the Trackmania Server as no instance is currently running"
+            data: "Can't stop the ManiaControl Server as no instance is currently running"
         });
     }
 };
 
 const startServer = async (io, socket) => {
     if (io.gameserver == null) {
-        io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_trackmania_server.sh']);
+        io.gameserver = spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/start_maniacontrol_server.sh']);
 
         socket.emit('stdout', {
-            data: "The Trackmania server is starting on tcc.tircher.be:" + Config.TRACKMANIA_PORT
+            data: "The ManiaControl server is starting on tcc.tircher.be:" + Config.MANIACONTROL_PORT
         });
 
         io.gameserver.stdout.on('data', data => {
@@ -41,14 +41,14 @@ const startServer = async (io, socket) => {
 
         io.gameserver.on('exit', () => {
             io.to(Config.GAMESERVER_ROOM).emit('stdout', {
-                data: "The Trackmania server was stopped"
+                data: "The ManiaControl server was stopped"
             });
             delete io.gameserver;
         });
 
     } else {
         socket.emit('stdout', {
-            data: "The Trackmania server is already running on tcc.tircher.be:" + Config.TRACKMANIA_PORT
+            data: "The ManiaControl server is already running on tcc.tircher.be:" + Config.MANIACONTROL_PORT
         })
     }
 };
@@ -56,7 +56,7 @@ const startServer = async (io, socket) => {
 const addSocketToListeningRoom = (socket) => {
     socket.join(Config.GAMESERVER_ROOM);
     socket.emit('stdout', {
-        data: "You are now connected to the live logs of the Trackmania server"
+        data: "You are now connected to the live logs of the ManiaControl server"
     });
 };
 

@@ -14,6 +14,7 @@ import Minecraft from "../game_servers/minecraft";
 import Conan_1 from "../game_servers/conan_1";
 import Conan_2 from "../game_servers/conan_2";
 import Trackmania from "../game_servers/trackmania";
+import ManiaControl from "../game_servers/maniacontrol";
 
 Logger.info('Setting up server context...');
 
@@ -51,7 +52,10 @@ Conan_2.initSocket(socket_conan_2);
 Logger.info('Initializing websocket for Trackmania...');
 
 const socket_trackmania = socket.of('/trackmania');
-// Trackmania.initSocket(socket_trackmania);
+Trackmania.initSocket(socket_trackmania);
+
+const socket_maniacontrol = socket.of('/maniacontrol');
+ManiaControl.initSocket(socket_maniacontrol);
 
 Logger.info('Setting up the server log middleware...');
 

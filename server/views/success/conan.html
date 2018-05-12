@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div id="view_success_conan" class="view container-fluid">
     <div class="row">
         <div class="col-12">
             <h1>Conan</h1>
@@ -149,16 +149,6 @@
 
             $('#refreshConan2ServerButton').click(event => {
                 conan_2_socket.emit('state');
-            });
-
-
-            $('#navBarHomeButton, #navAccordion a').one("click", event => {
-                if(conan_1_socket.connected){
-                    conan_1_socket.disconnect();
-                }
-                if(conan_2_socket.connected){
-                    conan_2_socket.disconnect();
-                }
             });
 
             conan_1_socket.emit('state');

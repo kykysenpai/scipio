@@ -1,13 +1,19 @@
-const PERM_SPOTIFY = 'spotify';
-
-const getAndLoadPage = (viewName) => {
-    $('#mainContentDiv').load('/views/success/' + viewName)
+const getAndLoadPage = async (viewName) => {
+    // $('#mainContentDiv').append(('/views/success/' + viewName)
+    console.log('loading');
+    console.log($('#view_success_' + viewName).length);
+    if($('#view_success_' + viewName).length === 0){
+        console.log('not found', viewName);
+        let view = await $.get('/views/success/' + viewName);
+        $('#mainContentDiv').append(view);
+    }
+    $('.view').hide();
+    $('#view_success_' + viewName).show();
 };
 
 const getAndLoadError = (errorNumber) => {
     $('#mainContentDiv').load('/views/errors/' + errorNumber)
 };
-
 
 const getFormValuesFromClick = (event) => {
     let formName = $(event.currentTarget).closest('form').attr('name');
@@ -24,28 +30,10 @@ const getFormValues = (name) => {
     return map;
 };
 
-const loadSpotifyWidget = () => {
-    $.ajax({
-        url: '/views/success/spotify_widget',
-        type: 'GET',
-        noprint: true,
-        nonotif: true
-    })
-        .then((html) => {
-          $('#navAccordion').after(html);
-        })
-};
-
 const loadNavBarLinks = (permissions) => {
     let html = "";
     permissions.forEach(permission => {
-        switch (permission) {
-            case PERM_SPOTIFY :
-                loadSpotifyWidget();
-                break;
-            default :
-                html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+(permission.name).toLowerCase()+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+(permission.name).replace(/_/g, ' ')+'</span></a></li>';
-        }
+        html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+(permission.name).toLowerCase()+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+(permission.name).replace(/_/g, ' ')+'</span></a></li>';
     });
     $('#navAccordion').html(html);
     $('#navAccordion a').click((event) => {
