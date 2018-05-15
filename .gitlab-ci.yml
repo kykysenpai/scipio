@@ -1,0 +1,7 @@
+stages:
+ - test
+
+test_gitlab:
+ stage: test
+ script:
+  - echo "Hello, gitlab-ci is working"
