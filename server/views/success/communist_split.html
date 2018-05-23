@@ -1,20 +1,79 @@
 <div id="view_success_communist_split" class="view container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h1>Communist Split</h1>
-            <p>You can manage how much you owe and how much is owed to you here</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" id="mainNav2">
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <h4 class="navbar-text" id="communist_split_navbar_current_group">Summary</h4>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Groups</a>
+                    <div class="dropdown-menu" id="communist_split_dropdown_group">
+                        <a class="dropdown-item" href="#"></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="communist_split_manage_group_button">Manage your groups</a>
+                </li>
+            </ul>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <i class="fa fa-user-circle"></i> Payments
+    </nav>
+    <div id="communist_split_div_summary" class="communist_split_div" style="display:none;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-user-circle"></i> Payments
+                    </div>
+                    <div class="card-body">
+                    </div>
+                    <div class="card-footer small text-muted">Manage your payments</div>
                 </div>
-                <div class="card-body">
-                </div>
-                <div class="card-footer small text-muted">Manage your payments</div>
             </div>
         </div>
     </div>
+    <div id="communist_split_div_groups" class="communist_split_div" style="display:none;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-user-circle"></i> Payments
+                    </div>
+                    <div class="card-body">
+                    </div>
+                    <div class="card-footer small text-muted">Manage your payments</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="communist_split_div_manage" class="communist_split_div" style="display:none;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-user-circle"></i> Payments
+                    </div>
+                    <div class="card-body">
+                    </div>
+                    <div class="card-footer small text-muted">Manage your payments</div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    $(() => {
+        $('#communist_split_dropdown_group > a').click((event) => {
+
+        });
+
+
+        $('#communist_split_manage_group_button').click((event) => {
+
+        });
+
+
+
+    })
+</script>
 </div>
