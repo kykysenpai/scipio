@@ -6,6 +6,7 @@ test:
  tags:
   - ubuntu
  script:
+  - apt-get update && apt-get upgrade
   - apt-get install default-jdk -y
   - ls
   - touch yolo.txt
