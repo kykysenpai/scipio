@@ -6,4 +6,7 @@ test:
  tags:
   - ubuntu
  script:
-  - echo "Hello, gitlab-ci is working"
+  - apt-get install default-jdk -y
+  - ls
+  - touch yolo.txt
+  - ls
