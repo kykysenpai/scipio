@@ -1,7 +1,9 @@
 stages:
  - test
 
-test_gitlab:
+test:
  stage: test
+ tags:
+  - ubuntu
  script:
   - echo "Hello, gitlab-ci is working"
