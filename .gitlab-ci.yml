@@ -6,7 +6,4 @@ deploy:
  tags:
   - ubuntu
  script:
-  - apt-get update && apt-get upgrade -y
-  - apt-get install -y nodejs npm
-  - npm install
-  - npm run start-prod
+  - ssh -t kyky@tcc.tircher.be '/bin/bash deploy_scipio.sh'
