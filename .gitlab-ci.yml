@@ -1,0 +1,12 @@
+stages:
+ - deploy
+
+test:
+ stage: deploy
+ tags:
+  - ubuntu
+ script:
+  - apt-get update && apt-get upgrade -y
+  - apt-get install default-jdk -y
+  - apt-get install nodejs -y
+  - npm run start-prod

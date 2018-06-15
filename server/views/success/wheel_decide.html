@@ -1,0 +1,87 @@
+<div id="view_success_wheel_decide" class="view container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>Wheel Decide</h1>
+            <p>You really can't make a choice by yourself ?</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Choices
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="wheelDecideDataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <form>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" id="wheel_decide_add_name" placeholder="Enter choice"/>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button type="button" id="wheel_decide_add_button" class="btn btn-primary">Add</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer small text-muted"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Users
+                </div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary" id="wheel_decide_choice_button">RNG TIME !</button>
+                    <hr/>
+                    <p id="wheel_decide_choice"></p>
+                </div>
+                <div class="card-footer small text-muted">List of the users of Scipio</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        wheelDecideDataTable = $('#wheelDecideDataTable').DataTable();
+
+        $('#wheel_decide_add_button').click((event) => {
+           wheelDecideDataTable.row.add([
+               '<p class="wheel_decide_choice">' + (
+               $('#wheel_decide_add_name').val() || "no name" ) + '</p>'
+               , '<button type="button" class="btn btn-primary" onclick="removeRow($(this).closest(\'tr\'))">X</button>'
+           ]).draw();
+        });
+
+        let removeRow = (row) => {
+            row.addClass('toRemove');
+            wheelDecideDataTable.row('.toRemove').remove().draw();
+        };
+
+        $('#wheel_decide_choice_button').click((event) => {
+          let choices = [];
+          $('.wheel_decide_choice').each((index) => {
+              console.log($(this).html());
+              choices.push($(this).text());
+          });
+          // wheelDecideDataTable.rows().every((row) => {
+          //     choices.push(wheelDecideDataTable.row(row).data()[0])
+          // });
+            console.log(choices);
+        });
+    </script>
+</div>
