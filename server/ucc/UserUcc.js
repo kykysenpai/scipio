@@ -71,8 +71,6 @@ const authenticate = async (login, password) => {
 const checkIntegrity = (user) => {
     if (
         !user ||
-        !user.first_name || user.first_name === "" ||
-        !user.last_name || user.first_name === "" ||
         !user.login || user.login === "" ||
         !user.password || user.password === "" ||
         !user.email || user.email === ""
@@ -105,8 +103,6 @@ const findAll = async () => {
             });
         };
         rawUsers.push({
-            first_name: user.first_name,
-            last_name: user.last_name,
             email: user.email,
             login: user.login,
             active: user.active,

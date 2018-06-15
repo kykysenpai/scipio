@@ -6,12 +6,6 @@ export default {
         primaryKey: true,
         autoIncrement: true
     },
-    first_name: {
-        type: Sequelize.DataTypes.STRING
-    },
-    last_name: {
-        type: Sequelize.DataTypes.STRING
-    },
     login: {
         type: Sequelize.DataTypes.STRING
     },

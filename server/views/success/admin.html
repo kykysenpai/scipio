@@ -16,8 +16,6 @@
                         <table class="table table-bordered" id="adminPageUsersDataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
-                                <th>First Name</th>
-                                <th>Last Name</th>
                                 <th>Login</th>
                                 <th>Email</th>
                                 <th>Active</th>
@@ -259,8 +257,6 @@
 
             users.forEach(user => {
                 adminPageUsersDatatable.row.add([
-                    user.first_name,
-                    user.last_name,
                     user.login,
                     user.email,
                     user.active ?

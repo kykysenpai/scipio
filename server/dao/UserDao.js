@@ -16,7 +16,7 @@ const findAllInfoByLogin = async (login) => {
             where: {
                 login: login
             },
-            attributes: ['id', 'first_name', 'last_name', 'login', 'email', 'active', 'password']
+            attributes: ['id', 'login', 'email', 'active', 'password']
         });
     } catch (err) {
         Db.handleError(err);
@@ -29,8 +29,6 @@ const createUser = async (user) => {
     try {
         Logger.debug("Creating user in database...");
         let createdUser = await Db.Users.create({
-            first_name: user.first_name,
-            last_name: user.last_name,
             login: user.login,
             password: user.password,
             email: user.email,
@@ -120,7 +118,7 @@ const findAll = async () => {
                 attributes:['name'],
                 through: {attributes:[]}
             }],
-            attributes: ['first_name', 'last_name', 'login', 'email', 'active']
+            attributes: ['login', 'email', 'active']
         });
     } catch (err) {
         Db.handleError(err);
