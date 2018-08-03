@@ -74,10 +74,12 @@
 
         $('#wheel_decide_choice_button').click((event) => {
           let choices = [];
-          $('.wheel_decide_choice').each((index) => {
-              console.log($(this).html());
-              choices.push($(this).text());
-          });
+          let data = wheelDecideDataTable.rows().data();
+          //$('.wheel_decide_choice').each((index) => {
+          //    console.log($(this).html());
+          //    choices.push($(this).text());
+          //});
+            
           // wheelDecideDataTable.rows().every((row) => {
           //     choices.push(wheelDecideDataTable.row(row).data()[0])
           // });
