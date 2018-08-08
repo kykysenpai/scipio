@@ -29,6 +29,16 @@ export default {
     MAIL_FROM: process.env.MAIL_FROM,
 
     //app url
-    BASE_URL : process.env.BASE_URL || 'https://scipio.tircher.be'
+    BASE_URL : process.env.BASE_URL || 'https://scipio.tircher.be',
+
+    //gameserver ports
+    MINECRAFT_PORT : process.env.MINECRAFT_PORT,
+    TRACKMANIA_PORT : process.env.TRACKMANIA_PORT,
+    MANIACONTROL_PORT : process.env.MANIACONTROL_PORT,
+    CONAN_PORT_1 : process.env.CONAN_PORT_1,
+    CONAN_PORT_2 : process.env.CONAN_PORT_2,
+
+    //gameserver websocket room
+    GAMESERVER_ROOM : process.env.GAMESERVER_ROOM || 'authenticated'
 }
 

@@ -8,7 +8,8 @@ const paths = {
     PUBLIC: ROOT + '/public',
     VIEWS: VIEWS,
     VIEWS_ERRORS: VIEWS + '/errors',
-    VIEWS_SUCCESS: VIEWS + '/success'
-}
+    VIEWS_SUCCESS: VIEWS + '/success',
+    GAME_SERVER_SCRIPTS : ROOT +'/game_servers_scripts'
+};
 
 export default paths

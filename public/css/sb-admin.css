@@ -483,3 +483,8 @@ footer.sticky-footer {
     width: calc(100% - 55px);
   }
 }
+
+.divGameServerLogs {
+  height: 50vh;
+  overflow-y : scroll;
+}

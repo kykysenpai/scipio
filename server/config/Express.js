@@ -8,10 +8,19 @@ import Paths from "./constants/Paths";
 import Config from "./Config";
 import Logger from "../modules/Logger";
 import ViewRoute from "../routes/ViewRoute";
+import http from "http";
+import socket_io from "socket.io";
+import Minecraft from "../game_servers/minecraft";
+import Conan_1 from "../game_servers/conan_1";
+import Conan_2 from "../game_servers/conan_2";
+import Trackmania from "../game_servers/trackmania";
+import ManiaControl from "../game_servers/maniacontrol";
 
 Logger.info('Setting up server context...');
 
 const app = express();
+
+const http_server = http.Server(app);
 
 app.use(express.static(Paths.PUBLIC));
 
@@ -22,6 +31,31 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
+
+Logger.info('Setting up the websockets for gameservers...');
+
+const socket = socket_io(http_server);
+
+Logger.info('Initializing websocket for Minecraft...');
+
+const socket_minecraft = socket.of('/minecraft');
+Minecraft.initSocket(socket_minecraft);
+
+Logger.info('Initializing websocket for Conan...');
+
+const socket_conan_1 = socket.of('/conan_1');
+Conan_1.initSocket(socket_conan_1);
+
+const socket_conan_2 = socket.of('/conan_2');
+Conan_2.initSocket(socket_conan_2);
+
+Logger.info('Initializing websocket for Trackmania...');
+
+const socket_trackmania = socket.of('/trackmania');
+Trackmania.initSocket(socket_trackmania);
+
+const socket_maniacontrol = socket.of('/maniacontrol');
+ManiaControl.initSocket(socket_maniacontrol);
 
 Logger.info('Setting up the server log middleware...');
 
@@ -107,4 +141,4 @@ app.use((req, res) => {
 
 Logger.info('express app has received middlewares setup');
 
-export default app;
+export default http_server;

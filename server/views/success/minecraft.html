@@ -1,0 +1,95 @@
+<div id="view_success_minecraft" class="view container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1>Minecraft</h1>
+            <p>You can manage here the minecraft server</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Status
+                </div>
+                <div class="card-body">
+                    <p>Current status : <b id="currentStatusMinecraftServer">...</b></p>
+                    <button id="refreshMinecraftServerButton" class="btn btn-primary">Refresh</button>
+                    <button id="startMinecraftServerButton" class="btn btn-primary">Start</button>
+                    <button id="stopMinecraftServerButton" class="btn btn-primary">Stop</button>
+                </div>
+                <div class="card-footer small text-muted">Check the current status of the server</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Logs
+                </div>
+                <div id="divMinecraftServerLogs" class="divGameServerLogs card-body">
+                    <p>...</p>
+                </div>
+                <div class="card-footer small text-muted">Check out the live logs of the minecraft server</div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        getAndLoadServerState = () => {
+            $.ajax({
+                url:'/api/game_server/minecraft',
+                type: 'GET',
+                noprint: true
+            })
+                .then((inUse) => {
+                    if(inUse) {
+                        $('#currentStatusMinecraftServer').text("Running");
+                    } else {
+                        $('#currentStatusMinecraftServer').text("Off")
+                    }
+                })
+        };
+
+        $(() => {
+
+            getAndLoadServerState();
+
+            let minecraft_socket = io('/minecraft');
+
+            let token = Cookies.get("cookie_monster_rpz");
+            minecraft_socket.emit('authenticate', {
+                token: token
+            });
+
+            let stderrP = '<p style="color:red;">';
+            let stdoutP = '<p style="color:green;">';
+
+            minecraft_socket.on('stdout', data => {
+                writeIntoLogs(data, stdoutP);
+            });
+
+            minecraft_socket.on('stderr', data => {
+                writeIntoLogs(data, stderrP);
+            });
+
+            writeIntoLogs = (data, p) => {
+                $('#divMinecraftServerLogs').append(p + data.data + '</p>');
+                $('#divMinecraftServerLogs').scrollTop($('#divMinecraftServerLogs')[0].scrollHeight);
+            };
+
+            $('#startMinecraftServerButton').click(event => {
+                minecraft_socket.emit('start');
+            });
+
+            $('#stopMinecraftServerButton').click(event => {
+                minecraft_socket.emit('stop');
+            });
+
+            $('#refreshMinecraftServerButton').click(event => {
+                getAndLoadServerState();
+            });
+
+        });
+    </script>
+</div>
