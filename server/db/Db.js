@@ -14,6 +14,10 @@ import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
 import HashModel from "../models/Hash";
 import AccountCreationCodeModel from "../models/AccountCreationCode";
+import UserSplitPaymentModel from "../models/UserSplitPayment";
+import UserSplitGroupModel from "../models/UserSplitGroup";
+import SplitGroupModel from "../models/SplitGroup";
+import SplitPaymentModel from "../models/SplitPayment";
 
 Logger.info("Creating database instance...");
 
@@ -50,10 +54,10 @@ const getErrorMessage = (err) => {
         case HttpError:
             return err.message;
     }
-    if(err instanceof DatabaseError){
+    if (err instanceof DatabaseError) {
         return "There was an error querrying the database";
     }
-    if(err instanceof ConnectionError){
+    if (err instanceof ConnectionError) {
         return "There was an error connecting to the database";
     }
     return "There was an unknown problem in the database";
@@ -67,9 +71,9 @@ const handleError = (err) => {
 Logger.info("Creation all database models...");
 
 const getTransaction = async () => {
-    try{
+    try {
         return await sequelize.transaction();
-    } catch(err){
+    } catch (err) {
         Logger.error(err);
         throw new HttpError("Not possible to start a persistence transaction", HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -86,18 +90,56 @@ const Hashs = sequelize.define("hashs", HashModel);
 
 const AccountCreationCodes = sequelize.define("account_creation_codes", AccountCreationCodeModel);
 
+const SplitGroups = sequelize.define("split_groups", SplitGroupModel);
+
+const SplitPayments = sequelize.define("split_payments", SplitPaymentModel);
+
+const UserSplitGroups = sequelize.define("user_split_groups", UserSplitGroupModel);
+
+const UserSplitPayments = sequelize.define("user_split_payments", UserSplitPaymentModel);
+
 Users.belongsToMany(Permissions, {
     through: 'users_permissions',
-    as: 'permissions',
     foreignKey: 'user_id'
 });
 
 Permissions.belongsToMany(Users, {
-    through:'users_permissions',
-    as: 'users',
-    foreignKey:'permission_id'
+    through: 'users_permissions',
+    foreignKey: 'permission_id'
+});
+
+Users.belongsToMany(SplitGroups, {
+    through: 'user_split_groups',
+    foreignKey: 'user_id'
+});
+
+SplitGroups.belongsToMany(Users, {
+    through: 'user_split_groups',
+    foreignKey: 'split_group_id'
+});
+
+Users.belongsToMany(SplitPayments, {
+    through: 'user_split_payments',
+    foreignKey: 'user_id'
+});
+
+SplitPayments.belongsToMany(Users, {
+    through: 'user_split_payments',
+    foreignKey  : 'split_payment_id'
 });
 
 Logger.info("All database models have been set up");
 
-export default {handleError, Users, Permissions, UsersPermissions, Hashs, AccountCreationCodes, getTransaction}
+export default {
+    handleError,
+    Users,
+    Permissions,
+    UsersPermissions,
+    Hashs,
+    AccountCreationCodes,
+    SplitGroups,
+    SplitPayments,
+    UserSplitGroups,
+    UserSplitPayments,
+    getTransaction
+}

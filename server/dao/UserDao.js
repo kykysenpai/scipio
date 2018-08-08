@@ -8,15 +8,15 @@ import {UniqueConstraintError} from "sequelize";
 const findAllInfoByLogin = async (login) => {
     try {
         return await Db.Users.findOne({
-            include:{
-                model:Db.Permissions,
-                as:'permissions',
-                attributes:['name']
+            include: {
+                model: Db.Permissions,
+                as: 'permissions',
+                attributes: ['name']
             },
             where: {
                 login: login
             },
-            attributes: ['id', 'first_name', 'last_name', 'login', 'email', 'active', 'password']
+            attributes: ['id', 'login', 'email', 'active', 'password']
         });
     } catch (err) {
         Db.handleError(err);
@@ -100,15 +100,15 @@ const confirmAccount = async (hash) => {
 };
 
 const deactivateUser = async (login) => {
-  try{
-      let user = await findAllInfoByLogin(login);
-      return await user.update({
-          active: false
-      });
-  } catch(err){
+    try {
+        let user = await findAllInfoByLogin(login);
+        return await user.update({
+            active: false
+        });
+    } catch (err) {
 
-      Db.handleError(err);
-  }
+        Db.handleError(err);
+    }
 };
 
 const findAll = async () => {
@@ -116,9 +116,9 @@ const findAll = async () => {
         return await Db.Users.findAll({
             include: [{
                 model: Db.Permissions,
-                as:'permissions',
-                attributes:['name'],
-                through: {attributes:[]}
+                as: 'permissions',
+                attributes: ['name'],
+                through: {attributes: []}
             }],
             attributes: ['first_name', 'last_name', 'login', 'email', 'active']
         });
