@@ -2,8 +2,8 @@
 
 . $(dirname "$0")/env.sh
 
-rm -r node_modules
-rm package-lock.json
+rm -r node_modules || true
+rm package-lock.json || true
 
 docker run --rm \
     --name scipio_build \
