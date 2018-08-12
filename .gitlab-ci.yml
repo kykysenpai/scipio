@@ -1,40 +1,40 @@
 stages:
-- build
-- dockerize
-- deploy
+ - build
+ - dockerize
+ - deploy
 
 build:
-  stage: build
-  tags:
+ stage: build
+ tags:
   - ubuntu
-  before_script:
+ before_script:
   - rm -r node-modules
   - rm package-lock.json
-  script:
+ script:
   - npm install
-  artifacts:
-    paths:
-    - node-modules
-    - package-lock.json
-    expire_in: 1 day
+ artifacts:
+  paths:
+   - node-modules
+   - package-lock.json
+  expire_in: 1 day
 
 dockerize:
-  stage: dockerize
-  tags:
+ stage: dockerize
+ tags:
   - ubuntu
-  script:
+ script:
   - ./scripts/dockerize.sh
   - docker save scipio > scipio.tar
-  artifacts:
-    paths:
-    - ./scipio.tar
-    expire_in: 1 day
+ artifacts:
+  paths:
+   - ./scipio.tar
+  expire_in: 1 day
 
 deploy:
-  stage: deploy
-  tags:
+ stage: deploy
+ tags:
   - ubuntu
-  script:
+ script:
   - docker load < ./scipio.tar
   - docker tag scipio docker.tircher.be/scipio
   - docker push docker.tircher.be/scipio
