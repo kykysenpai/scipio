@@ -61,3 +61,5 @@ typings/
 .idea/
 
 game_servers_scripts/*.sh
+
+package-lock.json
