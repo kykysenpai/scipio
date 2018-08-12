@@ -8,8 +8,8 @@ build:
  tags:
   - ubuntu
  before_script:
-  - rm -r node-modules
-  - rm package-lock.json
+  - rm -rf node-modules
+  - rm -f package-lock.json
  script:
   - npm install
  artifacts:
