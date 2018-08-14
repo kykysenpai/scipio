@@ -1,5 +1,7 @@
 FROM node
 
+USER node
+
 COPY . /app
 
 WORKDIR /app
