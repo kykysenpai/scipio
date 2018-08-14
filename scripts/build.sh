@@ -7,5 +7,5 @@ docker run --rm \
     -v ${PROJECT_ROOT}:/app \
     -w /app \
     -u $UID \
-    docker.tircher.be/nap \
+    node \
     npm install --verbose

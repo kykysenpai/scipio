@@ -1,4 +1,4 @@
-FROM docker.tircher.be/nap
+FROM node
 
 COPY . /app
 
