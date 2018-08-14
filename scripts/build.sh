@@ -2,6 +2,8 @@
 
 . $(dirname "$0")/env.sh
 
+echo ${PROJECT_ROOT}
+
 docker run --rm \
     --name scipio_build \
     -v ${PROJECT_ROOT}:/app \

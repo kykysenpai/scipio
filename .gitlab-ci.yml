@@ -16,8 +16,8 @@ build:
   - ./scripts/build.sh
  artifacts:
   paths:
-   - node_modules
-   - package-lock.json
+   - ./node_modules
+   - ./package-lock.json
   expire_in: 1 day
 
 dockerize:
