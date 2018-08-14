@@ -11,6 +11,7 @@ build:
   - rm -rf node-modules
   - rm -f package-lock.json
  script:
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - ./scripts/build.sh
  artifacts:
   paths:
@@ -23,6 +24,7 @@ dockerize:
  tags:
   - ubuntu
  script:
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - ./scripts/dockerize.sh
   - docker save scipio > scipio.tar
  artifacts:
@@ -35,6 +37,7 @@ deploy:
  tags:
   - ubuntu
  script:
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - docker load < ./scipio.tar
   - docker tag scipio docker.tircher.be/scipio
   - docker push docker.tircher.be/scipio
