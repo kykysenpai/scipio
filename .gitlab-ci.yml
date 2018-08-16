@@ -24,7 +24,6 @@ dockerize:
  tags:
   - shell
  script:
-  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - ./scripts/dockerize.sh
   - docker save scipio > scipio.tar
  artifacts:
