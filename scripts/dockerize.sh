@@ -1,5 +1,5 @@
 #!/bin/bash
 
-#. $(dirname "$0")/env.sh
+. $(dirname "$0")/env.sh
 
-docker build . -t scipio
+docker build ${PROJECT_ROOT} -t scipio
