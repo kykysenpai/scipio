@@ -6,7 +6,8 @@ stages:
 build:
  stage: build
  tags:
-  - ubuntu
+  - docker
+  - node
  before_script:
   - rm -rf node-modules
   - rm -f package-lock.json
@@ -22,7 +23,7 @@ build:
 dockerize:
  stage: dockerize
  tags:
-  - ubuntu
+  - shell
  script:
   - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - ./scripts/dockerize.sh
@@ -35,7 +36,7 @@ dockerize:
 deploy:
  stage: deploy
  tags:
-  - ubuntu
+  - shell
  script:
   - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - docker load < ./scipio.tar

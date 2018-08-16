@@ -2,8 +2,8 @@ FROM node
 
 USER node
 
-COPY . /home/node/app
+COPY . /app
 
-WORKDIR /home/node/app
+WORKDIR /app
 
 ENTRYPOINT npm run-script start-prod
