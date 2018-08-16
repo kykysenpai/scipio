@@ -6,8 +6,7 @@ stages:
 build:
  stage: build
  tags:
-  - docker
-  - node
+  - shell
  before_script:
   - rm -rf node-modules
   - rm -f package-lock.json
