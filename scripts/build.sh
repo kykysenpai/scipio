@@ -4,8 +4,8 @@
 
 docker run --rm \
     --name scipio_build \
-    -v ${PROJECT_ROOT}:/home/node/ \
-    -w /home/node/ \
-    -u "node" \
+    -w /usr/src/app \
+    -v ${PROJECT_ROOT}:/usr/src/app \
+    -u ${UID} \
     node \
     npm install --verbose
