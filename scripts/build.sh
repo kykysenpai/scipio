@@ -8,5 +8,6 @@ docker run --rm \
     -v ${PROJECT_ROOT}:/home/node/app \
     -u "node" \
     node \
-    mkdir /home/node/app && \
+    ls -l /home/node && \
+    ls -l /home/node/app && \
     npm install --verbose
