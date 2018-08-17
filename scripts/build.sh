@@ -4,8 +4,8 @@
 
 docker run --rm \
     --name scipio_build \
-    -w /home/node/app \
-    -v ${PROJECT_ROOT}:/home/node/app \
+    -w /app \
+    -v ${PROJECT_ROOT}:/app \
     -u "node" \
     -e NPM_CONFIG_PREFIX=/home/node/.npm-global \
     node \
