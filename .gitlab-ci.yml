@@ -4,9 +4,10 @@ stages:
  - deploy
 
 build:
+ image: node
  stage: build
  tags:
-  - shell
+  - docker
  before_script:
   - rm -rf node-modules
   - rm -f package-lock.json
@@ -19,9 +20,10 @@ build:
   expire_in: 1 day
 
 dockerize:
+ image: docker
  stage: dockerize
  tags:
-  - shell
+  - docker
  script:
   - ./scripts/dockerize.sh
   - docker save scipio > scipio.tar
@@ -31,9 +33,10 @@ dockerize:
   expire_in: 1 day
 
 deploy:
+ image: docker
  stage: deploy
  tags:
-  - shell
+  - docker
  script:
   - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - docker load < ./scipio.tar
