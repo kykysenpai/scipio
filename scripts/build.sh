@@ -4,9 +4,9 @@
 
 docker run --rm \
     --name scipio_build \
-    -w /app \
-    -v ${PROJECT_ROOT}:/app \
+    -w /home/node/app \
+    -v ${PROJECT_ROOT}:/home/node/app \
     -u "node" \
-    -e NPM_CONFIG_PREFIX=/home/node/.npm-global \
     node \
+    mkdir ~/app && \
     npm install --verbose
