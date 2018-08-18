@@ -25,6 +25,8 @@ dockerize:
  tags:
   - docker
  script:
+  - ls -l
+  - ls -l scripts
   - ./scripts/dockerize.sh
   - docker save scipio > scipio.tar
  artifacts:
