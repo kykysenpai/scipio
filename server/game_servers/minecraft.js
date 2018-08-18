@@ -13,7 +13,7 @@ const stopServer = async (io, socket) => {
         socket.emit('stdout', {
             data: "Stopping Minecraft Server..."
         });
-        io.gameserver.stdin.write("stop\n");
+        spawn('/bin/bash', [Paths.GAME_SERVER_SCRIPTS + '/stop_minecraft_server.sh']);
     } else {
         socket.emit('stdout', {
             data: "Can't stop the Minecraft Server as no instance is currently running"
