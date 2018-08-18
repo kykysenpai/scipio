@@ -11,6 +11,7 @@ build:
  before_script:
   - rm -rf node-modules
   - rm -f package-lock.json
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
  script:
   - /bin/bash scripts/build.sh
  artifacts:
