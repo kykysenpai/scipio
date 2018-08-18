@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM node
 COPY . /app
 
 RUN apt-get update
