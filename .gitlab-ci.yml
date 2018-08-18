@@ -3,9 +3,6 @@ stages:
  - dockerize
  - deploy
 
-before_script:
- - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
-
 build:
  image: docker.tircher.be/node_docker
  stage: build
@@ -31,7 +28,6 @@ dockerize:
   - docker
  script:
   - docker build . -t scipio
-  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
   - docker tag scipio docker.tircher.be/scipio
   - docker push docker.tircher.be/scipio
 
