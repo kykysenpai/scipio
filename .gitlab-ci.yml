@@ -39,3 +39,5 @@ deploy:
   - docker:dind
  tags:
   - docker
+ script:
+  - ls
