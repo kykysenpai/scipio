@@ -22,6 +22,8 @@ build:
 dockerize:
  image: docker
  stage: dockerize
+ services:
+  - docker:dind
  tags:
   - docker
  script:
@@ -35,6 +37,8 @@ dockerize:
 deploy:
  image: docker
  stage: deploy
+ services:
+  - docker:dind
  tags:
   - docker
  script:
