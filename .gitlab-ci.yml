@@ -12,7 +12,7 @@ build:
   - rm -rf node-modules
   - rm -f package-lock.json
  script:
-  - ./scripts/build.sh
+  - /bin/bash scripts/build.sh
  artifacts:
   paths:
    - ./node_modules
@@ -25,9 +25,7 @@ dockerize:
  tags:
   - docker
  script:
-  - ls -l
-  - ls -l scripts
-  - ./scripts/dockerize.sh
+  - /bin/bash scripts/dockerize.sh
   - docker save scipio > scipio.tar
  artifacts:
   paths:
