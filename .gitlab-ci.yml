@@ -4,7 +4,7 @@ stages:
  - deploy
 
 build:
- image: node
+ image: docker.tircher.be/node_docker
  stage: build
  tags:
   - docker
