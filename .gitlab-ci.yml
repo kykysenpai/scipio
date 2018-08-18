@@ -13,6 +13,8 @@ build:
   - rm -f package-lock.json
  script:
   - ./scripts/build.sh
+  - du -sh node_modules
+  - du -sh package-lock.json
  artifacts:
   paths:
    - ./node_modules
