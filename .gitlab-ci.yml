@@ -3,6 +3,9 @@ stages:
  - dockerize
  - deploy
 
+before_script:
+ - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
+
 build:
  image: docker.tircher.be/node_docker
  stage: build
@@ -11,7 +14,6 @@ build:
  before_script:
   - rm -rf node-modules
   - rm -f package-lock.json
-  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
  script:
   - /bin/bash scripts/build.sh
  artifacts:
