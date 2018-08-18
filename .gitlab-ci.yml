@@ -28,11 +28,9 @@ dockerize:
   - docker
  script:
   - docker build . -t scipio
-  - docker save scipio > scipio.tar
- artifacts:
-  paths:
-   - ./scipio.tar
-  expire_in: 1 day
+  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
+  - docker tag scipio docker.tircher.be/scipio
+  - docker push docker.tircher.be/scipio
 
 deploy:
  image: docker
@@ -41,8 +39,3 @@ deploy:
   - docker:dind
  tags:
   - docker
- script:
-  - docker login -u ${DOCKER_USER} -p ${DOCKER_PASSWORD} docker.tircher.be
-  - docker load < ./scipio.tar
-  - docker tag scipio docker.tircher.be/scipio
-  - docker push docker.tircher.be/scipio
