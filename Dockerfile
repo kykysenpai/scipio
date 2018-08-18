@@ -1,7 +1,12 @@
-FROM node
+FROM ubuntu
 COPY . /app
 
 RUN apt-get update
+
+RUN apt-get install -y \
+    npm \
+    nodejs
+
 RUN apt-get install -y \
         apt-transport-https \
         ca-certificates \
