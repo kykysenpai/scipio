@@ -29,8 +29,7 @@ dockerize with version:
  only:
   - tags
  script:
-  - docker build . -t scipio
-  - docker tag scipio docker.tircher.be/scipio
+  - docker build . -t docker.tircher.be/scipio:$CI_COMMIT_TAG
   - docker push docker.tircher.be/scipio:$CI_COMMIT_TAG
 
 dockerize as latest:
@@ -41,8 +40,7 @@ dockerize as latest:
  tags:
   - docker
  script:
-  - docker build . -t scipio
-  - docker tag scipio docker.tircher.be/scipio
+  - docker build . -t docker.tircher.be/scipio:latest
   - docker push docker.tircher.be/scipio:latest
  except:
   - tags
