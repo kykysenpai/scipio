@@ -11,6 +11,9 @@ export default {
     },
     date: {
         type: Sequelize.DataTypes.DATE
+    },
+    image: {
+        type: Sequelize.DataTypes.STRING
     }
 
 }
