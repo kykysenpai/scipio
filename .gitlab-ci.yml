@@ -12,14 +12,28 @@ build:
   - rm -rf node-modules
   - rm -f package-lock.json
  script:
-  - /bin/bash scripts/build.sh
+  - npm install --verbose
  artifacts:
   paths:
    - ./node_modules
    - ./package-lock.json
   expire_in: 1 day
 
-dockerize:
+dockerize with version:
+ image: docker
+ stage: dockerize
+ services:
+  - docker:dind
+ tags:
+  - docker
+ only:
+  - tags
+ script:
+  - docker build . -t scipio
+  - docker tag scipio docker.tircher.be/scipio
+  - docker push docker.tircher.be/scipio:$CI_COMMIT_TAG
+
+dockerize as latest:
  image: docker
  stage: dockerize
  services:
@@ -29,7 +43,9 @@ dockerize:
  script:
   - docker build . -t scipio
   - docker tag scipio docker.tircher.be/scipio
-  - docker push docker.tircher.be/scipio
+  - docker push docker.tircher.be/scipio:latest
+ except:
+  - tags
 
 deploy:
  image: docker
@@ -39,4 +55,6 @@ deploy:
  tags:
   - docker
  script:
-  - ls
+  - echo "TODO automatic deploy on tcc server"
+ only:
+  - master
