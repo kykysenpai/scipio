@@ -9,12 +9,277 @@
         <div class="col-12">
             <div class="card mb-3">
                 <div class="card-header">
-                    <i class="fa fa-user-circle"></i> Payments
+                    <i class="fa fa-user-circle"></i> Groups
                 </div>
                 <div class="card-body">
+                    <select class="form-control" id="communistSplitGroupSelect"/>
                 </div>
-                <div class="card-footer small text-muted">Manage your payments</div>
+                <div class="card-footer small text-muted">All your groups</div>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Summary
+                </div>
+                <div class="card-body">
+                    <p>
+                    <div id="communitSplitOwesOrIsOwed">Your credit</div>
+                    <b id="communistSplitPersonalCredit">...</b> €</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="communitSplitSummaryTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Credit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer small text-muted"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> Add a payment
+                </div>
+                <div class="card-body">
+                    <form name="communistSplitAddPaymentForm">
+                        <div class="form-group">
+                            <label for="communistSplitAddPaymentFormDescription">Description</label>
+                            <input class="form-control" type="text" id="communistSplitAddPaymentFormDescription"
+                                   name="description"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="communistSplitAddPaymentFormImage">Image</label>
+                            <input class="form-control" type="text" id="communistSplitAddPaymentFormImage" name="image"
+                                   placeholder="Will come in a later update" disabled/>
+                        </div>
+                        <div class="form-group">
+                            <label for="communistSplitAddPaymentFormAmount">Amount</label>
+                            <input class="form-control" type="text" placeholder="How much you paid"
+                                   id="communistSplitAddPaymentFormAmount" name="amount"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="communitSplitAddPaymentTable">How much each user owes you in this payment</label>
+                            <table class="table table-bordered" id="communitSplitAddPaymentTable" width="100%"
+                                   cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td>The amount left to be shared is : <span
+                                            id="communitSplitAddPaymentCurrentTotal"></span> €
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input id="communistSplitAddPaymentConfirmButton"
+                                                   class="form-control btn btn-primary" type="button"
+                                                   value="create payment" disabled/>
+                                        </div>
+                                        <div class="form-group">
+                                            <input id="communistSplitAddPaymentEqualShare"
+                                                   class="form-control btn btn-primary" type="button"
+                                                   value="equal share"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer small text-muted"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa fa-user-circle"></i> History
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="communitSplitHistoryTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer small text-muted"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(() => {
+
+            let total, group_total;
+
+            let users = {};
+
+            let group_users_total = {};
+
+            communitSplitSummaryTable = $('#communitSplitSummaryTable').DataTable();
+
+            communistSplitHistoryTable = $('#communitSplitHistoryTable').DataTable();
+
+            $.ajax({
+                url: '/api/communist_split/split_group',
+                type: 'GET',
+                noprint: true
+            })
+                .then((split_groups) => {
+                    let html = "<option value=\"\" disabled selected>Select a group</option>";
+                    split_groups.forEach(split_group => {
+                        html += "<option value=\"" + split_group.id + "\">" + split_group.name + "</option>";
+                    });
+                    $('#communistSplitGroupSelect').html(html);
+                });
+
+            $('#communistSplitAddPaymentFormAmount').keyup(function () {
+                total = parseFloat($(this).val());
+                updateCurrentTotal();
+            });
+
+            $('#communistSplitAddPaymentEqualShare').click(function () {
+                let nb_user = Object.keys(users).length;
+
+                let equal_share = total / nb_user;
+
+                equal_share = Math.round(equal_share * 100) / 100;
+
+                $('input[name="communistSplitAmount"]').val(equal_share);
+                for (let user in users) {
+                    users[user].amount = equal_share;
+                }
+                updateCurrentTotal();
+            });
+
+            $('#communistSplitGroupSelect').change(function () {
+
+                let selected_group_id = $(this).find(":selected").val();
+
+                $.ajax({
+                    url: '/api/communist_split/split_group/' + selected_group_id,
+                    type: 'GET',
+                    noprint: true
+                })
+                    .then((split_group) => {
+
+                        let tbodyHtml = "";
+
+                        split_group.users.forEach(user => {
+
+                            users[user.id] = {id: user.id, amount: 0};
+
+                            group_users_total[user.id] = 0;
+
+                            tbodyHtml += "<tr><td>" + user.login + "</td><td><input type=\"text\" name=\"communistSplitAmount\" id=\"communistSplitAmount_" + user.id + "\" value=\"0\"/></td></tr>";
+
+                        });
+
+                        $('#communitSplitAddPaymentTable > tbody').html(tbodyHtml);
+
+                        $('input[name="communistSplitAmount"]').keyup(function () {
+
+                            let modified_id = $(this).prop('id');
+
+                            let substring_modified_id = modified_id.substring(modified_id.indexOf("_") + 1, modified_id.length);
+
+                            let userTotal = parseFloat($(this).val());
+
+                            users[substring_modified_id].amount = userTotal;
+
+                            updateCurrentTotal();
+
+                        });
+
+                        let owes = 0;
+
+                        for (let owe in split_group.users_owe[split_group.user_id]) {
+                            owes += split_group.users_owe[split_group.user_id][owe];
+                        }
+
+                        $('#communistSplitPersonalCredit').text(Math.round((Math.abs(owes))*100)/100);
+
+                        if (owes < 0) {
+                            $('#communistSplitPersonalCredit').css('color', 'green');
+                            $('#communitSplitOwesOrIsOwed').text("You are owed : ");
+                        } else {
+                            $('#communistSplitPersonalCredit').css('color', 'red');
+                            $('#communitSplitOwesOrIsOwed').text("You owes : ");
+                        }
+
+                    });
+
+            });
+
+            $('#communistSplitAddPaymentConfirmButton').click(function () {
+
+                let participating_users = [];
+
+                for (let user in users) {
+                    participating_users.push(users[user]);
+                }
+
+                $.ajax({
+                    url: '/api/communist_split/split_payment',
+                    type: 'POST',
+                    noprint: true,
+                    data: {
+                        split_payment: {
+                            participating_users: participating_users,
+                            description: $('#communistSplitAddPaymentFormDescription').val(),
+                            split_group_id: $('#communistSplitGroupSelect').find(":selected").val(),
+                            total: total
+                        }
+                    }
+                })
+                    .then(() => {
+                        toastS("New payment created");
+                    });
+            });
+
+            updateCurrentTotal = () => {
+
+                let currentTotal = total;
+
+                for (let user in users) {
+                    currentTotal -= users[user].amount;
+                }
+
+                $('#communitSplitAddPaymentCurrentTotal').text(currentTotal);
+
+                if (currentTotal === 0) {
+                    $('#communistSplitAddPaymentConfirmButton').prop('disabled', false);
+                } else {
+                    $('#communistSplitAddPaymentConfirmButton').prop('disabled', true);
+                }
+            }
+
+        });
+
+    </script>
 </div>

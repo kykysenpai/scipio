@@ -3,6 +3,9 @@ stages:
  - dockerize
  - deploy
 
+services:
+ - docker:dind
+
 build:
  image: docker.tircher.be/node_docker
  stage: build
@@ -22,8 +25,6 @@ build:
 dockerize with version:
  image: docker
  stage: dockerize
- services:
-  - docker:dind
  tags:
   - docker
  only:
@@ -35,8 +36,6 @@ dockerize with version:
 dockerize as latest:
  image: docker
  stage: dockerize
- services:
-  - docker:dind
  tags:
   - docker
  script:
@@ -48,8 +47,6 @@ dockerize as latest:
 deploy:
  image: docker
  stage: deploy
- services:
-  - docker:dind
  tags:
   - docker
  script:

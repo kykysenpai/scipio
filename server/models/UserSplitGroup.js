@@ -8,8 +8,5 @@ export default {
     user_id: {
         type: Sequelize.DataTypes.INTEGER,
         primaryKey: true
-    },
-    credit: {
-        type: Sequelize.DataTypes.FLOAT
     }
 }

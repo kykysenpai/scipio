@@ -94,9 +94,9 @@ const SplitGroups = sequelize.define("split_groups", SplitGroupModel);
 
 const SplitPayments = sequelize.define("split_payments", SplitPaymentModel);
 
-const UserSplitGroups = sequelize.define("user_split_groups", UserSplitGroupModel);
+const UsersSplitGroups = sequelize.define("users_split_groups", UserSplitGroupModel);
 
-const UserSplitPayments = sequelize.define("user_split_payments", UserSplitPaymentModel);
+const UsersSplitPayments = sequelize.define("users_split_payments", UserSplitPaymentModel);
 
 Users.belongsToMany(Permissions, {
     through: 'users_permissions',
@@ -109,23 +109,31 @@ Permissions.belongsToMany(Users, {
 });
 
 Users.belongsToMany(SplitGroups, {
-    through: 'user_split_groups',
+    through: 'users_split_groups',
     foreignKey: 'user_id'
 });
 
 SplitGroups.belongsToMany(Users, {
-    through: 'user_split_groups',
+    through: 'users_split_groups',
     foreignKey: 'split_group_id'
 });
 
 Users.belongsToMany(SplitPayments, {
-    through: 'user_split_payments',
+    through: 'users_split_payments',
     foreignKey: 'user_id'
 });
 
 SplitPayments.belongsToMany(Users, {
-    through: 'user_split_payments',
+    through: 'users_split_payments',
     foreignKey  : 'split_payment_id'
+});
+
+SplitPayments.hasOne(SplitGroups, {
+    foreignKey: 'id'
+});
+
+SplitGroups.hasMany(SplitPayments, {
+    foreignKey: 'id'
 });
 
 Logger.info("All database models have been set up");
@@ -139,7 +147,7 @@ export default {
     AccountCreationCodes,
     SplitGroups,
     SplitPayments,
-    UserSplitGroups,
-    UserSplitPayments,
+    UsersSplitGroups,
+    UsersSplitPayments,
     getTransaction
 }

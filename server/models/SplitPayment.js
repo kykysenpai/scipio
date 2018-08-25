@@ -11,6 +11,21 @@ export default {
     },
     date: {
         type: Sequelize.DataTypes.DATE
+    },
+    image: {
+        type: Sequelize.DataTypes.STRING
+    },
+    split_group_id: {
+        type: Sequelize.DataTypes.INTEGER
+    },
+    user_id: {
+        type: Sequelize.DataTypes.INTEGER
+    },
+    total: {
+        type: Sequelize.DataTypes.FLOAT
+    },
+    users_participations: {
+        type: Sequelize.DataTypes.VIRTUAL
     }
 
 }
