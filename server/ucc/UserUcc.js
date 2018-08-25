@@ -27,7 +27,7 @@ const createUser = async (req) => {
     }
     let userHash = await UserDao.createUser(req.body);
     try {
-        await Mailer.sendAccountConfirmation(req.body.email, Url.ACCOUNT_CONFIRMATION + userHash, req.body.login);
+        Mailer.sendAccountConfirmation(req.body.email, Url.ACCOUNT_CONFIRMATION + userHash, req.body.login);
     } catch (err) {
         Logger.error(err);
         throw new HttpError("Error while trying to send confirmation email", HttpStatus.INTERNAL_SERVER_ERROR);
