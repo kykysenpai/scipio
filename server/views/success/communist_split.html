@@ -206,7 +206,7 @@
 
                             let substring_modified_id = modified_id.substring(modified_id.indexOf("_") + 1, modified_id.length);
 
-                            let userTotal = parseFloat($(this).val());
+                            let userTotal = Math.round(parseFloat($(this).val())*100)/100;
 
                             users[substring_modified_id].amount = userTotal;
 
@@ -267,6 +267,8 @@
                 for (let user in users) {
                     currentTotal -= users[user].amount;
                 }
+
+                currentTotal = Math.round(currentTotal*100)/100;
 
                 $('#communitSplitAddPaymentCurrentTotal').text(currentTotal);
 
