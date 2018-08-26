@@ -22,7 +22,9 @@ const app = express();
 
 const http_server = http.Server(app);
 
-app.use(express.static(Paths.PUBLIC));
+app.use(express.static(Paths.ANGULAR_DIST));
+
+// app.use(express.static(Paths.PUBLIC));
 
 app.use(cookieParser());
 

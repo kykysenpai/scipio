@@ -15,11 +15,16 @@ build:
   - rm -rf node-modules
   - rm -f package-lock.json
  script:
-  - npm install --verbose
+  - npm install
+  - pushd scipio-angular
+  - npm install
+  - ng build --prod
+  - popd
  artifacts:
   paths:
    - ./node_modules
    - ./package-lock.json
+   - ./scipio-angular/dist
   expire_in: 1 day
 
 dockerize with version:
@@ -39,8 +44,8 @@ dockerize as latest:
  tags:
   - docker
  script:
-  - docker build . -t docker.tircher.be/scipio:latest
-  - docker push docker.tircher.be/scipio:latest
+  - docker build . -t docker.tircher.be/scipio
+  - docker push docker.tircher.be/scipio
  except:
   - tags
 

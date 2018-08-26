@@ -9,7 +9,8 @@ const paths = {
     VIEWS: VIEWS,
     VIEWS_ERRORS: VIEWS + '/errors',
     VIEWS_SUCCESS: VIEWS + '/success',
-    GAME_SERVER_SCRIPTS : ROOT +'/game_servers_scripts'
+    GAME_SERVER_SCRIPTS : ROOT +'/game_servers_scripts',
+    ANGULAR_DIST: ROOT + '/scipio-angular/dist/scipio-angular'
 };
 
 export default paths
