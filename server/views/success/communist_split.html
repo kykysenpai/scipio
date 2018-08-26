@@ -135,11 +135,9 @@
     <script>
         $(() => {
 
-            let total, group_total;
+            let total;
 
             let users = {};
-
-            let group_users_total = {};
 
             communitSplitSummaryTable = $('#communitSplitSummaryTable').DataTable();
 
@@ -179,6 +177,8 @@
 
             $('#communistSplitGroupSelect').change(function () {
 
+                users = [];
+
                 let selected_group_id = $(this).find(":selected").val();
 
                 $.ajax({
@@ -193,8 +193,6 @@
                         split_group.users.forEach(user => {
 
                             users[user.id] = {id: user.id, amount: 0};
-
-                            group_users_total[user.id] = 0;
 
                             tbodyHtml += "<tr><td>" + user.login + "</td><td><input type=\"text\" name=\"communistSplitAmount\" id=\"communistSplitAmount_" + user.id + "\" value=\"0\"/></td></tr>";
 
