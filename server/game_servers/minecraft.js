@@ -8,8 +8,9 @@ import Paths from "../config/constants/Paths";
 let spawn = child_process.spawn;
 
 const stopServer = async (io, socket) => {
-    let inUse = await GameServerUcc.getStateMinecraft();
-    if (io.gameserver != null && inUse) {
+    // let inUse = await GameServerUcc.getStateMinecraft();
+    // if (io.gameserver != null && inUse) {
+    if(io.gameserver != null){
         socket.emit('stdout', {
             data: "Stopping Minecraft Server..."
         });
@@ -82,6 +83,12 @@ const initSocket = (io) => {
                 if (socket.authenticated) {
                     await addSocketToListeningRoom(socket);
                 }
+            }
+        });
+
+        socket.on('state', () => {
+            if (socket.authenticated) {
+                socket.emit('state', io.gameserver != null);
             }
         });
 

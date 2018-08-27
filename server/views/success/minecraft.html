@@ -86,8 +86,17 @@
                 minecraft_socket.emit('stop');
             });
 
+            minecraft_socket.on('state', inUse => {
+                if(inUse) {
+                    $('#currentStatusMinecraftServer').text("Running");
+                } else {
+                    $('#currentStatusMinecraftServer').text("Off")
+                }
+            });
+
             $('#refreshMinecraftServerButton').click(event => {
-                getAndLoadServerState();
+                // getAndLoadServerState();
+                minecraft_socket.emit('state');
             });
 
         });
