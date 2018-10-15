@@ -7,4 +7,4 @@ docker run --rm -d \
 	-w /app \
 	-p 5002:5002 \
 	--name scipio \
-docker.tircher.be/node_docker npm run-script start-prod
+docker.mytcc.be/node_docker npm run-script start-prod

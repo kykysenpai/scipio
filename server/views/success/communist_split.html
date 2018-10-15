@@ -26,14 +26,28 @@
                 </div>
                 <div class="card-body">
                     <p>
-                    <div id="communitSplitOwesOrIsOwed">Your credit : </div>
+                    <div id="communitSplitOwesOrIsOwed">Your credit :</div>
                     <b id="communistSplitPersonalCredit">...</b> €</p>
+                    <label for="communitSplitOwesTable">User credit towards you</label>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="communitSplitOwesTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <label for="communitSplitSummaryTable">Overall credit for the group</label>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="communitSplitSummaryTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>User</th>
-                                <th>Credit</th>
+                                <th>Total Credit</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -69,7 +83,8 @@
                                    id="communistSplitAddPaymentFormAmount" name="amount"/>
                         </div>
                         <div class="form-group">
-                            <label for="communitSplitAddPaymentTable">How much each user owes you in this payment</label>
+                            <label for="communitSplitAddPaymentTable">How much each user owes you in this
+                                payment</label>
                             <table class="table table-bordered" id="communitSplitAddPaymentTable" width="100%"
                                    cellspacing="0">
                                 <thead>
@@ -139,6 +154,8 @@
 
             let users = {};
 
+            communitSplitOwesTable = $('#communitSplitOwesTable').DataTable();
+
             communitSplitSummaryTable = $('#communitSplitSummaryTable').DataTable();
 
             communistSplitHistoryTable = $('#communitSplitHistoryTable').DataTable();
@@ -206,7 +223,7 @@
 
                             let substring_modified_id = modified_id.substring(modified_id.indexOf("_") + 1, modified_id.length);
 
-                            let userTotal = Math.round(parseFloat($(this).val())*100)/100;
+                            let userTotal = Math.round(parseFloat($(this).val()) * 100) / 100;
 
                             users[substring_modified_id].amount = userTotal;
 
@@ -218,9 +235,28 @@
 
                         for (let owe in split_group.users_owe[split_group.user_id]) {
                             owes += split_group.users_owe[split_group.user_id][owe];
+
+                            communitSplitOwesTable.row.add([
+                                getUserById(split_group.users, owe).login,
+                                split_group.users_owe[split_group.user_id][owe] < 0
+                                    ? "owes you " + Math.abs(split_group.users_owe[split_group.user_id][owe])
+                                    : "is owed " + split_group.users_owe[split_group.user_id][owe]
+                            ]).draw();
+
                         }
 
-                        $('#communistSplitPersonalCredit').text(Math.round((Math.abs(owes))*100)/100);
+                        for (let user in split_group.users_owe) {
+                            let owes = 0;
+                            for (let owe in split_group.users_owe[user]) {
+                                owes += split_group.users_owe[user][owe];
+                            }
+                            communitSplitSummaryTable.row.add([
+                                getUserById(split_group.users, user).login,
+                                owes > 0 ? "owes everyone " + owes : "is owed " + Math.abs(owes)
+                            ]).draw();
+                        }
+
+                        $('#communistSplitPersonalCredit').text(Math.round((Math.abs(owes)) * 100) / 100);
 
                         if (owes < 0) {
                             $('#communistSplitPersonalCredit').css('color', 'green');
@@ -268,7 +304,7 @@
                     currentTotal -= users[user].amount;
                 }
 
-                currentTotal = Math.round(currentTotal*100)/100;
+                currentTotal = Math.round(currentTotal * 100) / 100;
 
                 $('#communitSplitAddPaymentCurrentTotal').text(currentTotal);
 
@@ -277,7 +313,16 @@
                 } else {
                     $('#communistSplitAddPaymentConfirmButton').prop('disabled', true);
                 }
-            }
+            };
+
+            getUserById = (users, id) => {
+                for (user in users) {
+                    if (users[user].id == id) {
+                        return users[user];
+                    }
+                }
+                return null;
+            };
 
         });
 

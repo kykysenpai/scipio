@@ -1,6 +1,5 @@
 import HttpStatus from "../config/constants/HttpStatus";
 import CommunistSplitUcc from "../ucc/CommunistSplitUcc";
-import Logger from "../modules/Logger";
 
 const getAllSplitGroups = async (req, res, next) => {
     try{
