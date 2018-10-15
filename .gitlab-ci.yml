@@ -7,7 +7,7 @@ services:
  - docker:dind
 
 build:
- image: docker.tircher.be/node_docker
+ image: docker.mytcc.be/node_docker
  stage: build
  tags:
   - docker
