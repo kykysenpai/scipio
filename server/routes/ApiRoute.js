@@ -9,6 +9,7 @@ import AdminRoute from "./AdminRoute";
 import PermissionRoute from "./PermissonRoute";
 import GameServerRoute from "./GameServerRoute";
 import CommunistSplitRoute from "./CommunistSplitRoute";
+import VersionRoute from './VersionRoute';
 
 const router = express.Router();
 
@@ -33,5 +34,7 @@ router.use('/permission', PermissionRoute);
 router.use('/game_server', GameServerRoute);
 
 router.use('/communist_split', CommunistSplitRoute);
+
+router.use('/version', VersionRoute);
 
 export default router

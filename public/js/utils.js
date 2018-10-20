@@ -1,5 +1,5 @@
 const getAndLoadPage = async (viewName) => {
-    if($('#view_success_' + viewName).length === 0){
+    if ($('#view_success_' + viewName).length === 0) {
         let view = await $.get('/views/success/' + viewName);
         $('#mainContentDiv').append(view);
     }
@@ -7,8 +7,13 @@ const getAndLoadPage = async (viewName) => {
     $('#view_success_' + viewName).show();
 };
 
+const loadVersion = async () => {
+    let version = await $.get('/api/version');
+    $('#navBarHomeButton').text('Scipio - ' + version);
+};
+
 const getAndLoadError = async (errorNumber) => {
-    if($('#view_error_' + errorNumber).length === 0){
+    if ($('#view_error_' + errorNumber).length === 0) {
         let view = await $.get('/views/errors/' + errorNumber);
         $('#mainContentDiv').append(view);
     }
@@ -25,7 +30,7 @@ const getFormValues = (name) => {
     let map = {};
     $('form[name=' + name + ']')
         .find('input[type=text],input[type=email],input[type=password],select')
-        .each(function() {
+        .each(function () {
             map[$(this).attr('name')] = $(this).val();
         });
     return map;
@@ -34,7 +39,7 @@ const getFormValues = (name) => {
 const loadNavBarLinks = (permissions) => {
     let html = "";
     permissions.forEach(permission => {
-        html +=  '<li class="nav-item" id="navbarApplication'+ permission.name +'" data-toggle="tooltip" data-placement="right" title="'+permission.name+'" style="display:none;"><a class="nav-link" data-link="'+(permission.name).toLowerCase()+'" href="#"><i class="'+permission.icon+'"></i><span class="nav-link-text"> '+(permission.name).replace(/_/g, ' ')+'</span></a></li>';
+        html += '<li class="nav-item" id="navbarApplication' + permission.name + '" data-toggle="tooltip" data-placement="right" title="' + permission.name + '" style="display:none;"><a class="nav-link" data-link="' + (permission.name).toLowerCase() + '" href="#"><i class="' + permission.icon + '"></i><span class="nav-link-text"> ' + (permission.name).replace(/_/g, ' ') + '</span></a></li>';
     });
     $('#navAccordion').html(html);
     $('#navAccordion a').click((event) => {
@@ -65,7 +70,7 @@ toastr.options = {
 };
 
 const toast = (type, toastMessage, toastTitle) => {
-    if(!toastTitle){
+    if (!toastTitle) {
         toastTitle = 'Notification'
     }
     toastr[type](toastMessage, toastTitle);

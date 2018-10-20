@@ -39,6 +39,8 @@ export default {
     CONAN_PORT_2 : process.env.CONAN_PORT_2,
 
     //gameserver websocket room
-    GAMESERVER_ROOM : process.env.GAMESERVER_ROOM || 'authenticated'
+    GAMESERVER_ROOM : process.env.GAMESERVER_ROOM || 'authenticated',
+
+    VERSION : process.env.VERSION || 'Dev'
 }
 

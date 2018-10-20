@@ -131,5 +131,7 @@
                     loadNavBarLinks([]);
                 })
         });
+
+        loadVersion();
     })
 })(jQuery);
