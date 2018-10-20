@@ -80,3 +80,8 @@ deploy in production environment:
   - chmod 644 ~/.ssh/known_hosts
  script:
   - ssh -t kyky@server.mytcc.be "~/deploy_prod_scipio_node.sh $CI_COMMIT_TAG"
+ environment:
+  name: production
+  url: https://scipio.mytcc.be
+ only:
+  - tags
