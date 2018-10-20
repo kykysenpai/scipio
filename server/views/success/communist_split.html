@@ -195,6 +195,9 @@
             $('#communistSplitGroupSelect').change(function () {
 
                 users = [];
+                communitSplitSummaryTable.clear();
+                communitSplitOwesTable.clear();
+                communistSplitHistoryTable.clear();
 
                 let selected_group_id = $(this).find(":selected").val();
 
