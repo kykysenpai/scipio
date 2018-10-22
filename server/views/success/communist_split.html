@@ -134,8 +134,10 @@
                         <table class="table table-bordered" id="communitSplitHistoryTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
+                                <th>Loaner</th>
                                 <th>Description</th>
                                 <th>Date</th>
+                                <th>Total</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -208,6 +210,8 @@
                 })
                     .then((split_group) => {
 
+                        console.log(split_group);
+
                         let tbodyHtml = "";
 
                         split_group.users.forEach(user => {
@@ -246,6 +250,26 @@
                                     : "is owed " + split_group.users_owe[split_group.user_id][owe]
                             ]).draw();
 
+                        }
+
+                        for (let payment in split_group.payments) {
+                            let addedRow = communistSplitHistoryTable.row.add([
+                                getUserById(split_group.users, split_group.payments[payment].user_id).login,
+                                split_group.payments[payment].description,
+                                split_group.payments[payment].date,
+                                split_group.payments[payment].total
+                            ]).draw();
+
+                            for (let participation in split_group.payments[payment].users_participations) {
+                                addedRow.child.row.add({
+                                    "User":getUserById(split_group.users, split_group.payments[payment].user_id).login,
+                                    "Amount":split_group.payments[payment].users_participations[participation].amount
+                                }).draw();
+                            }
+
+                            $(addedRow).click(function () {
+                                addedRow.child.show();
+                            });
                         }
 
                         for (let user in split_group.users_owe) {
