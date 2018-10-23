@@ -15,6 +15,8 @@ import Conan_1 from "../game_servers/conan_1";
 import Conan_2 from "../game_servers/conan_2";
 import Trackmania from "../game_servers/trackmania";
 import ManiaControl from "../game_servers/maniacontrol";
+import Keycloak from "../modules/Keycloak";
+import cors from 'cors';
 
 Logger.info('Setting up server context...');
 
@@ -22,9 +24,13 @@ const app = express();
 
 const http_server = http.Server(app);
 
-app.use(express.static(Paths.PUBLIC));
+app.use(cors({origin:'http://localhost:22222', credentials: true}));
 
 app.use(cookieParser());
+
+app.use(Keycloak.middleware());
+
+app.use(express.static(Paths.PUBLIC));
 
 app.use(express.json());
 

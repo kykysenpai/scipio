@@ -133,5 +133,19 @@
         });
 
         loadVersion();
+
+        let keycloak = Keycloak({
+            url: "https://keycloak.mytcc.be/auth",
+            realm: "TCC",
+            clientId: "scipio-frontend",
+            credentials: {
+                secret: "82b4106a-83f5-4d1c-bd75-880f96386906"
+            }
+        });
+        keycloak.init({onLoad: 'login-required'}).success(function (authenticated) {
+            console.log("authenticated : " + authenticated);
+        }).error(function () {
+            console.log("failed to init");
+        });
     })
 })(jQuery);

@@ -63,3 +63,5 @@ typings/
 game_servers_scripts/*.sh
 
 package-lock.json
+
+keycloak.json
