@@ -62,8 +62,6 @@ deploy in development environment:
  environment:
   name: development
   url: https://dev.scipio.mytcc.be
- only:
-  - master
 
 deploy in production environment:
  image: ubuntu
