@@ -245,8 +245,8 @@
                             communitSplitOwesTable.row.add([
                                 getUserById(split_group.users, owe).login,
                                 split_group.users_owe[split_group.user_id][owe] < 0
-                                    ? "owes you " + Math.abs(split_group.users_owe[split_group.user_id][owe])
-                                    : "is owed " + split_group.users_owe[split_group.user_id][owe]
+                                    ? "owes you " + Math.round(Math.abs(split_group.users_owe[split_group.user_id][owe]) * 100) / 100
+                                    : "gets back " + Math.round(split_group.users_owe[split_group.user_id][owe] * 100) / 100 + " from you"
                             ]).draw();
 
                         }
@@ -257,7 +257,7 @@
                                 getUserById(split_group.users, split_group.payments[payment].user_id).login,
                                 split_group.payments[payment].description,
                                 split_group.payments[payment].date,
-                                split_group.payments[payment].total
+                                Math.round(split_group.payments[payment].total * 100) / 100
                             ]).draw();
 
                             let childDataSet = "<table>";
@@ -266,7 +266,7 @@
                                 childDataSet += "<tr><td>" +
                                     getUserById(split_group.users, split_group.payments[payment].users_participations[participation].user_id).login
                                     + "</td><td>" +
-                                    split_group.payments[payment].users_participations[participation].amount
+                                    Math.round(split_group.payments[payment].users_participations[participation].amount * 100) / 100
                                     + "</td></tr>";
                             }
 
@@ -294,7 +294,7 @@
                             }
                             communitSplitSummaryTable.row.add([
                                 getUserById(split_group.users, user).login,
-                                owes > 0 ? "owes everyone " + owes : "is owed " + Math.abs(owes)
+                                owes > 0 ? "owes everyone " + Math.round(owes * 100) / 100 : "gets back " + Math.round(Math.abs(owes) * 100) / 100
                             ]).draw();
                         }
 
@@ -302,7 +302,7 @@
 
                         if (owes < 0) {
                             $('#communistSplitPersonalCredit').css('color', 'green');
-                            $('#communitSplitOwesOrIsOwed').text("You are owed : ");
+                            $('#communitSplitOwesOrIsOwed').text("You get back : ");
                         } else {
                             $('#communistSplitPersonalCredit').css('color', 'red');
                             $('#communitSplitOwesOrIsOwed').text("You owe : ");
