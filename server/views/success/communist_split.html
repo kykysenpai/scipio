@@ -134,6 +134,7 @@
                         <table class="table table-bordered" id="communitSplitHistoryTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
+                                <th></th>
                                 <th>Loaner</th>
                                 <th>Description</th>
                                 <th>Date</th>
@@ -210,8 +211,6 @@
                 })
                     .then((split_group) => {
 
-                        console.log(split_group);
-
                         let tbodyHtml = "";
 
                         split_group.users.forEach(user => {
@@ -254,23 +253,39 @@
 
                         for (let payment in split_group.payments) {
                             let addedRow = communistSplitHistoryTable.row.add([
+                                "+",
                                 getUserById(split_group.users, split_group.payments[payment].user_id).login,
                                 split_group.payments[payment].description,
                                 split_group.payments[payment].date,
                                 split_group.payments[payment].total
                             ]).draw();
 
+                            let childDataSet = "<table>";
+
                             for (let participation in split_group.payments[payment].users_participations) {
-                                addedRow.child.row.add({
-                                    "User":getUserById(split_group.users, split_group.payments[payment].user_id).login,
-                                    "Amount":split_group.payments[payment].users_participations[participation].amount
-                                }).draw();
+                                childDataSet += "<tr><td>" +
+                                    getUserById(split_group.users, split_group.payments[payment].users_participations[participation].user_id).login
+                                    + "</td><td>" +
+                                    split_group.payments[payment].users_participations[participation].amount
+                                    + "</td></tr>";
                             }
 
-                            $(addedRow).click(function () {
-                                addedRow.child.show();
-                            });
+                            childDataSet += "</table>";
+
+                            addedRow.child(childDataSet).draw();
+
                         }
+
+                        $('#communitSplitHistoryTable td').click('tr', function () {
+                            let tr = $(this).closest('tr');
+                            let row = communistSplitHistoryTable.row(tr);
+
+                            if (row.child.isShown()) {
+                                row.child.hide();
+                            } else {
+                                row.child.show();
+                            }
+                        });
 
                         for (let user in split_group.users_owe) {
                             let owes = 0;
