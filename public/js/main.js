@@ -142,10 +142,11 @@
                 secret: "82b4106a-83f5-4d1c-bd75-880f96386906"
             }
         });
+
         keycloak.init({onLoad: 'login-required'}).success(function (authenticated) {
-            console.log("authenticated : " + authenticated);
-        }).error(function () {
-            console.log("failed to init");
+            $.ajaxSetup({
+                headers: {'Authorization': 'Bearer ' + keycloak.token}
+            });
         });
     })
 })(jQuery);
