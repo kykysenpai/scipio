@@ -134,7 +134,7 @@
 
         loadVersion();
 
-        let keycloak = Keycloak({
+        const keycloak = Keycloak({
             url: "https://keycloak.mytcc.be/auth",
             realm: "TCC",
             clientId: "scipio-frontend",
@@ -142,10 +142,14 @@
                 secret: "82b4106a-83f5-4d1c-bd75-880f96386906"
             }
         });
-        keycloak.init({onLoad: 'login-required'}).success(function (authenticated) {
-            console.log("authenticated : " + authenticated);
-        }).error(function () {
-            console.log("failed to init");
+
+        keycloak.init().success((authenticated) => {
+            $('#loginNavButton').click(() => {
+                keycloak.login()
+            });
+            $('#logoutNavButton').click(() => {
+                keycloak.logout()
+            });
         });
     })
 })(jQuery);
