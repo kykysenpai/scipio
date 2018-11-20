@@ -145,7 +145,10 @@
 
         keycloak.init().success((authenticated) => {
             $('#loginNavButton').click(() => {
-                keycloak.login()
+                keycloak.login();
+                $.ajaxSetup({
+                    headers: {'Authorization': 'Bearer ' + keycloak.token}
+                });
             });
             $('#logoutNavButton').click(() => {
                 keycloak.logout()
