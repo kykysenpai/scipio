@@ -276,7 +276,7 @@
 
                         }
 
-                        $('#communitSplitHistoryTable td').click('tr', function () {
+                        $('#communitSplitHistoryTable').on('click', 'tr', function () {
                             let tr = $(this).closest('tr');
                             let row = communistSplitHistoryTable.row(tr);
 
