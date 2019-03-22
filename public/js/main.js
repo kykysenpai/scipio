@@ -156,25 +156,6 @@
             $('#logoutNavButton').click(() => {
                 keycloak.logout()
             });
-
-            $.ajax({
-                type: 'POST',
-                url: '/api/auth/check',
-                noprint: true,
-                nonotif: true
-            })
-                .then((ret) => {
-                    if (ret.isAuthenticated) {
-                        console.info("JWT token was valid, now authenticated");
-                        $('.navLoggedIn, .indexLoggedIn').show("slow");
-                        $('.navLoggedOut, .indexLoggedOut').hide("slow");
-                        console.log(ret);
-                        loadNavBarLinks(ret.permissions || {});
-                    } else {
-                        $('.navLoggedOut, .indexLoggedOut').show("slow");
-                        $('.navLoggedIn, .indexLoggedIn').hide("slow");
-                    }
-                });
         });
     })
 })(jQuery);
