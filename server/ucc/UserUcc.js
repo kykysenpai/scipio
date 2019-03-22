@@ -1,7 +1,6 @@
 import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
 import Db from "../db/DbMock";
-import bcrypt from "bcrypt";
 import UserDao from "../dao/UserDao";
 import Logger from "../modules/Logger";
 import Config from "../config/Config";
@@ -60,6 +59,18 @@ const authenticate = async (login, password) => {
         throw new HttpError('Password did not match', HttpStatus.BAD_REQUEST);
     }
 };
+
+/**
+ * Get all info on a single user given his login
+ * @param login
+ * @returns {Promise<*>}
+ */
+const findUserByUsername = async (login) => {
+    if(!login || login === ""){
+        throw new HttpError('Invalid username', HttpStatus.BAD_REQUEST);
+    }
+    return await UserDao.findAllInfoByLogin(login);
+}
 
 /**
  * Checks if the javascript object has all the attriubtes required to match a user in the application
@@ -142,4 +153,4 @@ const removePermission = async (req) => {
     await UserPermissionDao.removePermission(req.body.login, req.body.permission);
 };
 
-export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail, addPermission, removePermission}
+export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail, addPermission, removePermission, findUserByUsername}

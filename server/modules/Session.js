@@ -35,4 +35,10 @@ const signToken = async (token) => {
     }
 };
 
-export default {getTokenFromSession, signToken}
+const checkUser = (token, req) => {
+  Logger.error(token);
+};
+
+
+
+export default {getTokenFromSession, signToken, checkUser}

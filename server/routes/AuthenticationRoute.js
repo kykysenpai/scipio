@@ -1,6 +1,5 @@
 import express from "express";
 import AuthController from "../controllers/AuthController";
-import Keycloak from "../modules/Keycloak";
 
 const router = express.Router();
 
@@ -12,7 +11,7 @@ const router = express.Router();
  * Post request to try and get a valid session back if credentials are valids
  */
 router.route('/')
-    .post(Keycloak.protect(), AuthController.authenticate);
+    .post(AuthController.authenticate);
 
 router.route('/check')
     .post(AuthController.checkAuthenticated);

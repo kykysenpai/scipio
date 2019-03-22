@@ -1,4 +1,4 @@
-FROM docker.mytcc.be/node_docker
+FROM node
 COPY . /app
 WORKDIR /app
 ENTRYPOINT npm run-script start-prod

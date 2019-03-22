@@ -143,16 +143,38 @@
             }
         });
 
-        keycloak.init().success((authenticated) => {
+        keycloak.init({onLoad: 'login-required'}).success((authenticated) => {
             $('#loginNavButton').click(() => {
-                keycloak.login();
-                $.ajaxSetup({
-                    headers: {'Authorization': 'Bearer ' + keycloak.token}
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/auth',
+                    noprint: true,
+                    nonotif: true,
+                    data: {'token': keycloak.token}
                 });
             });
             $('#logoutNavButton').click(() => {
                 keycloak.logout()
             });
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/auth/check',
+                noprint: true,
+                nonotif: true
+            })
+                .then((ret) => {
+                    if (ret.isAuthenticated) {
+                        console.info("JWT token was valid, now authenticated");
+                        $('.navLoggedIn, .indexLoggedIn').show("slow");
+                        $('.navLoggedOut, .indexLoggedOut').hide("slow");
+                        console.log(ret);
+                        loadNavBarLinks(ret.permissions || {});
+                    } else {
+                        $('.navLoggedOut, .indexLoggedOut').show("slow");
+                        $('.navLoggedIn, .indexLoggedIn').hide("slow");
+                    }
+                });
         });
     })
 })(jQuery);

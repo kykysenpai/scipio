@@ -3,11 +3,8 @@ import HttpStatus from "../config/constants/HttpStatus";
 import Logger from "../modules/Logger";
 import Config from "../config/Config";
 import UserUcc from "../ucc/UserUcc";
-import HttpError from "../modules/HttpError";
-import HttpParams from "../config/constants/HttpParams";
-import PermissionUcc from "../ucc/PermissionUcc";
 import FrontPermissions from "../config/constants/FrontPermissions";
-import Permissions from "../config/constants/Permissions";
+import keycloak from "../modules/Keycloak";
 
 /**
  * Try to authenticate request by putting a token in it if it's not already present
@@ -18,25 +15,27 @@ import Permissions from "../config/constants/Permissions";
  */
 const authenticate = async (req, res, next) => {
     try {
-        if (!req.body[HttpParams.LOGIN] || !req.body[HttpParams.PASSWORD]) throw new HttpError('The login or the password is missing !', HttpStatus.BAD_REQUEST);
 
         let infoToSignInToken = {};
 
-        let user = await UserUcc.authenticate(req.body[HttpParams.LOGIN], req.body[HttpParams.PASSWORD]);
-        infoToSignInToken.id = user.id;
-        infoToSignInToken.first_name = user.first_name;
-        infoToSignInToken.last_name = user.last_name;
-        infoToSignInToken.login = user.login;
+        let user = await keycloak.getAccount(req.body.token);
+
+        infoToSignInToken.id = user.sub;
+        infoToSignInToken.first_name = user.given_name;
+        infoToSignInToken.last_name = user.family_name;
+        infoToSignInToken.login = user.preferred_username;
         infoToSignInToken.email = user.email;
         infoToSignInToken.permissions = [];
 
-        user.permissions.forEach(permission => {
+        let localUser = await UserUcc.findUserByUsername(user.preferred_username);
+
+        localUser.permissions.forEach(permission => {
             infoToSignInToken.permissions.push(permission.name);
         });
 
         let permissionsWithIcons = [];
 
-        user.permissions.forEach(permission => {
+        localUser.permissions.forEach(permission => {
             permissionsWithIcons.push({
                 name: permission.name,
                 icon: FrontPermissions[permission.name]
@@ -83,7 +82,7 @@ const checkAuthenticated = async (req, res) => {
             .status(HttpStatus.OK)
             .send({
                 isAuthenticated: true,
-                permissions : permissionsWithIcons
+                permissions: permissionsWithIcons
             });
     } catch (err) {
         /**

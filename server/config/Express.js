@@ -24,11 +24,11 @@ const app = express();
 
 const http_server = http.Server(app);
 
-app.use(cors({origin:'http://localhost:22222', credentials: true}));
+app.use(cors({origin: 'http://localhost:22222', credentials: true}));
 
 app.use(cookieParser());
 
-app.use(Keycloak.middleware());
+app.use(Keycloak.middleware({}));
 
 app.use(express.static(Paths.PUBLIC));
 
@@ -134,7 +134,7 @@ app.use((err, req, res, next) => {
  * If no route managed to respond to the request, send a 404
  */
 app.use((req, res) => {
-    if(req.accepts('html')){
+    if (req.accepts('html')) {
         res
             .status(HttpStatus.NOT_FOUND)
             .sendFile(Paths.VIEWS_ERRORS + '/404.html');
