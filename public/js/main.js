@@ -143,18 +143,53 @@
             }
         });
 
-        keycloak.init({onLoad: 'login-required'}).success((authenticated) => {
-            $('#loginNavButton').click(() => {
-                $.ajax({
+        const checkAuthentication = async (authenticated) => {
+            if (authenticated) {
+                await $.ajax({
                     type: 'POST',
                     url: '/api/auth',
                     noprint: true,
                     nonotif: false,
                     data: {'token': keycloak.token}
                 });
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/auth/check',
+                noprint: true,
+                nonotif: true
+            })
+                .then((ret) => {
+                    if (ret.isAuthenticated) {
+                        $('.navLoggedIn, .indexLoggedIn').show("slow");
+                        $('.navLoggedOut, .indexLoggedOut').hide("slow");
+                        loadNavBarLinks(ret.permissions || {});
+                    } else {
+                        $('.navLoggedOut, .indexLoggedOut').show("slow");
+                        $('.navLoggedIn, .indexLoggedIn').hide("slow");
+                    }
+                });
+        };
+
+        keycloak.init().success((authenticated) => {
+
+            checkAuthentication(authenticated);
+
+            $('#loginNavButton').click(() => {
+                keycloak.login();
             });
+
             $('#logoutNavButton').click(() => {
-                keycloak.logout()
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/api/auth',
+                    noprint: true,
+                    nonotif: true
+                })
+                    .then(() => {
+                        keycloak.logout();
+                    });
             });
         });
     })
