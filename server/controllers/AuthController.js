@@ -5,6 +5,7 @@ import Config from "../config/Config";
 import UserUcc from "../ucc/UserUcc";
 import FrontPermissions from "../config/constants/FrontPermissions";
 import keycloak from "../modules/Keycloak";
+import HttpError from "../modules/HttpError";
 
 /**
  * Try to authenticate request by putting a token in it if it's not already present
@@ -27,7 +28,11 @@ const authenticate = async (req, res, next) => {
         infoToSignInToken.email = user.email;
         infoToSignInToken.permissions = [];
 
-        let localUser = await UserUcc.findUserByUsername(user.preferred_username);
+        let localUser = await UserUcc.findUserByUsername(user.sub);
+        if(localUser == null){
+            throw new Error("Sorry user creation is not available at this time");
+            //create local user
+        }
 
         localUser.permissions.forEach(permission => {
             infoToSignInToken.permissions.push(permission.name);
@@ -50,7 +55,7 @@ const authenticate = async (req, res, next) => {
             .send(permissionsWithIcons);
     } catch (err) {
         Logger.debug(err);
-        next(err)
+        next(new HttpError(err, HttpStatus.BAD_REQUEST));
     }
 };
 

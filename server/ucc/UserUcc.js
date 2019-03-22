@@ -70,7 +70,7 @@ const findUserByUsername = async (login) => {
         throw new HttpError('Invalid username', HttpStatus.BAD_REQUEST);
     }
     return await UserDao.findAllInfoByLogin(login);
-}
+};
 
 /**
  * Checks if the javascript object has all the attriubtes required to match a user in the application

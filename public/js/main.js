@@ -149,7 +149,7 @@
                     type: 'POST',
                     url: '/api/auth',
                     noprint: true,
-                    nonotif: true,
+                    nonotif: false,
                     data: {'token': keycloak.token}
                 });
             });
