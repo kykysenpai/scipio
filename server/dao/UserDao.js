@@ -5,7 +5,7 @@ import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
 import {UniqueConstraintError} from "sequelize";
 
-const findAllInfoByLogin = async (login) => {
+const findAllInfoByKeycloakId = async (id) => {
     try {
         return await Db.Users.findOne({
             include: {
@@ -14,7 +14,7 @@ const findAllInfoByLogin = async (login) => {
                 attributes: ['name']
             },
             where: {
-                login: login
+                id_keycloak: id
             },
             attributes: ['id', 'login', 'email', 'active', 'password']
         });
@@ -125,4 +125,4 @@ const findAll = async () => {
     }
 };
 
-export default {findAllInfoByLogin, createUser, confirmAccount, findAll, deactivateUser}
+export default {findAllInfoByKeycloakId, createUser, confirmAccount, findAll, deactivateUser}

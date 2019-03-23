@@ -27,7 +27,7 @@ const authenticate = async (req, res, next) => {
         infoToSignInToken.email = user.email;
         infoToSignInToken.permissions = [];
 
-        let localUser = await UserUcc.findUserByUsername(user.sub);
+        let localUser = await UserUcc.findUserByKeycloakId(user.sub);
         infoToSignInToken.id = localUser.id;
         if(localUser == null){
             throw new Error("Sorry user creation is not available at this time");

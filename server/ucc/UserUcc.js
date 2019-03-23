@@ -65,11 +65,11 @@ const authenticate = async (login, password) => {
  * @param login
  * @returns {Promise<*>}
  */
-const findUserByUsername = async (login) => {
-    if(!login || login === ""){
-        throw new HttpError('Invalid username', HttpStatus.BAD_REQUEST);
+const findUserByKeycloakId = async (id) => {
+    if(!id || id === ""){
+        throw new HttpError('Invalid keycloak ID', HttpStatus.BAD_REQUEST);
     }
-    return await UserDao.findAllInfoByLogin(login);
+    return await UserDao.findAllInfoByKeycloakId(id);
 };
 
 /**
@@ -153,4 +153,4 @@ const removePermission = async (req) => {
     await UserPermissionDao.removePermission(req.body.login, req.body.permission);
 };
 
-export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail, addPermission, removePermission, findUserByUsername}
+export default {authenticate, createUser, confirmAccount, findAll, validateCode, deactivateUser, resendMail, addPermission, removePermission, findUserByKeycloakId}

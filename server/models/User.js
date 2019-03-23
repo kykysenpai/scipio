@@ -17,5 +17,8 @@ export default {
     },
     active: {
         type: Sequelize.DataTypes.BOOLEAN
+    },
+    id_keycloak: {
+        type: Sequelize.DataTypes.STRING
     }
 }
