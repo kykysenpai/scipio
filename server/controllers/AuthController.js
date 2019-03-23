@@ -21,7 +21,6 @@ const authenticate = async (req, res, next) => {
 
         let user = await keycloak.getAccount(req.body.token);
 
-        infoToSignInToken.id = user.sub;
         infoToSignInToken.first_name = user.given_name;
         infoToSignInToken.last_name = user.family_name;
         infoToSignInToken.login = user.preferred_username;
@@ -29,6 +28,7 @@ const authenticate = async (req, res, next) => {
         infoToSignInToken.permissions = [];
 
         let localUser = await UserUcc.findUserByUsername(user.sub);
+        infoToSignInToken.id = localUser.id;
         if(localUser == null){
             throw new Error("Sorry user creation is not available at this time");
             //create local user
