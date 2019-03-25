@@ -1,6 +1,8 @@
 import Session from "../modules/Session";
 import CommunistSplitDao from "../dao/CommunistSplitDao";
 import Logger from "../modules/Logger";
+import rp from "request-promise-native";
+import Config from "../config/Config";
 
 const getAllSplitGroups = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
@@ -57,6 +59,19 @@ const addSplitPayment = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
     req.body.split_payment.user_id = decodedToken.id;
     await CommunistSplitDao.addSplitPayment(req.body.split_payment);
+
+    rp({
+        uri: Config.BOT_URL + '/api/payment',
+        method: 'POST',
+        form: req.body.split_payment
+    })
+        .then(() => {
+            Logger.info("Bot was informed of the new payment creation");
+        })
+        .catch(() => {
+            Logger.error("Couldn't contact Discord bot to inform it of payment creation");
+        });
+
 };
 
 

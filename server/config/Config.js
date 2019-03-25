@@ -30,6 +30,7 @@ export default {
 
     //app url
     BASE_URL : process.env.BASE_URL || 'https://scipio.tircher.be',
+    BOT_URL: process.env.BOT_URL || 'http://bot-tcc:8080',
 
     //gameserver ports
     MINECRAFT_PORT : process.env.MINECRAFT_PORT,
