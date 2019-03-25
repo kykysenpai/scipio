@@ -64,7 +64,10 @@ const addSplitPayment = async (req) => {
         uri: Config.BOT_URL + '/api/payment',
         method: 'POST',
         body: req.body.split_payment,
-        json:true
+        json: true,
+        headers: {
+            'Content-Type': 'Application/json'
+        }
     })
         .then(() => {
             Logger.info("Bot was informed of the new payment creation");
