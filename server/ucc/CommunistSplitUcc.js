@@ -63,7 +63,9 @@ const addSplitPayment = async (req) => {
     rp({
         uri: Config.BOT_URL + '/api/payment',
         method: 'POST',
-        body: req.body.split_payment,
+        body: {
+            split_payment : req.body.split_payment
+        },
         json: true,
         headers: {
             'Content-Type': 'Application/json'
