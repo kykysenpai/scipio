@@ -66,10 +66,8 @@ const addSplitPayment = async (req) => {
     let users_ids = [];
 
     req.body.split_payment.participating_users.forEach(user => {
-        users_ids.push(user.user_id)
+        users_ids.push(user.id)
     });
-
-    Logger.error(users_ids);
 
     let db_users = await UserDao.findLoginByIdList(users_ids);
 
@@ -78,7 +76,7 @@ const addSplitPayment = async (req) => {
 
     for(let user in req.body.split_payment.participating_users){
         db_users.forEach(db_user => {
-            if(db_user.id === req.body.split_payment.participating_users[user].user_id){
+            if(db_user.id === req.body.split_payment.participating_users[user].id){
                 req.body.split_payment.participating_users[user].login = db_user.login;
             }
         })
