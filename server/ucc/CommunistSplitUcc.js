@@ -73,7 +73,7 @@ const addSplitPayment = async (req) => {
 
     for(let user in req.body.split_payment.participating_users){
         db_users.forEach(db_user => {
-            if(db_user.id === req.body.split_payment.participating_users[user].id){
+            if(db_user.id === req.body.split_payment.participating_users[user].user_id){
                 req.body.split_payment.participating_users[user].login = db_user.login;
             }
         })
