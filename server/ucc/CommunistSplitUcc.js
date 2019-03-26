@@ -69,13 +69,12 @@ const addSplitPayment = async (req) => {
             'Content-Type': 'Application/json'
         }
     }, (err, response, body) => {
-       if(err){
-           Logger.error("Couldn't contact Discord bot to inform it of payment creation", err);
-       }
-       if(response){
-           Logger.info("Bot was informed of the new payment creation", response);;
-
-       }
+        if (err) {
+            Logger.error("Couldn't contact Discord bot to inform it of payment creation", err);
+        }
+        if (response) {
+            Logger.info("Bot was informed of the new payment creation", response);
+        }
     });
 };
 
