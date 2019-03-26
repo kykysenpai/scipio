@@ -65,9 +65,7 @@ const addSplitPayment = async (req) => {
         url: Config.BOT_URL + '/api/payment',
         method: 'POST',
         body: JSON.stringify(req.body.split_payment),
-        headers: {
-            'Content-Type': 'Application/json'
-        }
+        json: true
     }, (err, response, body) => {
         if (err) {
             Logger.error("Couldn't contact Discord bot to inform it of payment creation", err);
