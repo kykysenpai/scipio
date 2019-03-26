@@ -24,14 +24,14 @@ const findAllInfoByKeycloakId = async (id) => {
 };
 
 const findLoginByIdList = async (ids) => {
-    try{
-        let users = await Db.Users.findAll({
-            where:{
+    try {
+        return await Db.Users.findAll({
+            where: {
                 id: ids
             },
             attributes: ['id', 'login']
         });
-    }catch(err){
+    } catch (err) {
         Db.handleError(err);
     }
 };
