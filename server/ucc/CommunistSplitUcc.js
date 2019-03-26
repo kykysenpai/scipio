@@ -3,6 +3,7 @@ import CommunistSplitDao from "../dao/CommunistSplitDao";
 import Logger from "../modules/Logger";
 import Config from "../config/Config";
 import Request from "request";
+import UserDao from "../dao/UserDao";
 
 const getAllSplitGroups = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
@@ -59,6 +60,26 @@ const addSplitPayment = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
     req.body.split_payment.user_id = decodedToken.id;
     await CommunistSplitDao.addSplitPayment(req.body.split_payment);
+
+
+    //add usernames
+    let users_ids = [];
+
+    req.body.split_payment.participating_users.forEach(user => {
+        users_ids.push(user.user_id)
+    });
+
+    let db_users = await UserDao.findLoginByIdList(users_ids);
+
+    for(let user in req.body.split_payment.participating_users){
+        db_users.forEach(db_user => {
+            if(db_user.id === req.body.split_payment.participating_users[user].id){
+                req.body.split_payment.participating_users[user].login = db_user.login;
+            }
+        })
+    }
+
+    req.body.split_payment.user_login = decodedToken.login;
 
     Request.post({
         url: Config.BOT_URL + '/api/payment',

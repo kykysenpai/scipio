@@ -23,6 +23,19 @@ const findAllInfoByKeycloakId = async (id) => {
     }
 };
 
+const findLoginByIdList = async (ids) => {
+    try{
+        let users = await Db.Users.findAll({
+            where:{
+                id: ids
+            },
+            attributes: ['id', 'login']
+        });
+    }catch(err){
+        Db.handleError(err);
+    }
+};
+
 const createUser = async (user) => {
     Logger.debug("Started creating user in persistence", user);
     let t = await Db.getTransaction();
@@ -125,4 +138,4 @@ const findAll = async () => {
     }
 };
 
-export default {findAllInfoByKeycloakId, createUser, confirmAccount, findAll, deactivateUser}
+export default {findAllInfoByKeycloakId, createUser, confirmAccount, findAll, deactivateUser, findLoginByIdList}
