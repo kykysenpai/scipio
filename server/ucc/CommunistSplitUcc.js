@@ -3,7 +3,6 @@ import CommunistSplitDao from "../dao/CommunistSplitDao";
 import Logger from "../modules/Logger";
 import Config from "../config/Config";
 import Request from "request";
-require('request').debug = true;
 
 const getAllSplitGroups = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
@@ -60,8 +59,6 @@ const addSplitPayment = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
     req.body.split_payment.user_id = decodedToken.id;
     await CommunistSplitDao.addSplitPayment(req.body.split_payment);
-
-    Logger.info("SENDING TO BOT : " + JSON.stringify(req.body.split_payment));
 
     Request.post({
         url: Config.BOT_URL + '/api/payment',
