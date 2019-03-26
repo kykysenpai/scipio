@@ -71,11 +71,11 @@ const addSplitPayment = async (req) => {
             'Content-Type': 'Application/json'
         }
     })
-        .then(() => {
-            Logger.info("Bot was informed of the new payment creation");
+        .then((res) => {
+            Logger.info("Bot was informed of the new payment creation", res);
         })
-        .catch(() => {
-            Logger.error("Couldn't contact Discord bot to inform it of payment creation");
+        .catch((err) => {
+            Logger.error("Couldn't contact Discord bot to inform it of payment creation", err);
         });
 
 };
