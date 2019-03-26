@@ -75,7 +75,8 @@ const addSplitPayment = async (req) => {
         for (let db_user in db_users) {
             Logger.error(req.body.split_payment.participating_users[user]);
             Logger.error(db_users[db_user].id);
-            if(db_users[db_user].id === req.body.split_payment.participating_users[user]){
+            if(db_users[db_user].id === req.body.split_payment.participating_users[user].id){
+                Logger.error("Match : " + db_users[db_user].login);
                 req.body.split_payment.participating_users[user]['login'] = db_users[db_user].login;
             }
         }
