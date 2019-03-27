@@ -26,6 +26,12 @@ const getAllSplitGroups = async (user_id) => {
     }
 };
 
+const findSplitGroupInfoById = async (split_group_id) => {
+    return await Db.SplitGroups.find({
+        id: split_group_id
+    });
+};
+
 const getSplitGroup = async (split_group_id) => {
     try{
 
@@ -134,4 +140,4 @@ const removeUserFromGroup = async (user_id, group_id) => {
 };
 
 
-export default {getAllSplitGroups, getSplitGroup, addSplitPayment}
+export default {getAllSplitGroups, getSplitGroup, addSplitPayment, findSplitGroupInfoById}

@@ -9,5 +9,8 @@ export default {
     name: {
         type: Sequelize.DataTypes.STRING,
         unique: true
+    },
+    id_discord_server: {
+        type: Sequelize.DataTypes.STRING
     }
 }

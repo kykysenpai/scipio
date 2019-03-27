@@ -62,7 +62,7 @@ const addSplitPayment = async (req) => {
     await CommunistSplitDao.addSplitPayment(req.body.split_payment);
 
 
-    //add usernames
+    //add logins to ids
     let users_ids = [];
 
     req.body.split_payment.participating_users.forEach(user => {
@@ -71,15 +71,21 @@ const addSplitPayment = async (req) => {
 
     let db_users = await UserDao.findLoginByIdList(users_ids);
 
-    for(let user in req.body.split_payment.participating_users){
+    for (let user in req.body.split_payment.participating_users) {
         for (let db_user in db_users) {
-            if(db_users[db_user].id == req.body.split_payment.participating_users[user].id){
+            if (db_users[db_user].id == req.body.split_payment.participating_users[user].id) {
                 req.body.split_payment.participating_users[user]['login'] = db_users[db_user].login;
             }
         }
     }
 
     req.body.split_payment.user_login = decodedToken.login;
+
+    //add splitgroup info
+    let splitGroup = await CommunistSplitDao.findSplitGroupInfoById(req.body.split_payment.split_group_id);
+
+    req.body.split_payment['split_group_id_discord_server'] = splitGroup.id_discord_server;
+    req.body.split_payment['split_group_name'] = splitGroup.name;
 
     Request.post({
         url: Config.BOT_URL + '/api/payment',
