@@ -81,8 +81,12 @@ const addSplitPayment = async (req) => {
 
     req.body.split_payment.user_login = decodedToken.login;
 
+    Logger.info(req.body.split_payment);
+    Logger.info(req.body.split_payment.split_group_id);
+
     //add splitgroup info
     let splitGroup = await CommunistSplitDao.findSplitGroupInfoById(req.body.split_payment.split_group_id);
+
 
     req.body.split_payment['split_group_id_discord_server'] = splitGroup.id_discord_server;
     req.body.split_payment['split_group_name'] = splitGroup.name;
