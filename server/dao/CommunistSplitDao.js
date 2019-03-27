@@ -27,9 +27,15 @@ const getAllSplitGroups = async (user_id) => {
 };
 
 const findSplitGroupInfoById = async (split_group_id) => {
-    return await Db.SplitGroups.find({
-        id: split_group_id
-    });
+    try {
+        return await Db.SplitGroups.find({
+            where: {
+                id: split_group_id
+            }
+        });
+    } catch(err){
+        Db.handleError(err);
+    }
 };
 
 const getSplitGroup = async (split_group_id) => {
