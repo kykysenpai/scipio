@@ -56,13 +56,12 @@ const addSplitGroup = async (req) => {
     return await CommunistSplitDao.addSplitGroup();
 };
 
+//TODO separate in multple method http call to bot
 const addSplitPayment = async (req) => {
     let decodedToken = await Session.getTokenFromSession(req);
     req.body.split_payment.user_id = decodedToken.id;
     await CommunistSplitDao.addSplitPayment(req.body.split_payment);
 
-
-    //add logins to ids
     let users_ids = [];
 
     req.body.split_payment.participating_users.forEach(user => {
@@ -81,14 +80,10 @@ const addSplitPayment = async (req) => {
 
     req.body.split_payment.user_login = decodedToken.login;
 
-    Logger.info(req.body.split_payment);
-    Logger.info(req.body.split_payment.split_group_id);
-
-    //add splitgroup info
     let splitGroup = await CommunistSplitDao.findSplitGroupInfoById(req.body.split_payment.split_group_id);
 
-
     req.body.split_payment['split_group_id_discord_server'] = splitGroup.id_discord_server;
+    req.body.split_payment['split_group_id_discord_default_channel'] = splitGroup.id_discord_default_channel;
     req.body.split_payment['split_group_name'] = splitGroup.name;
 
     Request.post({

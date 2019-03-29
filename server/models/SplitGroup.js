@@ -12,5 +12,8 @@ export default {
     },
     id_discord_server: {
         type: Sequelize.DataTypes.STRING
+    },
+    id_discord_default_channel: {
+        type: Sequelize.DataTypes.STRING
     }
 }
