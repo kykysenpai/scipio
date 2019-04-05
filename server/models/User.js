@@ -9,16 +9,13 @@ export default {
     login: {
         type: Sequelize.DataTypes.STRING
     },
-    password: {
-        type: Sequelize.DataTypes.STRING
-    },
     email: {
         type: Sequelize.DataTypes.STRING
     },
-    active: {
-        type: Sequelize.DataTypes.BOOLEAN
-    },
     id_keycloak: {
+        type: Sequelize.DataTypes.STRING
+    },
+    id_discord: {
         type: Sequelize.DataTypes.STRING
     }
 }

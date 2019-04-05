@@ -6,6 +6,7 @@ import UserUcc from "../ucc/UserUcc";
 import FrontPermissions from "../config/constants/FrontPermissions";
 import keycloak from "../modules/Keycloak";
 import HttpError from "../modules/HttpError";
+import UserDao from "../dao/UserDao";
 
 /**
  * Try to authenticate request by putting a token in it if it's not already present
@@ -28,11 +29,13 @@ const authenticate = async (req, res, next) => {
         infoToSignInToken.permissions = [];
 
         let localUser = await UserUcc.findUserByKeycloakId(user.sub);
-        infoToSignInToken.id = localUser.id;
         if(localUser == null){
-            throw new Error("Sorry user creation is not available at this time");
-            //create local user
+            localUser = await UserDao.createUser(user);
+        } else {
+            localUser = await UserDao.updateUser(localUser, user);
         }
+
+        infoToSignInToken.id = localUser.id;
 
         localUser.permissions.forEach(permission => {
             infoToSignInToken.permissions.push(permission.name);

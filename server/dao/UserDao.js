@@ -1,5 +1,4 @@
 import Db from '../db/Db';
-import Hash from 'object-hash';
 import Logger from "../modules/Logger";
 import HttpError from "../modules/HttpError";
 import HttpStatus from "../config/constants/HttpStatus";
@@ -16,7 +15,7 @@ const findAllInfoByKeycloakId = async (id) => {
             where: {
                 id_keycloak: id
             },
-            attributes: ['id', 'login', 'email', 'active', 'password']
+            attributes: ['id', 'login', 'email', 'id_keycloak', 'id_discord']
         });
     } catch (err) {
         Db.handleError(err);
@@ -36,40 +35,31 @@ const findLoginByIdList = async (ids) => {
     }
 };
 
+const updateUser = async (localUser, keycloakUser) => {
+    try {
+        Logger.debug("Updating user infos with keycloak infos", keycloakUser);
+        return await localUser.update({
+            login: keycloakUser.preferred_username,
+            email: keycloakUser.email
+        })
+    } catch (err) {
+        Db.handleError(err);
+    }
+};
+
 const createUser = async (user) => {
     Logger.debug("Started creating user in persistence", user);
-    let t = await Db.getTransaction();
     try {
         Logger.debug("Creating user in database...");
-        let createdUser = await Db.Users.create({
-            login: user.login,
-            password: user.password,
+        await Db.Users.create({
+            login: user.preferred_username,
             email: user.email,
-            active: false
-        }, {transaction: t});
+            id_keycloak: user.sub
+        });
 
-        Logger.debug("Creating his hash for email confirmation...");
-        let createdHash = await Db.Hashs.create({
-            user_id: createdUser.id,
-            hash: Hash(createdUser.email)
-        }, {transaction: t});
+        return await findAllInfoByKeycloakId(user.sub);
 
-        let foundAccountCreationCode = await Db.AccountCreationCodes.find({
-            where: {
-                code: user.code
-            }
-        }, {transaction: t});
-
-        Logger.debug("Deleting his security code in the database...");
-        await foundAccountCreationCode.destroy({}, {transaction: t});
-
-
-        Logger.debug("No problem while creating user, committing changes...");
-        await t.commit();
-
-        return createdHash.hash;
     } catch (err) {
-        await t.rollback();
         if (err.constructor === UniqueConstraintError) {
             throw new HttpError("This e-mail is already used", HttpStatus.BAD_REQUEST);
         }
@@ -131,11 +121,19 @@ const findAll = async () => {
                 attributes: ['name'],
                 through: {attributes: []}
             }],
-            attributes: ['login', 'email', 'active']
+            attributes: ['login', 'email', 'id_keycloak', 'id_discord']
         });
     } catch (err) {
         Db.handleError(err);
     }
 };
 
-export default {findAllInfoByKeycloakId, createUser, confirmAccount, findAll, deactivateUser, findLoginByIdList}
+export default {
+    findAllInfoByKeycloakId,
+    createUser,
+    confirmAccount,
+    findAll,
+    deactivateUser,
+    findLoginByIdList,
+    updateUser
+}
