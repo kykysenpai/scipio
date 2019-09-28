@@ -30,8 +30,8 @@ dockerize with version:
  only:
   - tags
  script:
-  - docker build . -t registry:5000/scipio:$CI_COMMIT_TAG
-  - docker push registry:5000/scipio:$CI_COMMIT_TAG
+  - docker build . -t localhost:5005/scipio:$CI_COMMIT_TAG
+  - docker push localhost:5005/scipio:$CI_COMMIT_TAG
 
 dockerize as latest:
  image: docker
@@ -39,8 +39,8 @@ dockerize as latest:
  tags:
   - docker
  script:
-  - docker build . -t registry:5000/scipio:latest
-  - docker push registry:5000/scipio:latest
+  - docker build . -t localhost:5005/scipio:latest
+  - docker push localhost:5005/scipio:latest
  except:
   - tags
 
