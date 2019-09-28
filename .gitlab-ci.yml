@@ -30,8 +30,8 @@ dockerize with version:
  only:
   - tags
  script:
-  - docker build . -t docker.mytcc.be/scipio:$CI_COMMIT_TAG
-  - docker push docker.mytcc.be/scipio:$CI_COMMIT_TAG
+  - docker build . -t registry:5000/scipio:$CI_COMMIT_TAG
+  - docker push registry:5000/scipio:$CI_COMMIT_TAG
 
 dockerize as latest:
  image: docker
@@ -39,8 +39,8 @@ dockerize as latest:
  tags:
   - docker
  script:
-  - docker build . -t docker.mytcc.be/scipio:latest
-  - docker push docker.mytcc.be/scipio:latest
+  - docker build . -t registry:5000/scipio:latest
+  - docker push registry:5000/scipio:latest
  except:
   - tags
 
